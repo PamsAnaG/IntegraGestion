@@ -63,7 +63,6 @@ public class CargaProyectoController {
                 tarea.setIdUnicoTarea(task.getUniqueID());
                 Task parent = task.getParentTask();
                 if (parent != null) {
-                    System.out.println("Parent " + parent.getUniqueID());
                     if (idTasks.containsKey(parent.getUniqueID())) {
                         tarea.setIdTareaPadre((Integer) idTasks.get(parent.getUniqueID()));
                     }
@@ -81,6 +80,14 @@ public class CargaProyectoController {
 
         return model;
 
+    }
+
+    @RequestMapping(value = "/nuevop", method = RequestMethod.POST)
+    public ModelAndView nuevoProyecto() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("nuevoProyecto");
+        
+        return model;
     }
 
 }
