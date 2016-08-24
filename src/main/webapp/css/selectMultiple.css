@@ -1,0 +1,33 @@
+ul.selectMultiple {
+	margin: 3px 0 4px;
+        padding: 8px 6px;
+        width: 200px;
+        height: 100px;
+        display: block;
+        color: #754b23;
+	background: #fff;
+	Zoutline: 1px solid #999999;	
+	overflow: auto;
+        border: 6px solid #e7fbb6;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        -moz-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+        -webkit-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+        box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+}
+
+	ul.selectMultiple li {
+		padding:5px;
+		font-family: verdana;
+		font-size: 11px;
+		font-color: #000;
+		list-style: none;
+		border-bottom: 1px solid #eee;
+		cursor: pointer;
+	}
+	ul.selectMultiple li.selected {
+		background: #f0f7fc;
+		color: #000;
+		border-bottom: 1px dotted #888;
+	}
