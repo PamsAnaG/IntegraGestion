@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author pamela.gutierrez
  */
-public class TareaVO {
+public class Tarea {
 
     private int idTarea;
     private int idTareaPadre;

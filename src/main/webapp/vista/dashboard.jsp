@@ -62,12 +62,18 @@
 
             function nuevoProyecto() {
                 $("#nuevoPF").submit();
+            }
 
+            function menu(opcion) {
+                if (opcion === 1) {
+                    $("#frmMenu").attr('action', '/igestion/salir');
+                    $("#frmMenu").submit();
+                }
             }
         </script>
     </head>
     <body>
-        <form:form class="header">
+        <form:form id="frmMenu" class="header">
             <table style="height:100%;">
                 <tr align="left" style=" vertical-align:middle;">
                     <th style="width:15px;"></th>
@@ -92,7 +98,7 @@
                     </th>
                     <th style="width:15px;"></th>
                     <th class="title generalUsr">
-                        <a href="acceso.html" class="linkMenu">Salir</a>
+                        <a href="javascript: menu(1)" class="linkMenu">Salir</a>
                     </th>
                 </tr>
             </table>

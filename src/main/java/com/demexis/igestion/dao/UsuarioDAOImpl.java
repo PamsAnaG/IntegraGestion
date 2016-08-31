@@ -5,13 +5,13 @@
  */
 package com.demexis.igestion.dao;
 
-import com.demexis.igestion.controllers.CargaProyectoController;
-import com.demexis.igestion.domain.UsuarioVO;
+import com.demexis.igestion.domain.Privilegio;
+import com.demexis.igestion.domain.Rol;
+import com.demexis.igestion.domain.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 
 /**
@@ -20,26 +20,63 @@ import org.springframework.jdbc.core.RowMapper;
  */
 public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO {
 
-    private Logger logger = Logger.getLogger(CargaProyectoController.class);       
+    private Logger logger = Logger.getLogger(UsuarioDAOImpl.class);
 
-    private static RowMapper<UsuarioVO> MAPPER_USUARIO = new RowMapper<UsuarioVO>() {
-        UsuarioVO obj;
+    private static RowMapper<Usuario> MAPPER_USUARIO = new RowMapper<Usuario>() {
+        Usuario obj;
 
-        public UsuarioVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-            obj = new UsuarioVO();
+        public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
+            obj = new Usuario();
 
+            obj.setIdUsuario(rs.getInt("ID_USUARIO"));
             obj.setUsuario(rs.getString("USUARIO"));
             obj.setPassword(rs.getString("PASSWORD"));
+            obj.setApMaterno(rs.getString("APMATERNO"));
+            obj.setApPaterno(rs.getString("APPATERNO"));
+            obj.setCorreoElectronico(rs.getString("CORREO_ELECTRONICO"));
+            obj.setNombre(rs.getString("NOMBRE"));
+            obj.setNumeroMovil(rs.getString("NUMERO_MOVIL"));
+            Rol rol = new Rol();
+            rol.setNombre(rs.getString("NOMBRE_ROL"));
+            rol.setDescripcion(rs.getString("DESCRIPCION"));
+            obj.setRol(rol);
+
+            return obj;
+        }
+    };
+
+    private static RowMapper<Privilegio> MAPPER_PRIV_USUARIO = new RowMapper<Privilegio>() {
+        Privilegio obj;
+
+        public Privilegio mapRow(ResultSet rs, int rowNum) throws SQLException {
+            obj = new Privilegio();
+
+            obj.setNombre(rs.getString("NOMBRE"));
+            obj.setDescripcion(rs.getString("DESCRIPCION"));
 
             return obj;
         }
     };
 
     @Override
-    public UsuarioVO obtenUsuario(UsuarioVO usuario) {
+    public Usuario getPrivilegiosUsuario(Usuario usuario) {
+        String query = getQueries().getProperty("obtenPrivUsuario");
+
+        List<Privilegio> privilegios = getJdbcTemplate().query(query, MAPPER_PRIV_USUARIO, new Object[]{usuario.getIdUsuario()});
+
+
+        if (!privilegios.isEmpty()) {
+            usuario.setPrivilegio(privilegios);
+        }
+
+        return usuario;
+    }
+
+    @Override
+    public Usuario obtenUsuario(Usuario usuario) {
         String query = getQueries().getProperty("obtenInfoUsuario");
 
-        List<UsuarioVO> usuarios = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{usuario.getUsuario()});
+        List<Usuario> usuarios = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{usuario.getUsuario()});
 
         if (!usuarios.isEmpty()) {
             return usuarios.get(0);

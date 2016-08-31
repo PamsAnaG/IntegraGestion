@@ -6,7 +6,7 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.controllers.CargaProyectoController;
-import com.demexis.igestion.domain.TareaVO;
+import com.demexis.igestion.domain.Tarea;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,11 +26,11 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
     private Logger logger = Logger.getLogger(CargaProyectoController.class);
 
     @Override
-    public TareaVO guardaTarea(TareaVO tarea) throws Exception {
+    public Tarea guardaTarea(Tarea tarea) throws Exception {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        final TareaVO tareaF = tarea;
+        final Tarea tareaF = tarea;
 
         getJdbcTemplate().update(new PreparedStatementCreator() {
             @Override

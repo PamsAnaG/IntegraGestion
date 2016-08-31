@@ -7,7 +7,7 @@ package com.demexis.igestion.controllers;
 
 import com.demexis.igestion.dao.ProyectoDAO;
 import com.demexis.igestion.domain.ArchivoProyecto;
-import com.demexis.igestion.domain.TareaVO;
+import com.demexis.igestion.domain.Tarea;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public class CargaProyectoController {
             ProjectFile project = reader.read(uploaded.getInputStream());
             HashMap idTasks = new HashMap();
 
-            TareaVO tarea = new TareaVO();
+            Tarea tarea = new Tarea();
             for (Task task : project.getAllTasks()) {
                 System.out.println("Task: " + task.getName() + " ID=" + task.getID() + " Unique ID=" + task.getUniqueID() + " Duration  " + task.getDuration().getDuration() + " Inicio " + task.getStart() + " Fin " + task.getFinish());
                 tarea.setNombre(task.getName());

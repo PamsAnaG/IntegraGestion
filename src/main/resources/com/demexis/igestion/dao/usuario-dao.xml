@@ -10,11 +10,19 @@
                 <prop key="obtenInfoUsuario">
 	        <![CDATA[
 	            SELECT ID_USUARIO, NOMBRE, APPATERNO, APMATERNO, USUARIO, PASSWORD, 
-                    CORREO_ELECTRONICO, NUMERO_MOVIL, ID_ROL
-                    FROM USUARIO
+                    CORREO_ELECTRONICO, NUMERO_MOVIL, ID_ROL, NOMBRE_ROL, DESCRIPCION
+                    FROM V_USUARIO
                     WHERE USUARIO = ?
                 ]]>
-                </prop>                
+                </prop>
+                <prop key="obtenPrivUsuario">
+	        <![CDATA[
+	            SELECT ID_REL_U_P, ID_USUARIO, USUARIO, ID_PRIVILEGIO, 
+                    NOMBRE, DESCRIPCION 
+                    FROM V_USUARIO_PRIVILEGIO
+                    WHERE ID_USUARIO = ?
+                ]]>
+                </prop>
             </props>
         </property>
     </bean>

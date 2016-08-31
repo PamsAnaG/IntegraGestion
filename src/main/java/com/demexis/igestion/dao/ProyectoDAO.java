@@ -5,7 +5,7 @@
  */
 package com.demexis.igestion.dao;
 
-import com.demexis.igestion.domain.TareaVO;
+import com.demexis.igestion.domain.Tarea;
 
 /**
  *
@@ -13,6 +13,6 @@ import com.demexis.igestion.domain.TareaVO;
  */
 public interface ProyectoDAO {
 
-    public TareaVO guardaTarea(TareaVO tarea) throws Exception;
+    public Tarea guardaTarea(Tarea tarea) throws Exception;
 
 }

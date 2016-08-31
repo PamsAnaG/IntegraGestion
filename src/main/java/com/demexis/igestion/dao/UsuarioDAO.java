@@ -5,7 +5,7 @@
  */
 package com.demexis.igestion.dao;
 
-import com.demexis.igestion.domain.UsuarioVO;
+import com.demexis.igestion.domain.Usuario;
 
 /**
  *
@@ -13,6 +13,8 @@ import com.demexis.igestion.domain.UsuarioVO;
  */
 public interface UsuarioDAO {
 
-    public UsuarioVO obtenUsuario(UsuarioVO usuario);
+    public Usuario obtenUsuario(Usuario usuario);
+    
+    public Usuario getPrivilegiosUsuario(Usuario usuario);
 
 }

@@ -5,8 +5,11 @@
  */
 package com.demexis.igestion.controllers;
 
-import com.demexis.igestion.dao.UsuarioDAO;
-import com.demexis.igestion.domain.UsuarioVO;
+import com.demexis.igestion.domain.ConstantesIntegra;
+import com.demexis.igestion.domain.Usuario;
+import com.demexis.igestion.servicios.UsuarioService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +29,12 @@ public class AutenticacionController {
     private Logger logger = Logger.getLogger(AutenticacionController.class);
 
     @Autowired
-    UsuarioDAO usuarioDao;
+    UsuarioService usuarioService;
 
     @RequestMapping(value = "/inicio", method = RequestMethod.GET)
     public ModelAndView inicio() {
 
-        UsuarioVO usuario = new UsuarioVO();
+        Usuario usuario = new Usuario();
 
         ModelAndView model = new ModelAndView();
         model.setViewName("inicio");
@@ -42,19 +45,44 @@ public class AutenticacionController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ModelAndView login(@ModelAttribute("Usuario") UsuarioVO usuario) {
+    public ModelAndView login(@ModelAttribute("Usuario") Usuario usuario, HttpServletRequest request) {
 
         logger.debug("Firmando usuario - [" + usuario.getUsuario() + "]");
 
         ModelAndView model = new ModelAndView();
-        UsuarioVO usuarioBD = usuarioDao.obtenUsuario(usuario);
+        Usuario usuarioBD = usuarioService.informacionUsuario(usuario);
         if (usuarioBD != null) {
-            model.setViewName("dashboard");
-            model.addObject("Usuario", usuario);
+            // RECUPERAMOS LOS DATOS DEL USUARIO DESDE LA BASE DE DATOS
+            usuarioBD = usuarioService.privilegiosUsuario(usuarioBD);
+            if (!usuarioBD.getPrivilegio().isEmpty()) {
+                // GUARDAMOS AL USUARIO FIRMADO EN LA SESION
+                HttpSession session = request.getSession();
+                session.setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), usuarioBD);
+                model.setViewName("dashboard");
+                model.addObject("Usuario", usuario);
+            }
         } else {
             model.setViewName("inicio");
             model.addObject("Usuario", usuario);
         }
+
+        return model;
+
+    }
+
+    @RequestMapping(value = "/salir", method = RequestMethod.POST)
+    public ModelAndView salir(HttpServletRequest request) {
+
+        logger.debug("Cerrando sesión...");
+
+        ModelAndView model = new ModelAndView();
+        Usuario usuario = new Usuario();
+
+        HttpSession session = request.getSession();
+        session.setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), null);
+
+        model.setViewName("inicio");
+        model.addObject("Usuario", usuario);
 
         return model;
 
