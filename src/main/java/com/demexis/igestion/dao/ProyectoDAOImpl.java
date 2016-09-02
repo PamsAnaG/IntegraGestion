@@ -42,6 +42,7 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
                 statement.setTimestamp(4, new Timestamp(tareaF.getFechaFin().getTime()));
                 statement.setDouble(5, tareaF.getDuracion());
                 statement.setInt(6, tareaF.getProcentajeCompletado());
+                //statement.setInt(7, tareaF.get);
                 return statement;
             }
         }, keyHolder);

@@ -3,31 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.demexis.igestion.domain;
 
 /**
  *
  * @author pamela.gutierrez
  */
-public class TipoProyecto {
-    
-    private int idTipoProyecto;
+public class ClaseProyecto {
+
+    private int idClaseProyecto;
     private String nombre;
     private String descripcion;
 
     /**
-     * @return the idTipoProyecto
+     * @return the idClaseProyecto
      */
-    public int getIdTipoProyecto() {
-        return idTipoProyecto;
+    public int getIdClaseProyecto() {
+        return idClaseProyecto;
     }
 
     /**
-     * @param idTipoProyecto the idTipoProyecto to set
+     * @param idClaseProyecto the idClaseProyecto to set
      */
-    public void setIdTipoProyecto(int idTipoProyecto) {
-        this.idTipoProyecto = idTipoProyecto;
+    public void setIdClaseProyecto(int idClaseProyecto) {
+        this.idClaseProyecto = idClaseProyecto;
     }
 
     /**
@@ -57,5 +56,5 @@ public class TipoProyecto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
 }

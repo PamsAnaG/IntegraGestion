@@ -10,24 +10,24 @@ package com.demexis.igestion.domain;
  *
  * @author pamela.gutierrez
  */
-public class TipoProyecto {
+public class ModalidadProyecto {
     
-    private int idTipoProyecto;
+    private int idModalidadProyecto;
     private String nombre;
     private String descripcion;
 
     /**
-     * @return the idTipoProyecto
+     * @return the idModalidadProyecto
      */
-    public int getIdTipoProyecto() {
-        return idTipoProyecto;
+    public int getIdModalidadProyecto() {
+        return idModalidadProyecto;
     }
 
     /**
-     * @param idTipoProyecto the idTipoProyecto to set
+     * @param idModalidadProyecto the idModalidadProyecto to set
      */
-    public void setIdTipoProyecto(int idTipoProyecto) {
-        this.idTipoProyecto = idTipoProyecto;
+    public void setIdModalidadProyecto(int idModalidadProyecto) {
+        this.idModalidadProyecto = idModalidadProyecto;
     }
 
     /**

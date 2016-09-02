@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class Tarea {
 
-    private int idTarea;
+    private int idTarea;    
     private int idTareaPadre;
     private String nombre;
     private Date fechaInicio;

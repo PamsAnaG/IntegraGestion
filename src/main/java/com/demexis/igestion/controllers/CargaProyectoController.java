@@ -7,7 +7,9 @@ package com.demexis.igestion.controllers;
 
 import com.demexis.igestion.dao.ProyectoDAO;
 import com.demexis.igestion.domain.ArchivoProyecto;
+import com.demexis.igestion.domain.Cliente;
 import com.demexis.igestion.domain.Tarea;
+import com.demexis.igestion.servicios.ClienteService;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,10 +24,13 @@ import net.sf.mpxj.mpp.MPPReader;
 import net.sf.mpxj.reader.ProjectReader;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,6 +42,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class CargaProyectoController {
 
     private Logger logger = Logger.getLogger(CargaProyectoController.class);
+
+    @Autowired
+    ClienteService clienteService;
 
     @Autowired
     ProyectoDAO proyectoDao;
@@ -86,8 +94,19 @@ public class CargaProyectoController {
     public ModelAndView nuevoProyecto() {
         ModelAndView model = new ModelAndView();
         model.setViewName("nuevoProyecto");
-        
+
         return model;
     }
 
+    @GetMapping(value = "/clientes", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Cliente> obtenClientes() {
+        return clienteService.getClientes();
+    }
+
+    @GetMapping(value = "/asociados", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Cliente> obtenAsociados() {
+        return clienteService.getClientes();
+    }
 }
