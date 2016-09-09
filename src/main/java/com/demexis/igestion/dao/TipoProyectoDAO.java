@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.demexis.igestion.servicios;
+package com.demexis.igestion.dao;
 
-import com.demexis.igestion.domain.Asociado;
+import com.demexis.igestion.domain.TipoProyecto;
 import java.util.List;
 
 /**
  *
  * @author pamela.gutierrez
  */
-public interface AsociadoService {
+public interface TipoProyectoDAO {
 
-    public List<Asociado> getAsociados();
+    public List<TipoProyecto> getTiposProyecto();
 
 }

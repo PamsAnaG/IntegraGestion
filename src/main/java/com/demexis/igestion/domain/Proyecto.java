@@ -5,13 +5,14 @@
  */
 package com.demexis.igestion.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author pamela.gutierrez
  */
-public class Proyecto {
+public class Proyecto implements Serializable{
 
     private int idProyecto;
     private String nombre;
@@ -22,6 +23,8 @@ public class Proyecto {
     private TipoFacturacion tipoFacturacion;
     private ModalidadProyecto modalidad;
     private String estatus;
+    private Cliente cliente = new Cliente();
+    private ArchivoProyecto archivoProyecto;
 
     /**
      * @return the idProyecto
@@ -147,6 +150,34 @@ public class Proyecto {
      */
     public void setEstatus(String estatus) {
         this.estatus = estatus;
+    }
+
+    /**
+     * @return the archivoProyecto
+     */
+    public ArchivoProyecto getArchivoProyecto() {
+        return archivoProyecto;
+    }
+
+    /**
+     * @param archivoProyecto the archivoProyecto to set
+     */
+    public void setArchivoProyecto(ArchivoProyecto archivoProyecto) {
+        this.archivoProyecto = archivoProyecto;
+    }
+
+    /**
+     * @return the cliente
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
 }

@@ -5,15 +5,15 @@
  */
 package com.demexis.igestion.servicios;
 
-import com.demexis.igestion.domain.Asociado;
+import com.demexis.igestion.domain.TipoProyecto;
 import java.util.List;
 
 /**
  *
  * @author pamela.gutierrez
  */
-public interface AsociadoService {
+public interface TipoProyectoService {
 
-    public List<Asociado> getAsociados();
+    public List<TipoProyecto> getTiposProyecto();
 
 }

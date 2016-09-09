@@ -6,6 +6,8 @@
 
 package com.demexis.igestion.controllers;
 
+import com.demexis.igestion.domain.Cliente;
+import com.demexis.igestion.domain.Proyecto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +23,7 @@ public class DashBoardController {
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public ModelAndView inicio() {
 
-        ModelAndView model = new ModelAndView();
+        ModelAndView model = new ModelAndView();        
         model.setViewName("dashboard");
 
         return model;

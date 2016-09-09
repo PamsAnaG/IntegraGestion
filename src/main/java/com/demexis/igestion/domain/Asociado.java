@@ -14,7 +14,8 @@ public class Asociado {
     
     private int idAsociado;
     private String nombre;
-    private String descripcion;
+    private String numeroMovil;
+    private String correElectronico;
 
     /**
      * @return the idAsociado
@@ -45,17 +46,32 @@ public class Asociado {
     }
 
     /**
-     * @return the descripcion
+     * @return the numeroMovil
      */
-    public String getDescripcion() {
-        return descripcion;
+    public String getNumeroMovil() {
+        return numeroMovil;
     }
 
     /**
-     * @param descripcion the descripcion to set
+     * @param numeroMovil the numeroMovil to set
      */
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNumeroMovil(String numeroMovil) {
+        this.numeroMovil = numeroMovil;
     }
+
+    /**
+     * @return the correElectronico
+     */
+    public String getCorreElectronico() {
+        return correElectronico;
+    }
+
+    /**
+     * @param correElectronico the correElectronico to set
+     */
+    public void setCorreElectronico(String correElectronico) {
+        this.correElectronico = correElectronico;
+    }
+
     
 }

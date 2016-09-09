@@ -5,8 +5,8 @@
  */
 package com.demexis.igestion.servicios;
 
-import com.demexis.igestion.dao.AsociadoDAO;
-import com.demexis.igestion.domain.Asociado;
+import com.demexis.igestion.dao.TipoProyectoDAO;
+import com.demexis.igestion.domain.TipoProyecto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
  * @author pamela.gutierrez
  */
 @Service
-public class AsociadoServiceImpl implements AsociadoService {
+public class TipoProyectoServiceImpl implements TipoProyectoService {
 
     @Autowired
-    AsociadoDAO asociadoDAO;
+    TipoProyectoDAO tipoProyectoDAO;
 
     @Override
-    public List<Asociado> getAsociados() {
-        return asociadoDAO.getAsociados();
+    public List<TipoProyecto> getTiposProyecto() {
+        return tipoProyectoDAO.getTiposProyecto();
     }
 
 }
