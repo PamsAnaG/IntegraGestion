@@ -35,7 +35,7 @@ public class AutenticacionController {
     public ModelAndView inicio() {
 
         Usuario usuario = new Usuario();
-
+        
         ModelAndView model = new ModelAndView();
         model.setViewName("inicio");
         model.addObject("Usuario", usuario);
