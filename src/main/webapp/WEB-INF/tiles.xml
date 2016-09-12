@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    
+    <definition name="inicio" template="/vista/inicio.jsp">
+        <put-attribute name="title" value="Integra Gestión" />
+    </definition>
+    
+    <definition name="base.definition" template="/vista/layout.jsp">
+        <put-attribute name="title" value="Integra Gestión" />
+        <put-attribute name="menu" value="/vista/menu.jsp" />
+        <put-attribute name="body" value="" />
+    </definition>
+  
+    <definition name="dashboard" extends="base.definition">
+        <put-attribute name="title" value="Dashboard" />
+        <put-attribute name="body" value="/vista/dashboard.jsp" />
+    </definition>
+  
+</tiles-definitions>

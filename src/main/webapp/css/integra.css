@@ -1,0 +1,26 @@
+html {
+  font-family: Verdana, Geneva, sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/**
+ * Remove default margin.
+ */
+
+body {
+  margin: 0;
+}
+
+.login {
+    position:absolute;
+    top:100px;
+    left:50%;
+    height:300px;
+    width:250px;
+    margin-left:-125px;
+}
+
+.txtCenter {
+    text-align: center;
+}
