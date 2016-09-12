@@ -3,7 +3,22 @@
     Created on : Aug 8, 2016, 3:01:07 PM
     Author     : pamela.gutierrez
 --%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<html>
+    
+    <head>
+        <title><tiles:insertAttribute name="title" ignore="true" /></title>
+        
+        <script type="text/javascript" src='../js/dashboard.js'></script>
+        <SCRIPT>
+            function nuevoProyecto() {
+                $("#nuevoPF").submit();
+            }
+        </SCRIPT>
+    </head>
+    
+    <body>
         
         <form:form class="box dashboard" style="left: 13%; top: 35%; width: 60%; height: 80%;">
             <div style="height: 80%; overflow: auto;" id="boxScroll">
@@ -107,3 +122,6 @@
                 </tr>
             </table>      
         </form:form>
+        
+    </body>
+</html>

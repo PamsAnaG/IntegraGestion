@@ -18,5 +18,10 @@
         <put-attribute name="title" value="Dashboard" />
         <put-attribute name="body" value="/vista/dashboard.jsp" />
     </definition>
+    
+    <definition name="nuevoProyecto" extends="base.definition">
+        <put-attribute name="title" value="Nuevo Proyecto" />
+        <put-attribute name="body" value="/vista/nuevoProyecto.jsp" />
+    </definition>
   
 </tiles-definitions>
