@@ -6,6 +6,7 @@
 package com.demexis.igestion.servicios;
 
 import com.demexis.igestion.domain.Usuario;
+import java.util.List;
 
 /**
  *
@@ -16,5 +17,7 @@ public interface UsuarioService {
     public Usuario informacionUsuario(Usuario usuario);
 
     public Usuario privilegiosUsuario(Usuario usuario);
+    
+    public List<Usuario> getUsuariosRecursos();
 
 }

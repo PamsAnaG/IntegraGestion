@@ -9,14 +9,20 @@
             <props>
                 <prop key="guardaTareaProyecto">
 	        <![CDATA[
-	            INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+	            INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, 'A')
                 ]]>
                 </prop> 
                 <prop key="guardaProyecto">               
                 <![CDATA[
 	            INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ]]>
+                </prop>
+                <prop key="guardaArchivoProyecto">
+                <![CDATA[
+	            INSERT INTO ARCHIVO_PROYECTO (ID_PROYECTO, ARCHIVO)
+                    VALUES (?, ?)
                 ]]>
                 </prop>                
             </props>

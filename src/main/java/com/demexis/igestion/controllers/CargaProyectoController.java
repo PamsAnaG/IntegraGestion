@@ -68,46 +68,8 @@ public class CargaProyectoController {
 
         logger.debug("Cargando proyecto...");
 
-        Proyecto proyectoBD = null;
+        proyectoService.almacenaProyecto(proyecto);
 
-        try {
-
-            proyectoBD = proyectoService.guardaProyecto(proyecto);
-            logger.debug("Proyecto almacenado " + proyectoBD.getIdProyecto());
-
-        } catch (Exception excp) {
-            excp.printStackTrace();
-            logger.error("Error al almacenar el proyecto: " + excp.getMessage());
-        }
-
-        /*try {
-
-         CommonsMultipartFile uploaded = fileFormBean.getFichero();
-         ProjectReader reader = new MPPReader();
-         ProjectFile project = reader.read(uploaded.getInputStream());
-         HashMap idTasks = new HashMap();
-
-         Tarea tarea = new Tarea();
-         for (Task task : project.getAllTasks()) {
-         System.out.println("Task: " + task.getName() + " ID=" + task.getID() + " Unique ID=" + task.getUniqueID() + " Duration  " + task.getDuration().getDuration() + " Inicio " + task.getStart() + " Fin " + task.getFinish());
-         tarea.setNombre(task.getName());
-         tarea.setDuracion(task.getDuration().getDuration());
-         tarea.setFechaFin(task.getFinish());
-         tarea.setFechaInicio(task.getStart());
-         tarea.setIdUnicoTarea(task.getUniqueID());
-         Task parent = task.getParentTask();
-         if (parent != null) {
-         if (idTasks.containsKey(parent.getUniqueID())) {
-         tarea.setIdTareaPadre((Integer) idTasks.get(parent.getUniqueID()));
-         }
-         }
-         tarea = proyectoDao.guardaTarea(tarea);
-         idTasks.put(tarea.getIdUnicoTarea(), tarea.getIdTarea());
-         }
-         } catch (Exception excp) {
-         excp.printStackTrace();
-         logger.error(excp.getMessage());
-         }*/
         ModelAndView modelR = new ModelAndView();
         modelR.setViewName("dashboard");
 
@@ -123,7 +85,6 @@ public class CargaProyectoController {
         List<TipoFacturacion> tiposFacturacion = claseProyectoService.getTipoFacturacion();
         List<ModalidadProyecto> modalidadProyecto = claseProyectoService.getModalidadProyectos();
         Proyecto proyecto = new Proyecto();
-        proyecto.setNombre("Pamela");
         ModelAndView model = new ModelAndView("nuevoProyecto", "proyecto", proyecto);
         model.addObject("clientes", clientes);
         model.addObject("tiposP", tiposProyecto);

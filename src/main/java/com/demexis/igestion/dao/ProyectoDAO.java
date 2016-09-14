@@ -17,5 +17,7 @@ public interface ProyectoDAO {
     public Tarea guardaTarea(Tarea tarea, int idProyecto);
 
     public Proyecto guardaProyecto(Proyecto proyecto);
+    
+    public void guardaArchivoProyecto(Proyecto proyecto);
 
 }

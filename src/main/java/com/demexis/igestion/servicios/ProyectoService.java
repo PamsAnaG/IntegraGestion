@@ -18,4 +18,6 @@ public interface ProyectoService {
 
     public Tarea guardaTarea(Tarea tarea, int idProyecto);
 
+    public Proyecto almacenaProyecto(Proyecto proyecto);
+
 }

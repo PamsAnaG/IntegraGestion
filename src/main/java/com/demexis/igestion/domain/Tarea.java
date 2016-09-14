@@ -5,7 +5,9 @@
  */
 package com.demexis.igestion.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -21,6 +23,7 @@ public class Tarea {
     private double duracion;
     private int procentajeCompletado;
     private int idUnicoTarea;
+    private List<Recurso> responsables = new ArrayList();
 
     /**
      * @return the idTarea
@@ -132,6 +135,20 @@ public class Tarea {
      */
     public void setIdUnicoTarea(int idUnicoTarea) {
         this.idUnicoTarea = idUnicoTarea;
+    }
+
+    /**
+     * @return the responsables
+     */
+    public List<Recurso> getResponsables() {
+        return responsables;
+    }
+
+    /**
+     * @param responsables the responsables to set
+     */
+    public void setResponsables(List<Recurso> responsables) {
+        this.responsables = responsables;
     }
 
 }

@@ -27,7 +27,7 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
     private Logger logger = Logger.getLogger(CargaProyectoController.class);
 
     @Override
-    public Tarea guardaTarea(Tarea tarea, int idProyecto){
+    public Tarea guardaTarea(Tarea tarea, int idProyecto) {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -82,6 +82,15 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
         proyectoF.setIdProyecto(keyHolder.getKey().intValue());
 
         return proyectoF;
+    }
+
+    @Override
+    public void guardaArchivoProyecto(Proyecto proyecto) {
+
+        getJdbcTemplate().update(
+                getQueries().getProperty("guardaArchivoProyecto"),
+                new Object[]{proyecto.getIdProyecto(), proyecto.getArchivoProyecto().getFichero().getBytes()});
+
     }
 
 }

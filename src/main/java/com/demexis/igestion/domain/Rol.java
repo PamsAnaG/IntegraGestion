@@ -14,6 +14,12 @@ public class Rol {
     
     private String nombre;
     private String descripcion;
+    
+    public static int ADM_PROYECTOS = 1;
+    public static int GER_PROYECTOS = 2;
+    public static int LIDER_PROYECTOS = 3;
+    public static int RECURSO = 4;
+    public static int CLIENTE = 5;
 
     /**
      * @return the nombre

@@ -7,6 +7,7 @@ package com.demexis.igestion.servicios;
 
 import com.demexis.igestion.dao.UsuarioDAO;
 import com.demexis.igestion.domain.Usuario;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario privilegiosUsuario(Usuario usuario) {
         return usuarioDao.getPrivilegiosUsuario(usuario);
+    }
+
+    @Override
+    public List<Usuario> getUsuariosRecursos() {
+        return usuarioDao.getUsuariosRecursos();
     }
 
 }

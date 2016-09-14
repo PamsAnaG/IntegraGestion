@@ -85,4 +85,17 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
         }
     }
 
+    @Override
+    public List<Usuario> getUsuariosRecursos() {
+        String query = getQueries().getProperty("getUsuariosRecursos");
+
+        List<Usuario> usuariosRecursos = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{Rol.RECURSO});
+
+        if (!usuariosRecursos.isEmpty()) {
+            return usuariosRecursos;
+        }
+
+        return null;
+    }
+
 }

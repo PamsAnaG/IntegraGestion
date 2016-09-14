@@ -5,11 +5,26 @@
  */
 package com.demexis.igestion.servicios;
 
+import com.demexis.igestion.controllers.CargaProyectoController;
 import com.demexis.igestion.dao.ProyectoDAO;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Tarea;
+import com.demexis.igestion.domain.Usuario;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import net.sf.mpxj.ProjectFile;
+import net.sf.mpxj.Resource;
+import net.sf.mpxj.ResourceAssignment;
+import net.sf.mpxj.ResourceAssignmentContainer;
+import net.sf.mpxj.ResourceContainer;
+import net.sf.mpxj.Task;
+import net.sf.mpxj.mpp.MPPReader;
+import net.sf.mpxj.reader.ProjectReader;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  *
@@ -18,8 +33,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProyectoServiceImpl implements ProyectoService {
 
+    private Logger logger = Logger.getLogger(ProyectoServiceImpl.class);
+
     @Autowired
     ProyectoDAO proyectoDAO;
+
+    @Autowired
+    UsuarioService usuarioService;
 
     @Override
     public Proyecto guardaProyecto(Proyecto proyecto) {
@@ -29,6 +49,79 @@ public class ProyectoServiceImpl implements ProyectoService {
     @Override
     public Tarea guardaTarea(Tarea tarea, int idProyecto) {
         return proyectoDAO.guardaTarea(tarea, idProyecto);
+    }
+
+    @Override
+    public Proyecto almacenaProyecto(Proyecto proyecto) {
+
+        Proyecto proyectoBD = null;
+        try {
+
+            proyectoBD = proyectoDAO.guardaProyecto(proyecto);
+            proyectoBD.setArchivoProyecto(proyecto.getArchivoProyecto());
+            logger.debug("Proyecto almacenado " + proyectoBD.getIdProyecto());
+
+        } catch (Exception excp) {
+            excp.printStackTrace();
+            logger.error("Error al almacenar el proyecto: " + excp.getMessage());
+        }
+
+        try {
+            proyectoDAO.guardaArchivoProyecto(proyectoBD);
+        } catch (Exception excp) {
+            logger.error("Error al guardar el archivo del proyecto [" + proyectoBD.getIdProyecto() + "] - " + excp.getMessage());
+            excp.printStackTrace();
+        }
+
+        if (proyectoBD != null) {
+            try {
+                CommonsMultipartFile uploaded = proyecto.getArchivoProyecto().getFichero();
+                logger.debug("Archivo " + proyecto.getArchivoProyecto().getFichero().getOriginalFilename());
+                if (proyecto.getArchivoProyecto().getFichero().getOriginalFilename().contains(".mpp")) {
+                    ProjectReader reader = new MPPReader();
+                    ProjectFile project = reader.read(uploaded.getInputStream());
+                    HashMap idTasks = new HashMap();
+
+                    List<Usuario> usuariosRecursos = usuarioService.getUsuariosRecursos();
+                    Iterator usuariosIt = null;
+                    if (usuariosRecursos != null) {
+                        usuariosIt = usuariosRecursos.iterator();
+                    }
+
+                    Tarea tarea = new Tarea();
+                    for (Task task : project.getAllTasks()) {
+                        tarea.setNombre(task.getName());
+                        tarea.setDuracion(task.getDuration().getDuration());
+                        tarea.setFechaFin(task.getFinish());
+                        tarea.setFechaInicio(task.getStart());
+                        tarea.setIdUnicoTarea(task.getUniqueID());
+                        Task parent = task.getParentTask();
+                        if (parent != null) {
+                            if (idTasks.containsKey(parent.getUniqueID())) {
+                                tarea.setIdTareaPadre((Integer) idTasks.get(parent.getUniqueID()));
+                            }
+                        }
+                       
+                        List<ResourceAssignment> resources = task.getResourceAssignments();
+                        Iterator iResources = resources.iterator();
+                        while (iResources.hasNext()) {
+                            ResourceAssignment ra = (ResourceAssignment) iResources.next();
+                            Resource resource = ra.getResource();
+                            logger.debug("\tTask " + task.getUniqueID() + "|Assigned Resources: " + resource.getName());
+                        }
+                        tarea = proyectoDAO.guardaTarea(tarea, proyectoBD.getIdProyecto());
+                        proyectoBD.getTareas().add(tarea);
+                        idTasks.put(tarea.getIdUnicoTarea(), tarea.getIdTarea());
+                    }
+                } else {
+                    logger.error("Archivo de proyecto incorrecto...");
+                }
+            } catch (Exception excp) {
+                excp.printStackTrace();
+                logger.error(excp.getMessage());
+            }
+        }
+        return proyectoBD;
     }
 
 }
