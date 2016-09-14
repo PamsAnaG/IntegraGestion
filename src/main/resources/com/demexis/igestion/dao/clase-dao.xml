@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+    <bean id="claseProyectoDao" class="com.demexis.igestion.dao.ClaseProyectoDAOImpl">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="queries">
+            <props>
+                <prop key="getClaseProyecto">
+	        <![CDATA[
+	            SELECT ID_CLASE_PROYECTO, NOMBRE, DESCRIPCION
+                    FROM V_CLASE_PROYECTO
+                ]]>
+                </prop>
+                <prop key="getTipoFacturacion">
+	        <![CDATA[
+	            SELECT ID_TP_FACTURACION, NOMBRE, DESCRIPCION
+                    FROM V_TIPO_FACTURACION
+                ]]>
+                </prop>     
+                <prop key="getModalidad">
+	        <![CDATA[
+	            SELECT ID_MODALIDAD, NOMBRE, DESCRIPCION
+                    FROM V_MODALIDAD_PROYECTO
+                ]]>
+                </prop>             
+            </props>
+        </property>
+    </bean>
+</beans>

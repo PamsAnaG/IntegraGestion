@@ -12,6 +12,12 @@
 	            INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 ]]>
+                </prop> 
+                <prop key="guardaProyecto">               
+                <![CDATA[
+	            INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ]]>
                 </prop>                
             </props>
         </property>

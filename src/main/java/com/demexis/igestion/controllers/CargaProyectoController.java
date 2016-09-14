@@ -8,12 +8,17 @@ package com.demexis.igestion.controllers;
 import com.demexis.igestion.dao.ProyectoDAO;
 import com.demexis.igestion.domain.ArchivoProyecto;
 import com.demexis.igestion.domain.Asociado;
+import com.demexis.igestion.domain.ClaseProyecto;
 import com.demexis.igestion.domain.Cliente;
+import com.demexis.igestion.domain.ModalidadProyecto;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Tarea;
+import com.demexis.igestion.domain.TipoFacturacion;
 import com.demexis.igestion.domain.TipoProyecto;
 import com.demexis.igestion.servicios.AsociadoService;
+import com.demexis.igestion.servicios.ClaseProyectoService;
 import com.demexis.igestion.servicios.ClienteService;
+import com.demexis.igestion.servicios.ProyectoService;
 import com.demexis.igestion.servicios.TipoProyectoService;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +52,7 @@ public class CargaProyectoController {
     ClienteService clienteService;
 
     @Autowired
-    ProyectoDAO proyectoDao;
+    ProyectoService proyectoService;
 
     @Autowired
     AsociadoService asociadoService;
@@ -55,11 +60,25 @@ public class CargaProyectoController {
     @Autowired
     TipoProyectoService tipoProyectoService;
 
+    @Autowired
+    ClaseProyectoService claseProyectoService;
+
     @RequestMapping(value = "/cargap", method = RequestMethod.POST)
     public ModelAndView cargaProyecto(@ModelAttribute("proyecto") Proyecto proyecto, ModelMap model) {//@ModelAttribute ArchivoProyecto fileFormBean) {
 
         logger.debug("Cargando proyecto...");
 
+        Proyecto proyectoBD = null;
+
+        try {
+
+            proyectoBD = proyectoService.guardaProyecto(proyecto);
+            logger.debug("Proyecto almacenado " + proyectoBD.getIdProyecto());
+
+        } catch (Exception excp) {
+            excp.printStackTrace();
+            logger.error("Error al almacenar el proyecto: " + excp.getMessage());
+        }
 
         /*try {
 
@@ -99,10 +118,18 @@ public class CargaProyectoController {
     @RequestMapping(value = "/nuevop", method = RequestMethod.POST)
     public ModelAndView nuevoProyecto() {
         List<Cliente> clientes = clienteService.getClientes();
+        List<TipoProyecto> tiposProyecto = tipoProyectoService.getTiposProyecto();
+        List<ClaseProyecto> clasesProyecto = claseProyectoService.getClaseProyectos();
+        List<TipoFacturacion> tiposFacturacion = claseProyectoService.getTipoFacturacion();
+        List<ModalidadProyecto> modalidadProyecto = claseProyectoService.getModalidadProyectos();
         Proyecto proyecto = new Proyecto();
         proyecto.setNombre("Pamela");
         ModelAndView model = new ModelAndView("nuevoProyecto", "proyecto", proyecto);
         model.addObject("clientes", clientes);
+        model.addObject("tiposP", tiposProyecto);
+        model.addObject("clasesP", clasesProyecto);
+        model.addObject("tiposF", tiposFacturacion);
+        model.addObject("modalidadP", modalidadProyecto);
 
         return model;
     }

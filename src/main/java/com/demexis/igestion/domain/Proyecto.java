@@ -6,13 +6,15 @@
 package com.demexis.igestion.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author pamela.gutierrez
  */
-public class Proyecto implements Serializable{
+public class Proyecto implements Serializable {
 
     private int idProyecto;
     private String nombre;
@@ -25,6 +27,7 @@ public class Proyecto implements Serializable{
     private String estatus;
     private Cliente cliente = new Cliente();
     private ArchivoProyecto archivoProyecto;
+    private List<Tarea> tareas = new ArrayList();
 
     /**
      * @return the idProyecto
@@ -178,6 +181,20 @@ public class Proyecto implements Serializable{
      */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    /**
+     * @return the tareas
+     */
+    public List<Tarea> getTareas() {
+        return tareas;
+    }
+
+    /**
+     * @param tareas the tareas to set
+     */
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
     }
 
 }
