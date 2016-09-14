@@ -82,11 +82,11 @@ public class ProyectoServiceImpl implements ProyectoService {
                     ProjectFile project = reader.read(uploaded.getInputStream());
                     HashMap idTasks = new HashMap();
 
-                    List<Usuario> usuariosRecursos = usuarioService.getUsuariosRecursos();
+                    /*List<Usuario> usuariosRecursos = usuarioService.getUsuariosRecursos();
                     Iterator usuariosIt = null;
                     if (usuariosRecursos != null) {
                         usuariosIt = usuariosRecursos.iterator();
-                    }
+                    }*/
 
                     Tarea tarea = new Tarea();
                     for (Task task : project.getAllTasks()) {

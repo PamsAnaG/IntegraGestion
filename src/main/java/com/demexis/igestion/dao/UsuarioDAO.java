@@ -5,6 +5,7 @@
  */
 package com.demexis.igestion.dao;
 
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Usuario;
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface UsuarioDAO {
     
     public Usuario getPrivilegiosUsuario(Usuario usuario);
     
-    public List<Usuario> getUsuariosRecursos();
+    public List<Recurso> getUsuariosRecursos();
 
 }

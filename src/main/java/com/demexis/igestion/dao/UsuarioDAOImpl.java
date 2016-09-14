@@ -6,6 +6,7 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.domain.Privilegio;
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Rol;
 import com.demexis.igestion.domain.Usuario;
 import java.sql.ResultSet;
@@ -27,6 +28,29 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
 
         public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
             obj = new Usuario();
+
+            obj.setIdUsuario(rs.getInt("ID_USUARIO"));
+            obj.setUsuario(rs.getString("USUARIO"));
+            obj.setPassword(rs.getString("PASSWORD"));
+            obj.setApMaterno(rs.getString("APMATERNO"));
+            obj.setApPaterno(rs.getString("APPATERNO"));
+            obj.setCorreoElectronico(rs.getString("CORREO_ELECTRONICO"));
+            obj.setNombre(rs.getString("NOMBRE"));
+            obj.setNumeroMovil(rs.getString("NUMERO_MOVIL"));
+            Rol rol = new Rol();
+            rol.setNombre(rs.getString("NOMBRE_ROL"));
+            rol.setDescripcion(rs.getString("DESCRIPCION"));
+            obj.setRol(rol);
+
+            return obj;
+        }
+    };
+    
+    private static RowMapper<Recurso> MAPPER_RECURSO = new RowMapper<Recurso>() {
+        Recurso obj;
+
+        public Recurso mapRow(ResultSet rs, int rowNum) throws SQLException {
+            obj = new Recurso();
 
             obj.setIdUsuario(rs.getInt("ID_USUARIO"));
             obj.setUsuario(rs.getString("USUARIO"));
@@ -86,14 +110,14 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
     }
 
     @Override
-    public List<Usuario> getUsuariosRecursos() {
+    public List<Recurso> getUsuariosRecursos() {
         String query = getQueries().getProperty("getUsuariosRecursos");
 
-        List<Usuario> usuariosRecursos = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{Rol.RECURSO});
+        /*List<Recurso> usuariosRecursos = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{Rol.RECURSO});
 
         if (!usuariosRecursos.isEmpty()) {
             return usuariosRecursos;
-        }
+        }*/
 
         return null;
     }
