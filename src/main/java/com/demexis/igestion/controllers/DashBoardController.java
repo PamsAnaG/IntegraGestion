@@ -31,7 +31,7 @@ public class DashBoardController {
     @Autowired
     ProyectoService proyectoService;
     
-    @RequestMapping(value = "/dashboard", method = RequestMethod.POST)
+    @RequestMapping(value = "/dashboard", method = { RequestMethod.POST, RequestMethod.GET } )
     public ModelAndView inicio() {
         
         ResumenDashboard resumen = new ResumenDashboard();
@@ -80,6 +80,7 @@ public class DashBoardController {
         proyectos.add(proyecto1);
 
         ModelAndView model = new ModelAndView();
+        model.addObject("Proyecto", new Proyecto());
         model.addObject("resumen", resumen);
         model.addObject("proyectos", proyectos);
         model.addObject("numProyectos", proyectos.size());

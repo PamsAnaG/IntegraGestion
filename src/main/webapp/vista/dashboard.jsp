@@ -24,20 +24,21 @@
                 </form:form>
             </div>
             <div class="dashboardLeft" style="height:85%;">
-                <form:form id="lstProyectos" >
+                <form:form id="lstProyectos" commandName="Proyecto">
+                    <form:hidden path="idProyecto" id="idProyecto" />
                     <label class="table avance t">Proyectos en curso: ${numProyectos}</label>
                     <div style="height:100%; overflow: auto; margin-top: 15px;" id="boxScroll">
                         <table style="width: 100%;" id="progressBar">
                             <c:forEach var="fProyecto" items="${proyectos}">
-                                <tr onclick="javascript: detalleProyecto(${fProyecto.idProyecto})" style="height: 35px; vertical-align: bottom;">
+                                <tr onclick="detalleProyecto(${fProyecto.idProyecto});" style="height: 35px; vertical-align: bottom;">
                                     <td align="left" colspan="2">
                                         <label class="table avance p" >ID ${fProyecto.idProyecto} | ${fProyecto.cliente.nombre} | ${fProyecto.nombre}</label>
                                     </td>
                                 </tr>
-                                <tr onclick="javascript: detalleProyecto(${fProyecto.idProyecto})">
+                                <tr onclick="detalleProyecto(${fProyecto.idProyecto});">
                                     <td >
                                         <div class="progress-bar" data-value="${fProyecto.avance}" 
-                                             data-value2="${fProyecto.estatusAvance}"></div>
+                                             data-value2="${fProyecto.estatusAvance}" style="cursor: pointer; margin-bottom: 10px;"></div>
                                     </td>
                                     <td align="center" style="width: 8%;">
                                         <label class="table avance p" >${fProyecto.avance}%</label>

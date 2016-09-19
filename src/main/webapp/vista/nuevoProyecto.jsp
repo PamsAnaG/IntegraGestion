@@ -125,7 +125,7 @@
                         Carga archivo
                     </th>
                     <td colspan="2">
-                        <form:input path="archivoProyecto.fichero" type="file" name="archivoProyecto" cssClass="cargaArchivo" />
+                        <form:input path="archivoProyecto.fichero" type="file" name="archivoProyecto" />
                     </td>
                 </tr>
             </table>

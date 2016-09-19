@@ -8,27 +8,34 @@
         <property name="queries">
             <props>
                 <prop key="guardaTareaProyecto">
-	        <![CDATA[
-	            INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, 'A')
-                ]]>
+                    <![CDATA[
+                        INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, 'A')
+                    ]]>
                 </prop>
                 <prop key="guardaProyecto">
-                <![CDATA[
-	            INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ]]>
+                    <![CDATA[
+                        INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ]]>
                 </prop>
                 <prop key="guardaArchivoProyecto">
-                <![CDATA[
-	            INSERT INTO ARCHIVO_PROYECTO (ID_PROYECTO, ARCHIVO)
-                    VALUES (?, ?)
-                ]]>
+                    <![CDATA[
+                        INSERT INTO ARCHIVO_PROYECTO (ID_PROYECTO, ARCHIVO)
+                        VALUES (?, ?)
+                    ]]>
                 </prop>
                 <prop key="obtieneProyectosDashboard">
-                <![CDATA[
-                    SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM PROYECTO p JOIN CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'AC';
-                ]]>
+                    <![CDATA[
+                        SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM PROYECTO p JOIN CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'AC';
+                    ]]>
+                </prop>
+                <prop key="obtieneProyectosDashboard">
+                    <![CDATA[
+                        SELECT NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS
+                        FROM PROYECTO
+                        WHERE ID_PROYECTO = ?;
+                    ]]>
                 </prop>
             </props>
         </property>

@@ -25,7 +25,7 @@
 
     function detalleProyecto(idProyecto) {
         $("#lstProyectos").attr('action', '/igestion/detalleProyecto');
-        $("#lstProyectos").attr('idProyecto', idProyecto);
+        $("#idProyecto").attr('value', idProyecto);
         $("#lstProyectos").submit();
     }
 

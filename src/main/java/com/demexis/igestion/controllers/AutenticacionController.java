@@ -31,7 +31,7 @@ public class AutenticacionController {
     @Autowired
     UsuarioService usuarioService;
 
-    @RequestMapping(value = "/inicio", method = RequestMethod.GET)
+    @RequestMapping(value = "/inicio", method = { RequestMethod.GET, RequestMethod.GET })
     public ModelAndView inicio() {
 
         Usuario usuario = new Usuario();
@@ -58,7 +58,7 @@ public class AutenticacionController {
                 // GUARDAMOS AL USUARIO FIRMADO EN LA SESION
                 HttpSession session = request.getSession();
                 session.setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), usuarioBD);
-                model.setViewName("dashboard");
+                model.setViewName("redirect:dashboard");
                 model.addObject("Usuario", usuario);
             }
         } else {
@@ -81,7 +81,7 @@ public class AutenticacionController {
         HttpSession session = request.getSession();
         session.setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), null);
 
-        model.setViewName("inicio");
+        model.setViewName("redirect:inicio");
         model.addObject("Usuario", usuario);
 
         return model;

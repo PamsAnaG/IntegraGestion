@@ -21,6 +21,8 @@ public interface ProyectoDAO {
     
     public void guardaArchivoProyecto(Proyecto proyecto);
     
+    public Proyecto obtieneProyecto(int idProyecto);
+    
     public List<Proyecto> obtieneProyectosDashboard();
 
 }

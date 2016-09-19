@@ -99,6 +99,31 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
     }
     
     @Override
+    public Proyecto obtieneProyecto(int idProyecto) {
+        String query = getQueries().getProperty("obtieneProyectosDashboard");
+        
+        Proyecto proyecto = (Proyecto) getJdbcTemplate().query(query, MAPPER_PROYECTO, new Object[]{ idProyecto });
+        
+        if (proyecto != null) {
+            return proyecto;
+        }
+        
+        return null;
+    }
+    
+    private static RowMapper<Proyecto> MAPPER_PROYECTO = new RowMapper<Proyecto>() {
+        Proyecto obj = new Proyecto();
+        public Proyecto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Cliente cliente = new Cliente();
+            obj.setIdProyecto(rs.getInt("ID_PROYECTO"));
+            obj.setNombre(rs.getString("NOMBRE"));
+            cliente.setNombre(rs.getString("CLIENTE"));
+            obj.setCliente(cliente);
+            return obj;
+        }
+    };
+    
+    @Override
     public List<Proyecto> obtieneProyectosDashboard() {
         String query = getQueries().getProperty("obtieneProyectosDashboard");
         

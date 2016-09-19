@@ -21,6 +21,8 @@ public interface ProyectoService {
 
     public Proyecto almacenaProyecto(Proyecto proyecto);
     
+    public Proyecto obtieneProyecto(int idProyecto);
+    
     public List<Proyecto> obtieneProyectosDashboard();
 
 }

@@ -129,6 +129,11 @@ public class ProyectoServiceImpl implements ProyectoService {
     }
     
     @Override
+    public Proyecto obtieneProyecto(int idProyecto) {
+        return proyectoDAO.obtieneProyecto(idProyecto);
+    }
+    
+    @Override
     public List<Proyecto> obtieneProyectosDashboard() {
         List<Tarea> tareas;
         List<Proyecto> lstProyectos = new ArrayList<Proyecto>();
