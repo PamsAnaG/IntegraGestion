@@ -12,8 +12,8 @@
 	            INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS)
                     VALUES (?, ?, ?, ?, ?, ?, ?, 'A')
                 ]]>
-                </prop> 
-                <prop key="guardaProyecto">               
+                </prop>
+                <prop key="guardaProyecto">
                 <![CDATA[
 	            INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -24,7 +24,12 @@
 	            INSERT INTO ARCHIVO_PROYECTO (ID_PROYECTO, ARCHIVO)
                     VALUES (?, ?)
                 ]]>
-                </prop>                
+                </prop>
+                <prop key="obtieneProyectosDashboard">
+                <![CDATA[
+                    SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM PROYECTO p JOIN CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'AC';
+                ]]>
+                </prop>
             </props>
         </property>
     </bean>

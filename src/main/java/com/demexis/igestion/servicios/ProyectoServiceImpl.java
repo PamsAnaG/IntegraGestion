@@ -5,19 +5,18 @@
  */
 package com.demexis.igestion.servicios;
 
-import com.demexis.igestion.controllers.CargaProyectoController;
 import com.demexis.igestion.dao.ProyectoDAO;
+import com.demexis.igestion.dao.TareaProyectoDAO;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Tarea;
-import com.demexis.igestion.domain.Usuario;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import net.sf.mpxj.ProjectFile;
 import net.sf.mpxj.Resource;
 import net.sf.mpxj.ResourceAssignment;
-import net.sf.mpxj.ResourceAssignmentContainer;
-import net.sf.mpxj.ResourceContainer;
 import net.sf.mpxj.Task;
 import net.sf.mpxj.mpp.MPPReader;
 import net.sf.mpxj.reader.ProjectReader;
@@ -40,6 +39,11 @@ public class ProyectoServiceImpl implements ProyectoService {
 
     @Autowired
     UsuarioService usuarioService;
+    
+    @Autowired
+    TareaProyectoDAO tareaProyectoDAO;
+    
+    private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
 
     @Override
     public Proyecto guardaProyecto(Proyecto proyecto) {
@@ -123,5 +127,42 @@ public class ProyectoServiceImpl implements ProyectoService {
         }
         return proyectoBD;
     }
+    
+    @Override
+    public List<Proyecto> obtieneProyectosDashboard() {
+        List<Tarea> tareas;
+        List<Proyecto> lstProyectos = new ArrayList<Proyecto>();
+        Date current = new Date();
+        int alertado = 1;
+        double proceso;
+        double avance = 0;
+        int sumAvance = 0;
+        
+        List<Proyecto> proyectos = proyectoDAO.obtieneProyectosDashboard();
+        for (Proyecto proyecto : proyectos) {
+            tareas = tareaProyectoDAO.obtieneTareasProyectoDashboard(proyecto.getIdProyecto());
+            for (Tarea tarea : tareas) {
+                if (current.compareTo(tarea.getFechaFin()) > 0 
+                        && tarea.getPorcentajeCompletado() < 100 
+                        && alertado != 3) {
+                    alertado = 3;
+                } else if (current.compareTo(tarea.getFechaFin()) <= 0 
+                        && current.compareTo(tarea.getFechaInicio()) > 0
+                        && (alertado != 3 && alertado != 2)) {
+                    proceso = 100 / tarea.getDuracion();
+                    avance = ((current.getTime() - tarea.getFechaInicio().getTime()) / MILLSECS_PER_DAY) * proceso;
+                    if (tarea.getPorcentajeCompletado() < avance) {
+                        alertado = 2;
+                    }
+                }
+                sumAvance = sumAvance + tarea.getPorcentajeCompletado();
+            }
+            proyecto.setAvance(sumAvance / tareas.size());
+            proyecto.setEstatusAvance(alertado);
+            lstProyectos.add(proyecto);
+        } 
+        proyectos = null;
+        return lstProyectos;
+    } 
 
 }

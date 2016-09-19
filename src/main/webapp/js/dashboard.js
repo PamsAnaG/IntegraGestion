@@ -4,53 +4,40 @@
  * and open the template in the editor.
  */
 
-    /*$(function() {
-        $("#progressbar1").progressbar({
-            value: 75,
-            create: function(event, ui) {
-                $(this).find('.ui-widget-header').css({'background-color': '#3CB371'})
+    $(document).ready(function() {
+        var $progressBar = $(this).find('.progress-bar');
+        $progressBar.each(function() {
+            var bar = $(this);
+            var backColor;
+            switch (bar.data('value2')) {
+                case 1: backColor = '#3CB371'; break;
+                case 2: backColor = '#FFC125'; break;
+                case 3: backColor = '#EE0000'; break;
             }
-        });
-        $("#progressbar2").progressbar({
-            value: 41,
-            create: function(event, ui) {
-                $(this).find('.ui-widget-header').css({'background-color': '#3CB371'})
-            }
-        });
-        $("#progressbar3").progressbar({
-            value: 63,
-            create: function(event, ui) {
-                $(this).find('.ui-widget-header').css({'background-color': '#3CB371'})
-            }
-        });
-        $("#progressbar4").progressbar({
-            value: 52,
-            create: function(event, ui) {
-                $(this).find('.ui-widget-header').css({'background-color': '#FFC125'})
-            }
-        });
-        $("#progressbar5").progressbar({
-            value: 80,
-            create: function(event, ui) {
-                $(this).find('.ui-widget-header').css({'background-color': '#3CB371'})
-            }
-        });
-        $("#progressbar6").progressbar({
-            value: 50,
-            create: function(event, ui) {
-                $(this).find('.ui-widget-header').css({'background-color': '#EE0000'})
-            }
-        });
-    });*/
+            bar.progressbar({ 
+                value: parseFloat(bar.data('value')),
+                create: function(event, ui) {
+                    $(this).find('.ui-widget-header').css({'background-color': backColor})
+                }
+            })
+        })
+    });
 
-    function nuevoProyecto() {
-        $("#nuevoPF").submit();
+    function detalleProyecto(idProyecto) {
+        $("#lstProyectos").attr('action', '/igestion/detalleProyecto');
+        $("#lstProyectos").attr('idProyecto', idProyecto);
+        $("#lstProyectos").submit();
     }
 
     function menu(opcion) {
-        alert(opcion);
-        if (opcion === 1) {
-            $("#frmMenu").attr('action', '/igestion/salir');
-            $("#frmMenu").submit();
+        var urlOpcion;
+        switch(opcion) {
+            case 1: urlOpcion = 'dashboard'; break;
+            case 2: urlOpcion = 'mapaRecurso'; break;
+            case 3: urlOpcion = 'capturaRadar'; break;
+            case 4: urlOpcion = 'apruebaRadar'; break;
+            case 5: urlOpcion = 'salir'; break;
         }
+        $("#frmMenu").attr('action', '/igestion/' + urlOpcion);
+        $("#frmMenu").submit();
     }

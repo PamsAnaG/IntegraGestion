@@ -7,6 +7,7 @@ package com.demexis.igestion.servicios;
 
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Tarea;
+import java.util.List;
 
 /**
  *
@@ -19,5 +20,7 @@ public interface ProyectoService {
     public Tarea guardaTarea(Tarea tarea, int idProyecto);
 
     public Proyecto almacenaProyecto(Proyecto proyecto);
+    
+    public List<Proyecto> obtieneProyectosDashboard();
 
 }

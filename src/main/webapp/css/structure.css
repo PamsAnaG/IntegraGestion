@@ -46,8 +46,9 @@ h4 {
 }
 
 .logo{
-    height:50px; 
-    width:100px;
+    height: 40px;
+    width: 100px;
+    vertical-align: middle;
 }
 
 .box
@@ -508,19 +509,27 @@ footer#main
 
 .table.avance
 {
-    font-family: Helvetica, sans-serif;
     color: #102F3D;
-    font-weight: bold;
+}
+
+.table.avance.white {
+    color: white;
+}
+
+.table.avance.t
+{
+    font-size: large;
 }
 
 .table.avance.p{
     cursor:pointer;
+    /*font-weight: bold;*/
 }
 
 .tablaProyecto
 {
     position: relative;
-    margin: 40px 200px 20px;
+    margin: 0px 200px 20px;
     overflow: no-display;    
 
 }
@@ -543,14 +552,15 @@ footer#main
 
 .tablaProyecto th
 {
-    font-size: 25px;
+    font-size: 20px;
     color: #1D546F;
     padding: 7px;
+    text-align: left;
 }
 
 .tablaProyecto td
 {
-    font-size: 20px;    
+    font-size: 15px;    
     padding: 10px;
     border-spacing: 10px;
 }

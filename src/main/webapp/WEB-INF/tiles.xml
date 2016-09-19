@@ -9,7 +9,6 @@
     </definition>
     
     <definition name="base.definition" template="/vista/layout.jsp">
-        <put-attribute name="title" value="Integra Gestión" />
         <put-attribute name="menu" value="/vista/menu.jsp" />
         <put-attribute name="body" value="" />
     </definition>
@@ -19,9 +18,29 @@
         <put-attribute name="body" value="/vista/dashboard.jsp" />
     </definition>
     
+    <definition name="mapaRecurso" extends="base.definition">
+        <put-attribute name="title" value="Mapa Recursos" />
+        <put-attribute name="body" value="/vista/mapaRecursos.jsp" />
+    </definition>
+    
+    <definition name="capturaRadar" extends="base.definition">
+        <put-attribute name="title" value="Captura Radar" />
+        <put-attribute name="body" value="/vista/capturaRadar.jsp" />
+    </definition>
+    
+    <definition name="apruebaRadar" extends="base.definition">
+        <put-attribute name="title" value="Aprueba Radar" />
+        <put-attribute name="body" value="/vista/aprobacionRadar.jsp" />
+    </definition>
+    
     <definition name="nuevoProyecto" extends="base.definition">
         <put-attribute name="title" value="Nuevo Proyecto" />
         <put-attribute name="body" value="/vista/nuevoProyecto.jsp" />
+    </definition>
+    
+    <definition name="detalleProyecto" extends="base.definition">
+        <put-attribute name="title" value="Detalle Proyecto" />
+        <put-attribute name="body" value="/vista/detalleProyecto.jsp" />
     </definition>
   
 </tiles-definitions>

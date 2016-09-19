@@ -7,6 +7,7 @@ package com.demexis.igestion.dao;
 
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Tarea;
+import java.util.List;
 
 /**
  *
@@ -19,5 +20,7 @@ public interface ProyectoDAO {
     public Proyecto guardaProyecto(Proyecto proyecto);
     
     public void guardaArchivoProyecto(Proyecto proyecto);
+    
+    public List<Proyecto> obtieneProyectosDashboard();
 
 }

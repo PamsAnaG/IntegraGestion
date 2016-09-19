@@ -13,14 +13,26 @@ body {
 }
 
 .login {
-    position:absolute;
-    top:100px;
-    left:50%;
-    height:300px;
-    width:250px;
-    margin-left:-125px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    height: 300px;
+    width: 250px;
+    margin-left: -125px;
 }
 
 .txtCenter {
     text-align: center;
+}
+
+.dashboardLeft {
+    margin-left: 15px;
+    width: 60%;
+} 
+
+.cargaArchivo {
+    width: 157px;
+    height: 57px;
+    background: #6FDF81;
+    overflow: hidden;
 }

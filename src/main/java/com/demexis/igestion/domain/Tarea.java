@@ -21,7 +21,7 @@ public class Tarea {
     private Date fechaInicio;
     private Date fechaFin;
     private double duracion;
-    private int procentajeCompletado;
+    private int porcentajeCompletado;
     private int idUnicoTarea;
     private List<Recurso> responsables = new ArrayList();
 
@@ -110,17 +110,17 @@ public class Tarea {
     }
 
     /**
-     * @return the procentajeCompletado
+     * @return the porcentajeCompletado
      */
-    public int getProcentajeCompletado() {
-        return procentajeCompletado;
+    public int getPorcentajeCompletado() {
+        return porcentajeCompletado;
     }
 
     /**
-     * @param procentajeCompletado the procentajeCompletado to set
+     * @param porcentajeCompletado the porcentajeCompletado to set
      */
-    public void setProcentajeCompletado(int procentajeCompletado) {
-        this.procentajeCompletado = procentajeCompletado;
+    public void setPorcentajeCompletado(int porcentajeCompletado) {
+        this.porcentajeCompletado = porcentajeCompletado;
     }
 
     /**
