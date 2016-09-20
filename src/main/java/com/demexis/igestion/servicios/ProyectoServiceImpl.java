@@ -8,7 +8,9 @@ package com.demexis.igestion.servicios;
 import com.demexis.igestion.dao.ProyectoDAO;
 import com.demexis.igestion.dao.TareaProyectoDAO;
 import com.demexis.igestion.domain.Proyecto;
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
+import com.demexis.igestion.domain.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,10 +41,10 @@ public class ProyectoServiceImpl implements ProyectoService {
 
     @Autowired
     UsuarioService usuarioService;
-    
+
     @Autowired
     TareaProyectoDAO tareaProyectoDAO;
-    
+
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
 
     @Override
@@ -58,12 +60,13 @@ public class ProyectoServiceImpl implements ProyectoService {
     @Override
     public Proyecto almacenaProyecto(Proyecto proyecto) {
 
-        Proyecto proyectoBD = null;
+        //Proyecto proyectoBD = null;
         try {
 
-            proyectoBD = proyectoDAO.guardaProyecto(proyecto);
-            proyectoBD.setArchivoProyecto(proyecto.getArchivoProyecto());
-            logger.debug("Proyecto almacenado " + proyectoBD.getIdProyecto());
+            logger.debug("Cliente " + proyecto.getCliente().getNombre());
+            proyecto = proyectoDAO.guardaProyecto(proyecto);
+            proyecto.setArchivoProyecto(proyecto.getArchivoProyecto());
+            logger.debug("Proyecto almacenado " + proyecto.getIdProyecto() + "|" + proyecto.getCliente().getNombre());
 
         } catch (Exception excp) {
             excp.printStackTrace();
@@ -71,13 +74,13 @@ public class ProyectoServiceImpl implements ProyectoService {
         }
 
         try {
-            proyectoDAO.guardaArchivoProyecto(proyectoBD);
+            proyectoDAO.guardaArchivoProyecto(proyecto);
         } catch (Exception excp) {
-            logger.error("Error al guardar el archivo del proyecto [" + proyectoBD.getIdProyecto() + "] - " + excp.getMessage());
+            logger.error("Error al guardar el archivo del proyecto [" + proyecto.getIdProyecto() + "] - " + excp.getMessage());
             excp.printStackTrace();
         }
 
-        if (proyectoBD != null) {
+        if (proyecto != null) {
             try {
                 CommonsMultipartFile uploaded = proyecto.getArchivoProyecto().getFichero();
                 logger.debug("Archivo " + proyecto.getArchivoProyecto().getFichero().getOriginalFilename());
@@ -86,11 +89,8 @@ public class ProyectoServiceImpl implements ProyectoService {
                     ProjectFile project = reader.read(uploaded.getInputStream());
                     HashMap idTasks = new HashMap();
 
-                    /*List<Usuario> usuariosRecursos = usuarioService.getUsuariosRecursos();
+                    List<Recurso> usuariosRecursos = usuarioService.getUsuariosRecursos();
                     Iterator usuariosIt = null;
-                    if (usuariosRecursos != null) {
-                        usuariosIt = usuariosRecursos.iterator();
-                    }*/
 
                     Tarea tarea = new Tarea();
                     for (Task task : project.getAllTasks()) {
@@ -105,17 +105,25 @@ public class ProyectoServiceImpl implements ProyectoService {
                                 tarea.setIdTareaPadre((Integer) idTasks.get(parent.getUniqueID()));
                             }
                         }
-                       
+                        tarea = proyectoDAO.guardaTarea(tarea, proyecto.getIdProyecto());
+                        proyecto.getTareas().add(tarea);
+                        idTasks.put(tarea.getIdUnicoTarea(), tarea.getIdTarea());
+
                         List<ResourceAssignment> resources = task.getResourceAssignments();
                         Iterator iResources = resources.iterator();
                         while (iResources.hasNext()) {
                             ResourceAssignment ra = (ResourceAssignment) iResources.next();
-                            Resource resource = ra.getResource();
-                            logger.debug("\tTask " + task.getUniqueID() + "|Assigned Resources: " + resource.getName());
+                            Resource resource = ra.getResource();                            
+                            if (usuariosRecursos != null) {
+                                usuariosIt = usuariosRecursos.iterator();
+                                while (usuariosIt.hasNext()) {
+                                    Recurso recurso = (Recurso) usuariosIt.next();                                    
+                                    if (resource.getName().toUpperCase().trim().contains(recurso.getNombre().toUpperCase().trim())) {                                        
+                                        proyectoDAO.guardaResponsableTarera(tarea, recurso);
+                                    }
+                                }
+                            }
                         }
-                        tarea = proyectoDAO.guardaTarea(tarea, proyectoBD.getIdProyecto());
-                        proyectoBD.getTareas().add(tarea);
-                        idTasks.put(tarea.getIdUnicoTarea(), tarea.getIdTarea());
                     }
                 } else {
                     logger.error("Archivo de proyecto incorrecto...");
@@ -125,14 +133,14 @@ public class ProyectoServiceImpl implements ProyectoService {
                 logger.error(excp.getMessage());
             }
         }
-        return proyectoBD;
+        return proyecto;
     }
-    
+
     @Override
     public Proyecto obtieneProyecto(int idProyecto) {
         return proyectoDAO.obtieneProyecto(idProyecto);
     }
-    
+
     @Override
     public List<Proyecto> obtieneProyectosDashboard() {
         List<Tarea> tareas;
@@ -142,16 +150,16 @@ public class ProyectoServiceImpl implements ProyectoService {
         double proceso;
         double avance = 0;
         int sumAvance = 0;
-        
+
         List<Proyecto> proyectos = proyectoDAO.obtieneProyectosDashboard();
         for (Proyecto proyecto : proyectos) {
             tareas = tareaProyectoDAO.obtieneTareasProyectoDashboard(proyecto.getIdProyecto());
             for (Tarea tarea : tareas) {
-                if (current.compareTo(tarea.getFechaFin()) > 0 
-                        && tarea.getPorcentajeCompletado() < 100 
+                if (current.compareTo(tarea.getFechaFin()) > 0
+                        && tarea.getPorcentajeCompletado() < 100
                         && alertado != 3) {
                     alertado = 3;
-                } else if (current.compareTo(tarea.getFechaFin()) <= 0 
+                } else if (current.compareTo(tarea.getFechaFin()) <= 0
                         && current.compareTo(tarea.getFechaInicio()) > 0
                         && (alertado != 3 && alertado != 2)) {
                     proceso = 100 / tarea.getDuracion();
@@ -165,9 +173,9 @@ public class ProyectoServiceImpl implements ProyectoService {
             proyecto.setAvance(sumAvance / tareas.size());
             proyecto.setEstatusAvance(alertado);
             lstProyectos.add(proyecto);
-        } 
+        }
         proyectos = null;
         return lstProyectos;
-    } 
+    }
 
 }

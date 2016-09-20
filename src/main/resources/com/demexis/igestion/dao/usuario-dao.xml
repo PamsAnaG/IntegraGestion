@@ -25,9 +25,10 @@
                 </prop>
                 <prop key="getUsuariosRecursos">
 	        <![CDATA[
-	            SELECT ID_USUARIO, NOMBRE, APPATERNO, APMATERNO, USUARIO, PASSWORD, 
-                    CORREO_ELECTRONICO, NUMERO_MOVIL, ID_ROL, NOMBRE_ROL, DESCRIPCION
-                    FROM V_USUARIO
+	            SELECT ID_RECURSO, ID_USUARIO, NOMBRE, APPATERNO, APMATERNO, USUARIO, 
+                    CORREO_ELECTRONICO, NUMERO_MOVIL, ID_ROL, NOMBRE_ROL, DESCRIPCION,
+                    TIPO_RECURSO, COSTO_HORA
+                    FROM V_RECURSO
                     WHERE ID_ROL = ?
                 ]]>
                 </prop>                

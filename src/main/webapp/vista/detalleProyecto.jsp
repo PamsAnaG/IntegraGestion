@@ -12,13 +12,13 @@
         <script type="text/javascript" src='../js/jquery-ui.js'></script>
         <script type="text/javascript" src='../js/jquery-ui.min.js'></script>
         <link href="../img/Demexis.ico" rel="shortcut icon" />
-        <link type="text/css" href='../css/structure.css' rel="stylesheet" media="screen" />
-        <!--<link type="text/css" href='../css/jquery-ui.css' rel="stylesheet" media="screen" />
-        <link type="text/css" href='../css/jquery-ui.min.css' rel="stylesheet" media="screen" />
-        <link type="text/css" href='../css/jquery-ui.structure.css' rel="stylesheet" media="screen" />-->
+        <link type="text/css" href='../css/structure.css' rel="stylesheet" media="screen" />        
         <link type="text/css" href='../css/jquery-ui.structure.min.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery-ui.theme.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery-ui.theme.min.css' rel="stylesheet" media="screen" />
+
+        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
         <title>Integra Gestión</title>
         <script>
@@ -27,7 +27,7 @@
                 $(document).tooltip();
                 $("#dialog").dialog({autoOpen: false});
             });
-            function muestraDialog() {                
+            function muestraDialog() {
                 $("#dialog").dialog('open');
             }
         </script>
@@ -66,7 +66,7 @@
 
     </head>    
     <body>
-        
+
         <div style="display:none" id="dialog" title="Configuración alerta">
             Medio de entrega:<br>
             <input type="checkbox" name="Calendario">Programación calendario<br>
@@ -74,47 +74,46 @@
             <input type="checkbox" name="Calendario">Aviso móvil<br>
             <input type="checkbox" name="Calendario">Correo electrónico<br>
         </div>
-        
-        <form>
-            <table class="tablaProyecto">
-                <tr>
-                    <th>
-                        Proyecto
-                    </th>
-                    <td>
-                        PR-2016051
-                    </td>
-                    <td colspan="2">
-                        Implementaci&oacute;n de Sistema Integra Gesti&oacute;n
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Cliente
-                    </th>
-                    <td>
-                        CL1 - Systems Solutions
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Fechas
-                    </th>
-                    <td>
-                        01/05/2016
-                    </td>
-                    <td>
-                        20/05/2016
-                    </td>
-                    <td>
-                        Tipo
-                    </td>
-                    <td>
-                        Construcción
-                    </td>
-                </tr>
-            </table>
-        </form>
+
+
+        <table class="tablaProyecto">
+            <tr>
+                <th>
+                    Proyecto
+                </th>
+                <td>
+                    ${proyecto.idProyecto}
+                </td>
+                <td colspan="2">
+                    ${proyecto.nombre}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Cliente
+                </th>
+                <td>
+                    ${proyecto.cliente.nombre}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Fechas
+                </th>
+                <td>
+                    ${proyecto.fechaInicio}
+                </td>
+                <td>
+                    ${proyecto.fechaFin}
+                </td>
+                <td>
+                    Tipo
+                </td>
+                <td>
+                    ${proyecto.tipo.nombre}
+                </td>
+            </tr>
+        </table>
         <div id="tabs">
             <ul>
                 <li><a href="#tabs-1">Grupo Tareas</a></li>
@@ -532,7 +531,7 @@
                     <tr>
                         <td></td>
                         <td onclick="javascript: muestraDialog()">
-                             Requerimientos funcionales
+                            Requerimientos funcionales
                         </td>
                         <td onclick="javascript: muestraDialog()">
                             <img src="../img/correcto.png" width="10" height="10" alt=''> PT

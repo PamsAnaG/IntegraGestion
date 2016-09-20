@@ -12,6 +12,7 @@ package com.demexis.igestion.domain;
  */
 public class Recurso extends Usuario{
     
+    private int idRecurso;
     private String tipoRecurso;
     private int costoHora;
 
@@ -41,6 +42,20 @@ public class Recurso extends Usuario{
      */
     public void setCostoHora(int costoHora) {
         this.costoHora = costoHora;
+    }
+
+    /**
+     * @return the idRecurso
+     */
+    public int getIdRecurso() {
+        return idRecurso;
+    }
+
+    /**
+     * @param idRecurso the idRecurso to set
+     */
+    public void setIdRecurso(int idRecurso) {
+        this.idRecurso = idRecurso;
     }
     
     

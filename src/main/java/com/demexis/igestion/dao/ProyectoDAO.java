@@ -6,6 +6,7 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.domain.Proyecto;
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
 import java.util.List;
 
@@ -18,11 +19,13 @@ public interface ProyectoDAO {
     public Tarea guardaTarea(Tarea tarea, int idProyecto);
 
     public Proyecto guardaProyecto(Proyecto proyecto);
-    
+
     public void guardaArchivoProyecto(Proyecto proyecto);
-    
+
+    public void guardaResponsableTarera(Tarea tarea, Recurso recurso);
+
     public Proyecto obtieneProyecto(int idProyecto);
-    
+
     public List<Proyecto> obtieneProyectosDashboard();
 
 }

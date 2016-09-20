@@ -37,6 +37,12 @@
                         WHERE ID_PROYECTO = ?;
                     ]]>
                 </prop>
+                <prop key="guardaResponsableTarea">
+                    <![CDATA[
+                        INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS)
+                        VALUES (?, ?, ?)
+                    ]]>
+                </prop>
             </props>
         </property>
     </bean>

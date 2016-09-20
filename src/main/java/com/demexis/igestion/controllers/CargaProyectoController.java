@@ -64,14 +64,17 @@ public class CargaProyectoController {
     ClaseProyectoService claseProyectoService;
 
     @RequestMapping(value = "/cargap", method = RequestMethod.POST)
-    public ModelAndView cargaProyecto(@ModelAttribute("proyecto") Proyecto proyecto, ModelMap model) {//@ModelAttribute ArchivoProyecto fileFormBean) {
+    public ModelAndView cargaProyecto(@ModelAttribute("proyecto") Proyecto proyecto, ModelMap model) {
 
         logger.debug("Cargando proyecto...");
 
-        proyectoService.almacenaProyecto(proyecto);
+        Proyecto proyectoAlmacenado = proyectoService.almacenaProyecto(proyecto);
+        
+        logger.debug("Cliente proyecto " + proyectoAlmacenado.getCliente().getNombre());
 
         ModelAndView modelR = new ModelAndView();
-        modelR.setViewName("dashboard");
+        modelR.addObject("proyecto", proyectoAlmacenado);
+        modelR.setViewName("detalleProyecto");
 
         return modelR;
 

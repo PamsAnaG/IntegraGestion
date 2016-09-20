@@ -8,6 +8,7 @@ package com.demexis.igestion.dao;
 import com.demexis.igestion.controllers.CargaProyectoController;
 import com.demexis.igestion.domain.Cliente;
 import com.demexis.igestion.domain.Proyecto;
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
 import com.demexis.igestion.domain.TipoProyecto;
 import java.sql.Connection;
@@ -84,7 +85,7 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
             }
         }, keyHolder);
 
-        proyectoF.setIdProyecto(keyHolder.getKey().intValue());
+        proyecto.setIdProyecto(keyHolder.getKey().intValue());
 
         return proyectoF;
     }
@@ -97,22 +98,23 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
                 new Object[]{proyecto.getIdProyecto(), proyecto.getArchivoProyecto().getFichero().getBytes()});
 
     }
-    
+
     @Override
     public Proyecto obtieneProyecto(int idProyecto) {
         String query = getQueries().getProperty("obtieneProyectosDashboard");
-        
-        Proyecto proyecto = (Proyecto) getJdbcTemplate().query(query, MAPPER_PROYECTO, new Object[]{ idProyecto });
-        
+
+        Proyecto proyecto = (Proyecto) getJdbcTemplate().query(query, MAPPER_PROYECTO, new Object[]{idProyecto});
+
         if (proyecto != null) {
             return proyecto;
         }
-        
+
         return null;
     }
-    
+
     private static RowMapper<Proyecto> MAPPER_PROYECTO = new RowMapper<Proyecto>() {
         Proyecto obj = new Proyecto();
+
         public Proyecto mapRow(ResultSet rs, int rowNum) throws SQLException {
             Cliente cliente = new Cliente();
             obj.setIdProyecto(rs.getInt("ID_PROYECTO"));
@@ -122,22 +124,23 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
             return obj;
         }
     };
-    
+
     @Override
     public List<Proyecto> obtieneProyectosDashboard() {
         String query = getQueries().getProperty("obtieneProyectosDashboard");
-        
+
         List<Proyecto> proyectos = getJdbcTemplate().query(query, MAPPER_PROYECTO_DSHBRD, new Object[]{});
-        
+
         if (!proyectos.isEmpty()) {
             return proyectos;
         }
-        
+
         return null;
     }
-    
+
     private static RowMapper<Proyecto> MAPPER_PROYECTO_DSHBRD = new RowMapper<Proyecto>() {
         Proyecto obj;
+
         public Proyecto mapRow(ResultSet rs, int rowNum) throws SQLException {
             obj = new Proyecto();
             Cliente cliente = new Cliente();
@@ -148,5 +151,14 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
             return obj;
         }
     };
+
+    @Override
+    public void guardaResponsableTarera(Tarea tarea, Recurso recurso) {
+        
+        logger.debug("Guardando responsable " + tarea.getIdTarea() + "|" +  recurso.getIdRecurso());
+        getJdbcTemplate().update(
+                getQueries().getProperty("guardaResponsableTarea"),
+                new Object[]{tarea.getIdTarea(), recurso.getIdRecurso(), "A"});
+    }
 
 }

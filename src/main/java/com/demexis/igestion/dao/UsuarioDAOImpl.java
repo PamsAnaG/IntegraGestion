@@ -45,16 +45,18 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
             return obj;
         }
     };
-    
+
     private static RowMapper<Recurso> MAPPER_RECURSO = new RowMapper<Recurso>() {
         Recurso obj;
 
         public Recurso mapRow(ResultSet rs, int rowNum) throws SQLException {
             obj = new Recurso();
 
+            obj.setIdRecurso(rs.getInt("ID_RECURSO"));
+            obj.setTipoRecurso(rs.getString("TIPO_RECURSO"));
+            obj.setCostoHora(rs.getInt("COSTO_HORA"));
             obj.setIdUsuario(rs.getInt("ID_USUARIO"));
             obj.setUsuario(rs.getString("USUARIO"));
-            obj.setPassword(rs.getString("PASSWORD"));
             obj.setApMaterno(rs.getString("APMATERNO"));
             obj.setApPaterno(rs.getString("APPATERNO"));
             obj.setCorreoElectronico(rs.getString("CORREO_ELECTRONICO"));
@@ -88,7 +90,6 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
 
         List<Privilegio> privilegios = getJdbcTemplate().query(query, MAPPER_PRIV_USUARIO, new Object[]{usuario.getIdUsuario()});
 
-
         if (!privilegios.isEmpty()) {
             usuario.setPrivilegio(privilegios);
         }
@@ -113,11 +114,11 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
     public List<Recurso> getUsuariosRecursos() {
         String query = getQueries().getProperty("getUsuariosRecursos");
 
-        /*List<Recurso> usuariosRecursos = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{Rol.RECURSO});
+        List<Recurso> usuariosRecursos = getJdbcTemplate().query(query, MAPPER_RECURSO, new Object[]{Rol.RECURSO});
 
         if (!usuariosRecursos.isEmpty()) {
             return usuariosRecursos;
-        }*/
+        }
 
         return null;
     }
