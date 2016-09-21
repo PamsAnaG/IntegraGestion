@@ -45,4 +45,19 @@ public class ClienteDAOImpl extends IgestionJdbcDaoSupport implements ClienteDAO
         return null;
     }
 
+    @Override
+    public Cliente getCliente(int idCliente) {
+        String query = getQueries().getProperty("getCliente");
+
+        Cliente cliente = null;
+
+        List<Cliente> clientes = getJdbcTemplate().query(query, MAPPER_CLIENTE, new Object[]{idCliente});
+
+        if (!clientes.isEmpty()) {
+            cliente = clientes.get(0);
+        }
+
+        return cliente;
+    }
+
 }

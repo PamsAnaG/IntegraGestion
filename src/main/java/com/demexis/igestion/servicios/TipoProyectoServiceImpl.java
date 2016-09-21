@@ -26,4 +26,9 @@ public class TipoProyectoServiceImpl implements TipoProyectoService {
         return tipoProyectoDAO.getTiposProyecto();
     }
 
+    @Override
+    public TipoProyecto getTipoProyecto(int idTipoProyecto) {
+        return tipoProyectoDAO.getTipoProyecto(idTipoProyecto);
+    }
+
 }

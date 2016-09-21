@@ -15,5 +15,7 @@ import java.util.List;
 public interface TipoProyectoDAO {
 
     public List<TipoProyecto> getTiposProyecto();
+    
+    public TipoProyecto getTipoProyecto(int idTipoProyecto);
 
 }

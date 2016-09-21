@@ -26,4 +26,9 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteDAO.getClientes();
     }
 
+    @Override
+    public Cliente getCliente(int idCliente) {
+        return clienteDAO.getCliente(idCliente);
+    }
+
 }

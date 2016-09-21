@@ -29,11 +29,16 @@
                     <![CDATA[
                         SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM PROYECTO p JOIN CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'AC';
                     ]]>
-                </prop>
-                <prop key="obtieneProyectosDashboard">
+                </prop>                
+                <prop key="obtieneDatosProyecto">
                     <![CDATA[
-                        SELECT NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS
-                        FROM PROYECTO
+                        SELECT ID_PROYECTO, NOMBRE, FECHA_INICIO, FECHA_FIN, ESTATUS, 
+                        ID_CLIENTE, NOMBRE_CLIENTE, CORREO_ELECTRONICO, NUMERO_MOVIL, 
+                        ID_TIPO_PROYECTO, TIPO_NOMBRE, TIPO_DESCRIPCION, ID_TP_FACTURACION, 
+                        NOMBRE_FACTURACION, DESCRIPCION_FACTURACION, ID_CLASE_PROYECTO, 
+                        NOMBRE_CLASE, DESCRIPCION_CLASE, ID_MODALIDAD, NOMBRE_MODALIDAD, 
+                        DESCRIPCION_MODALIDAD
+                        FROM V_PROYECTO
                         WHERE ID_PROYECTO = ?;
                     ]]>
                 </prop>

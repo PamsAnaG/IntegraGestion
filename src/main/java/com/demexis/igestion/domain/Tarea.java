@@ -24,6 +24,8 @@ public class Tarea {
     private int porcentajeCompletado;
     private int idUnicoTarea;
     private List<Recurso> responsables = new ArrayList();
+    private List<Tarea> tareasHijas = new ArrayList();
+    private int idOrdenGrupo;
 
     /**
      * @return the idTarea
@@ -149,6 +151,34 @@ public class Tarea {
      */
     public void setResponsables(List<Recurso> responsables) {
         this.responsables = responsables;
+    }
+
+    /**
+     * @return the idOrdenGrupo
+     */
+    public int getIdOrdenGrupo() {
+        return idOrdenGrupo;
+    }
+
+    /**
+     * @param idOrdenGrupo the idOrdenGrupo to set
+     */
+    public void setIdOrdenGrupo(int idOrdenGrupo) {
+        this.idOrdenGrupo = idOrdenGrupo;
+    }
+
+    /**
+     * @return the tareasHijas
+     */
+    public List<Tarea> getTareasHijas() {
+        return tareasHijas;
+    }
+
+    /**
+     * @param tareasHijas the tareasHijas to set
+     */
+    public void setTareasHijas(List<Tarea> tareasHijas) {
+        this.tareasHijas = tareasHijas;
     }
 
 }

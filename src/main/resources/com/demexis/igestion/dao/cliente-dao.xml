@@ -12,6 +12,13 @@
 	            SELECT ID_CLIENTE, NOMBRE, CORREO_ELECTRONICO, NUMERO_MOVIL, ESTATUS
                     FROM V_CLIENTE
                 ]]>
+                </prop>
+                <prop key="getCliente">
+	        <![CDATA[
+	            SELECT ID_CLIENTE, NOMBRE, CORREO_ELECTRONICO, NUMERO_MOVIL, ESTATUS
+                    FROM V_CLIENTE
+                    WHERE ID_CLIENTE = ?
+                ]]>
                 </prop>                
             </props>
         </property>

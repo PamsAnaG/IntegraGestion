@@ -7,9 +7,11 @@ package com.demexis.igestion.servicios;
 
 import com.demexis.igestion.dao.ProyectoDAO;
 import com.demexis.igestion.dao.TareaProyectoDAO;
+import com.demexis.igestion.domain.Cliente;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
+import com.demexis.igestion.domain.TipoProyecto;
 import com.demexis.igestion.domain.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,53 +35,62 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 @Service
 public class ProyectoServiceImpl implements ProyectoService {
-
+    
     private Logger logger = Logger.getLogger(ProyectoServiceImpl.class);
-
+    
     @Autowired
     ProyectoDAO proyectoDAO;
-
+    
     @Autowired
     UsuarioService usuarioService;
-
+    
+    @Autowired
+    ClienteService clienteService;
+    
+    @Autowired
+    TipoProyectoService tipoService;
+    
     @Autowired
     TareaProyectoDAO tareaProyectoDAO;
-
+    
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
-
+    
     @Override
     public Proyecto guardaProyecto(Proyecto proyecto) {
         return proyectoDAO.guardaProyecto(proyecto);
     }
-
+    
     @Override
     public Tarea guardaTarea(Tarea tarea, int idProyecto) {
         return proyectoDAO.guardaTarea(tarea, idProyecto);
     }
-
+    
     @Override
     public Proyecto almacenaProyecto(Proyecto proyecto) {
-
-        //Proyecto proyectoBD = null;
+        
         try {
 
-            logger.debug("Cliente " + proyecto.getCliente().getNombre());
+            // VALIDAMOS EL CLIENTE ENVIADO            
+            Cliente cliente = clienteService.getCliente(proyecto.getCliente().getIdCliente());
+            proyecto.setCliente(cliente);
+            TipoProyecto tipo = tipoService.getTipoProyecto(proyecto.getTipo().getIdTipoProyecto());
+            proyecto.setTipo(tipo);
             proyecto = proyectoDAO.guardaProyecto(proyecto);
             proyecto.setArchivoProyecto(proyecto.getArchivoProyecto());
             logger.debug("Proyecto almacenado " + proyecto.getIdProyecto() + "|" + proyecto.getCliente().getNombre());
-
+            
         } catch (Exception excp) {
             excp.printStackTrace();
             logger.error("Error al almacenar el proyecto: " + excp.getMessage());
         }
-
+        
         try {
             proyectoDAO.guardaArchivoProyecto(proyecto);
         } catch (Exception excp) {
             logger.error("Error al guardar el archivo del proyecto [" + proyecto.getIdProyecto() + "] - " + excp.getMessage());
             excp.printStackTrace();
         }
-
+        
         if (proyecto != null) {
             try {
                 CommonsMultipartFile uploaded = proyecto.getArchivoProyecto().getFichero();
@@ -88,10 +99,10 @@ public class ProyectoServiceImpl implements ProyectoService {
                     ProjectReader reader = new MPPReader();
                     ProjectFile project = reader.read(uploaded.getInputStream());
                     HashMap idTasks = new HashMap();
-
+                    
                     List<Recurso> usuariosRecursos = usuarioService.getUsuariosRecursos();
                     Iterator usuariosIt = null;
-
+                    
                     Tarea tarea = new Tarea();
                     for (Task task : project.getAllTasks()) {
                         tarea.setNombre(task.getName());
@@ -108,17 +119,17 @@ public class ProyectoServiceImpl implements ProyectoService {
                         tarea = proyectoDAO.guardaTarea(tarea, proyecto.getIdProyecto());
                         proyecto.getTareas().add(tarea);
                         idTasks.put(tarea.getIdUnicoTarea(), tarea.getIdTarea());
-
+                        
                         List<ResourceAssignment> resources = task.getResourceAssignments();
                         Iterator iResources = resources.iterator();
                         while (iResources.hasNext()) {
                             ResourceAssignment ra = (ResourceAssignment) iResources.next();
-                            Resource resource = ra.getResource();                            
+                            Resource resource = ra.getResource();
                             if (usuariosRecursos != null) {
                                 usuariosIt = usuariosRecursos.iterator();
                                 while (usuariosIt.hasNext()) {
-                                    Recurso recurso = (Recurso) usuariosIt.next();                                    
-                                    if (resource.getName().toUpperCase().trim().contains(recurso.getNombre().toUpperCase().trim())) {                                        
+                                    Recurso recurso = (Recurso) usuariosIt.next();
+                                    if (resource.getName().toUpperCase().trim().contains(recurso.getNombre().toUpperCase().trim())) {
                                         proyectoDAO.guardaResponsableTarera(tarea, recurso);
                                     }
                                 }
@@ -135,12 +146,20 @@ public class ProyectoServiceImpl implements ProyectoService {
         }
         return proyecto;
     }
-
+    
+    private void ordenaTareas(Proyecto proyecto) {
+        Iterator tareasIt = proyecto.getTareas().iterator();
+        while (tareasIt.hasNext()) {
+            Tarea tarea = (Tarea) tareasIt.next();
+            logger.debug("Tarea " + tarea.getIdTarea() + "|" + tarea.getNombre());
+        }
+    }
+    
     @Override
     public Proyecto obtieneProyecto(int idProyecto) {
         return proyectoDAO.obtieneProyecto(idProyecto);
     }
-
+    
     @Override
     public List<Proyecto> obtieneProyectosDashboard() {
         List<Tarea> tareas;
@@ -150,7 +169,7 @@ public class ProyectoServiceImpl implements ProyectoService {
         double proceso;
         double avance = 0;
         int sumAvance = 0;
-
+        
         List<Proyecto> proyectos = proyectoDAO.obtieneProyectosDashboard();
         for (Proyecto proyecto : proyectos) {
             tareas = tareaProyectoDAO.obtieneTareasProyectoDashboard(proyecto.getIdProyecto());
@@ -177,5 +196,5 @@ public class ProyectoServiceImpl implements ProyectoService {
         proyectos = null;
         return lstProyectos;
     }
-
+    
 }

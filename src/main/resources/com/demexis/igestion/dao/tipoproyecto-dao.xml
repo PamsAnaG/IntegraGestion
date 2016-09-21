@@ -11,7 +11,12 @@
 	        <![CDATA[
 	            SELECT ID_TIPO_PROYECTO, NOMBRE, DESCRIPCION FROM V_TIPO_PROYECTO
                 ]]>
-                </prop>                
+                </prop>
+                <prop key="tipoProyecto">
+	        <![CDATA[
+	            SELECT ID_TIPO_PROYECTO, NOMBRE, DESCRIPCION FROM V_TIPO_PROYECTO WHERE ID_TIPO_PROYECTO = ?
+                ]]>
+                </prop>               
             </props>
         </property>
     </bean>

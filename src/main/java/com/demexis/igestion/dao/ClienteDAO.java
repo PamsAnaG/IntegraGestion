@@ -17,4 +17,6 @@ public interface ClienteDAO {
     
     public List<Cliente> getClientes();
     
+    public Cliente getCliente(int idCliente);
+    
 }

@@ -8,6 +8,7 @@ package com.demexis.igestion.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class Proyecto implements Serializable {
     private ArchivoProyecto archivoProyecto;
     private List<Tarea> tareas = new ArrayList();
     private double avance;
-    private int estatusAvance;
+    private int estatusAvance;    
 
     /**
      * @return the idProyecto

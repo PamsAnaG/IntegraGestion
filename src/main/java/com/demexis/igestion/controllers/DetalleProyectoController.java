@@ -34,7 +34,7 @@ public class DetalleProyectoController {
         Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyecto.getIdProyecto());
 
         ModelAndView model = new ModelAndView();
-        model.addObject("Proyecto", proyectoDetalle);
+        model.addObject("proyecto", proyectoDetalle);
         model.setViewName("detalleProyecto");
 
         return model;

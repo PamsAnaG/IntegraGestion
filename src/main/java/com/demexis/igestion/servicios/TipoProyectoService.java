@@ -16,4 +16,5 @@ public interface TipoProyectoService {
 
     public List<TipoProyecto> getTiposProyecto();
 
+    public TipoProyecto getTipoProyecto(int idTipoProyecto);
 }

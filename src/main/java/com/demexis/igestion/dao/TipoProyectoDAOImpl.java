@@ -17,32 +17,47 @@ import org.springframework.jdbc.core.RowMapper;
  * @author pamela.gutierrez
  */
 public class TipoProyectoDAOImpl extends IgestionJdbcDaoSupport implements TipoProyectoDAO {
-    
+
     private static RowMapper<TipoProyecto> MAPPER_TIPO_PROYECTO = new RowMapper<TipoProyecto>() {
         TipoProyecto obj;
-        
+
         public TipoProyecto mapRow(ResultSet rs, int rowNum) throws SQLException {
             obj = new TipoProyecto();
-            
+
             obj.setNombre(rs.getString("NOMBRE"));
             obj.setDescripcion(rs.getString("DESCRIPCION"));
             obj.setIdTipoProyecto(rs.getInt("ID_TIPO_PROYECTO"));
-            
+
             return obj;
         }
     };
-    
+
     @Override
     public List<TipoProyecto> getTiposProyecto() {
         String query = getQueries().getProperty("getTipoProyecto");
-        
+
         List<TipoProyecto> tipoProyecto = getJdbcTemplate().query(query, MAPPER_TIPO_PROYECTO, new Object[]{});
-        
+
         if (!tipoProyecto.isEmpty()) {
             return tipoProyecto;
         }
-        
+
         return null;
     }
-    
+
+    @Override
+    public TipoProyecto getTipoProyecto(int idTipoProyecto) {
+        String query = getQueries().getProperty("tipoProyecto");
+
+        TipoProyecto tipo = null;
+
+        List<TipoProyecto> tipoProyecto = getJdbcTemplate().query(query, MAPPER_TIPO_PROYECTO, new Object[]{idTipoProyecto});
+
+        if (!tipoProyecto.isEmpty()) {
+            tipo = tipoProyecto.get(0);
+        }
+
+        return tipo;
+    }
+
 }
