@@ -26,6 +26,6 @@ public interface ProyectoDAO {
 
     public Proyecto obtieneProyecto(int idProyecto);
 
-    public List<Proyecto> obtieneProyectosDashboard();
+    public List<Proyecto> obtieneProyectosDashboard();    
 
 }

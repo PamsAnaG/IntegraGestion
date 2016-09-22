@@ -27,7 +27,7 @@
                 </prop>
                 <prop key="obtieneProyectosDashboard">
                     <![CDATA[
-                        SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM PROYECTO p JOIN CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'AC';
+                        SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM V_PROYECTO p JOIN V_CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'A'
                     ]]>
                 </prop>                
                 <prop key="obtieneDatosProyecto">
@@ -47,7 +47,7 @@
                         INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS)
                         VALUES (?, ?, ?)
                     ]]>
-                </prop>
+                </prop>                              
             </props>
         </property>
     </bean>

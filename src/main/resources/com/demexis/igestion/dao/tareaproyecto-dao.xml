@@ -7,11 +7,30 @@
         <property name="dataSource" ref="dataSource"></property>
         <property name="queries">
             <props>
+                <prop key="obtieneTareasHijas">
+                <![CDATA[
+                    SELECT ID_TAREA, ID_PROYECTO, ID_TAREA_PADRE,
+                    NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION,
+                    PORCENTAJE_COMPLETADO, ESTATUS
+                    FROM TAREA_PROYECTO
+                    WHERE ID_TAREA_PADRE = 4
+                ]]>
+                </prop>
                 <prop key="obtieneTareasProyectoDashboard">
                 <![CDATA[
                     SELECT FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO FROM TAREA_PROYECTO WHERE ID_PROYECTO = ?;
                 ]]>
                 </prop>
+                <prop key="getTareasProyecto">
+                    <![CDATA[
+                        SELECT ID_TAREA, ID_PROYECTO, ID_TAREA_PADRE,
+                        NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION,
+                        PORCENTAJE_COMPLETADO, ESTATUS
+                        FROM TAREA_PROYECTO
+                        WHERE ID_PROYECTO = ?
+                        ORDER BY ID_TAREA
+                    ]]>
+                </prop>  
             </props>
         </property>
     </bean>

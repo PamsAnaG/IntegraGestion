@@ -6,10 +6,13 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.controllers.CargaProyectoController;
+import com.demexis.igestion.domain.ClaseProyecto;
 import com.demexis.igestion.domain.Cliente;
+import com.demexis.igestion.domain.ModalidadProyecto;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
+import com.demexis.igestion.domain.TipoFacturacion;
 import com.demexis.igestion.domain.TipoProyecto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -101,25 +104,51 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
 
     @Override
     public Proyecto obtieneProyecto(int idProyecto) {
-        String query = getQueries().getProperty("obtieneProyectosDashboard");
+        String query = getQueries().getProperty("obtieneDatosProyecto");
 
-        Proyecto proyecto = (Proyecto) getJdbcTemplate().query(query, MAPPER_PROYECTO, new Object[]{idProyecto});
+        List<Proyecto> proyectos = getJdbcTemplate().query(query, MAPPER_PROYECTO, new Object[]{idProyecto});
+        Proyecto proyecto = null;
 
-        if (proyecto != null) {
-            return proyecto;
+        if (!proyectos.isEmpty()) {
+            proyecto = proyectos.get(0);
         }
 
-        return null;
+        return proyecto;
     }
 
     private static RowMapper<Proyecto> MAPPER_PROYECTO = new RowMapper<Proyecto>() {
         Proyecto obj = new Proyecto();
 
         public Proyecto mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Cliente cliente = new Cliente();
             obj.setIdProyecto(rs.getInt("ID_PROYECTO"));
             obj.setNombre(rs.getString("NOMBRE"));
-            cliente.setNombre(rs.getString("CLIENTE"));
+            obj.setFechaInicio(rs.getTimestamp("FECHA_INICIO"));
+            obj.setFechaFin(rs.getTimestamp("FECHA_FIN"));
+            obj.setEstatus(rs.getString("ESTATUS"));
+            TipoProyecto tipo = new TipoProyecto();
+            tipo.setIdTipoProyecto(rs.getInt("ID_TIPO_PROYECTO"));
+            tipo.setNombre(rs.getString("TIPO_NOMBRE"));
+            tipo.setDescripcion(rs.getString("TIPO_DESCRIPCION"));
+            obj.setTipo(tipo);
+            TipoFacturacion facturacion = new TipoFacturacion();
+            facturacion.setIdTipoFacturacion(rs.getInt("ID_TP_FACTURACION"));
+            facturacion.setNombre(rs.getString("NOMBRE_FACTURACION"));
+            facturacion.setDescripcion(rs.getString("DESCRIPCION_FACTURACION"));
+            obj.setTipoFacturacion(facturacion);
+            ClaseProyecto clase = new ClaseProyecto();
+            clase.setIdClaseProyecto(rs.getInt("ID_CLASE_PROYECTO"));
+            clase.setNombre(rs.getString("NOMBRE_CLASE"));
+            clase.setDescripcion(rs.getString("DESCRIPCION_CLASE"));
+            obj.setClase(clase);
+            ModalidadProyecto modalidad = new ModalidadProyecto();
+            modalidad.setIdModalidadProyecto(rs.getInt("ID_MODALIDAD"));
+            modalidad.setDescripcion(rs.getString("DESCRIPCION_MODALIDAD"));
+            modalidad.setNombre(rs.getString("NOMBRE_MODALIDAD"));
+            obj.setModalidad(modalidad);
+            Cliente cliente = new Cliente();
+            cliente.setNombre(rs.getString("NOMBRE_CLIENTE"));
+            cliente.setCorreoElectronico(rs.getString("CORREO_ELECTRONICO"));
+            cliente.setNumeroMovil(rs.getString("NUMERO_MOVIL"));
             obj.setCliente(cliente);
             return obj;
         }
@@ -154,11 +183,10 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
 
     @Override
     public void guardaResponsableTarera(Tarea tarea, Recurso recurso) {
-        
-        logger.debug("Guardando responsable " + tarea.getIdTarea() + "|" +  recurso.getIdRecurso());
+
         getJdbcTemplate().update(
                 getQueries().getProperty("guardaResponsableTarea"),
                 new Object[]{tarea.getIdTarea(), recurso.getIdRecurso(), "A"});
-    }
+    }    
 
 }

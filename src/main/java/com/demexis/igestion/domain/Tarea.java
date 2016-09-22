@@ -13,9 +13,9 @@ import java.util.List;
  *
  * @author pamela.gutierrez
  */
-public class Tarea {
+public class Tarea implements Cloneable {
 
-    private int idTarea;    
+    private int idTarea;
     private int idTareaPadre;
     private String nombre;
     private Date fechaInicio;
@@ -25,7 +25,18 @@ public class Tarea {
     private int idUnicoTarea;
     private List<Recurso> responsables = new ArrayList();
     private List<Tarea> tareasHijas = new ArrayList();
-    private int idOrdenGrupo;
+    private int tareaGrupo;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Object obj = null;
+        try {
+            obj = super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new CloneNotSupportedException();
+        }
+        return obj;
+    }
 
     /**
      * @return the idTarea
@@ -152,21 +163,6 @@ public class Tarea {
     public void setResponsables(List<Recurso> responsables) {
         this.responsables = responsables;
     }
-
-    /**
-     * @return the idOrdenGrupo
-     */
-    public int getIdOrdenGrupo() {
-        return idOrdenGrupo;
-    }
-
-    /**
-     * @param idOrdenGrupo the idOrdenGrupo to set
-     */
-    public void setIdOrdenGrupo(int idOrdenGrupo) {
-        this.idOrdenGrupo = idOrdenGrupo;
-    }
-
     /**
      * @return the tareasHijas
      */
@@ -179,6 +175,20 @@ public class Tarea {
      */
     public void setTareasHijas(List<Tarea> tareasHijas) {
         this.tareasHijas = tareasHijas;
+    }
+
+    /**
+     * @return the tareaGrupo
+     */
+    public int getTareaGrupo() {
+        return tareaGrupo;
+    }
+
+    /**
+     * @param tareaGrupo the tareaGrupo to set
+     */
+    public void setTareaGrupo(int tareaGrupo) {
+        this.tareaGrupo = tareaGrupo;
     }
 
 }
