@@ -6,6 +6,7 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.domain.Proyecto;
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
 import java.util.List;
 
@@ -20,5 +21,9 @@ public interface TareaProyectoDAO {
     public List<Tarea> obtieneTareasProyecto(Proyecto proyecto);
     
     public List<Tarea> obtieneTareasHijas (int idTarea);
+    
+    public Tarea obtieneTareaPadre (int idProyecto);
+    
+    public List<Recurso> obtieneResponsableTareas (Tarea tarea);
            
 }

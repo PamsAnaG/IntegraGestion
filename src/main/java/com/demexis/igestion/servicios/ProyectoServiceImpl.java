@@ -36,39 +36,39 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 @Service
 public class ProyectoServiceImpl implements ProyectoService {
-
+    
     private Logger logger = Logger.getLogger(ProyectoServiceImpl.class);
-
+    
     @Autowired
     ProyectoDAO proyectoDAO;
-
+    
     @Autowired
     UsuarioService usuarioService;
-
+    
     @Autowired
     ClienteService clienteService;
-
+    
     @Autowired
     TipoProyectoService tipoService;
-
+    
     @Autowired
     TareaProyectoDAO tareaProyectoDAO;
-
+    
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
-
+    
     @Override
     public Proyecto guardaProyecto(Proyecto proyecto) {
         return proyectoDAO.guardaProyecto(proyecto);
     }
-
+    
     @Override
     public Tarea guardaTarea(Tarea tarea, int idProyecto) {
         return proyectoDAO.guardaTarea(tarea, idProyecto);
     }
-
+    
     @Override
     public Proyecto almacenaProyecto(Proyecto proyecto) {
-
+        
         try {
 
             // VALIDAMOS EL CLIENTE ENVIADO            
@@ -79,19 +79,19 @@ public class ProyectoServiceImpl implements ProyectoService {
             proyecto = proyectoDAO.guardaProyecto(proyecto);
             proyecto.setArchivoProyecto(proyecto.getArchivoProyecto());
             logger.debug("Proyecto almacenado " + proyecto.getIdProyecto() + "|" + proyecto.getCliente().getNombre());
-
+            
         } catch (Exception excp) {
             excp.printStackTrace();
             logger.error("Error al almacenar el proyecto: " + excp.getMessage());
         }
-
+        
         try {
             proyectoDAO.guardaArchivoProyecto(proyecto);
         } catch (Exception excp) {
             logger.error("Error al guardar el archivo del proyecto [" + proyecto.getIdProyecto() + "] - " + excp.getMessage());
             excp.printStackTrace();
         }
-
+        
         if (proyecto != null) {
             try {
                 CommonsMultipartFile uploaded = proyecto.getArchivoProyecto().getFichero();
@@ -100,10 +100,10 @@ public class ProyectoServiceImpl implements ProyectoService {
                     ProjectReader reader = new MPPReader();
                     ProjectFile project = reader.read(uploaded.getInputStream());
                     HashMap idTasks = new HashMap();
-
+                    
                     List<Recurso> usuariosRecursos = usuarioService.getUsuariosRecursos();
                     Iterator usuariosIt = null;
-
+                    
                     Tarea tarea = new Tarea();
                     for (Task task : project.getAllTasks()) {
                         tarea.setNombre(task.getName());
@@ -117,10 +117,11 @@ public class ProyectoServiceImpl implements ProyectoService {
                                 tarea.setIdTareaPadre((Integer) idTasks.get(parent.getUniqueID()));
                             }
                         }
+                        
                         tarea = proyectoDAO.guardaTarea(tarea, proyecto.getIdProyecto());
                         proyecto.getTareas().add(tarea);
                         idTasks.put(tarea.getIdUnicoTarea(), tarea.getIdTarea());
-
+                        
                         List<ResourceAssignment> resources = task.getResourceAssignments();
                         Iterator iResources = resources.iterator();
                         while (iResources.hasNext()) {
@@ -147,98 +148,65 @@ public class ProyectoServiceImpl implements ProyectoService {
         }
         return proyecto;
     }
-
-    private List<Tarea> ordenaTareas(List<Tarea> tareas) {
+    
+    private Tarea ordenaTareas(Proyecto proyecto) {
+        
+        Tarea tareaProyecto = null;
         try {
-            /*
-             HashMap<Integer, List<Tarea>> jerarquiaTareas = new HashMap<Integer, List<Tarea>>();
-             while (tareasIt.hasNext()) {
-             Tarea tarea = (Tarea) tareasIt.next();
-             if (jerarquiaTareas.containsKey(tarea.getIdTareaPadre())) {
-             List<Tarea> tareasT = jerarquiaTareas.get(tarea.getIdTareaPadre());
-             tareasT.add(tarea);
-             jerarquiaTareas.put(tarea.getIdTareaPadre(), tareasT);
-             } else {
-             jerarquiaTareas.put(tarea.getIdTareaPadre(), new ArrayList());
-             }
-
-             }
-
-             Set keys = jerarquiaTareas.keySet();
-             Iterator keysIt = keys.iterator();
-             while (keysIt.hasNext()) {
-             Integer key = (Integer) keysIt.next();
-             List<Tarea> tareasM = (List) jerarquiaTareas.get(key);
-             Iterator tareasMIt = tareasM.iterator();
-             while (tareasMIt.hasNext()) {
-             Tarea tarea = (Tarea) tareasMIt.next();
-             logger.debug(key + "Hija | " + tarea.getNombre());
-             }
-             }*/
-            Iterator tareasIt = tareas.iterator();
-            List<Tarea> tareasOrdenadas = new ArrayList();
-            int idTareaPrincipal = 0;
-            Tarea tareaProyecto = null;
-            Tarea tareaEnCurso = null;
-            tareasIt = tareas.iterator();
-            while (tareasIt.hasNext()) {
-                Tarea tarea = (Tarea) tareasIt.next();
-                if (tarea.getIdTareaPadre() == 0) {
-                    tareaProyecto = tarea;
-                    idTareaPrincipal = tarea.getIdTarea();
-                } else {
-                    if (tareaProyecto != null) {
-                        // SI ES UNA TAREA DE GRUPO                        
-                        if (idTareaPrincipal == tarea.getIdTareaPadre()) {
-                            tareaEnCurso = (Tarea) tarea.clone();
-                            logger.debug("Tarea " + "|" + tareaEnCurso.getNombre() + "| Hija de |" + tareaProyecto.getNombre());
-                            Iterator tareasItInt = tareas.iterator();
-                            while (tareasItInt.hasNext()) {
-                                Tarea tareaInt = (Tarea) tareasItInt.next();
-                                if (tareaInt.getIdTareaPadre() == tareaEnCurso.getIdTarea()) {
-                                    logger.debug("Tarea " + "|" + tareaInt.getNombre() + "| Hija de |" + tareaEnCurso.getNombre());
-                                    tareaEnCurso.getTareasHijas().add((Tarea) tareaInt.clone());
-                                }
-                            }
-                            tareaProyecto.getTareasHijas().add(tareaEnCurso);
-                        } else {
-
-                            /*logger.debug("Comparando 2 " + tareaAnterior.getIdTarea() + "|" + tarea.getIdTareaPadre());
-                             if (tareaAnterior.getIdTarea() == tarea.getIdTareaPadre()) {
-                             logger.debug("Tarea " + "|" + tarea.getNombre() + "| Hija de |" + tareaAnterior.getNombre());
-                             tareaAnterior.getTareasHijas().add(tarea);
-                             }*/
-                        }
-                    }
-                }
-                tareasOrdenadas.add(tarea);
-            }
-            // REVISAMOS EL ORDEN CONSTRUIDO
-            Iterator tareasOrdIt = tareaProyecto.getTareasHijas().iterator();
-            logger.debug(tareaProyecto.getNombre());
-            while (tareasOrdIt.hasNext()) {
-                Tarea tarea = (Tarea) tareasOrdIt.next();
-                logger.debug(tarea.getNombre());
-                boolean tareasHijas = true;
-                while(tareasHijas){
-                    
-                    
-                }
+            tareaProyecto = tareaProyectoDAO.obtieneTareaPadre(proyecto.getIdProyecto());
+            
+            if (tareaProyecto != null) {
+                ordenaTareasHijas(tareaProyecto);
+                imprimeTareas(tareaProyecto);
             }
         } catch (Exception excp) {
             excp.printStackTrace();
         }
-        return tareas;
+        return tareaProyecto;
     }
-
+    
+    private void imprimeTareas(Tarea tarea) {
+        try {
+            List<Tarea> tareasHijas = tarea.getTareasHijas();
+            for (Tarea tareaHija : tareasHijas) {
+                logger.debug("Tarea |" + tareaHija.getNombre() + " Hija de | " + tarea.getNombre());
+                List<Tarea> tareasHijasInt = tareaHija.getTareasHijas();
+                if (tareasHijasInt != null && !tareasHijasInt.isEmpty()) {
+                    imprimeTareas(tareaHija);
+                }
+            }
+        } catch (Exception excp) {
+            logger.error("Error imprimiendo tareas: " + excp.getMessage());
+        }
+    }
+    
+    private void ordenaTareasHijas(Tarea tarea) {
+        try {
+            List<Tarea> tareasHijas = tareaProyectoDAO.obtieneTareasHijas(tarea.getIdTarea());            
+            for (Tarea tareaHija : tareasHijas) {
+                // OBTENEMOS LOS RESPONSABLES DE LA TAREA
+                tareaHija.setResponsables(tareaProyectoDAO.obtieneResponsableTareas(tareaHija));
+                List<Tarea> tareasHijasInt = tareaProyectoDAO.obtieneTareasHijas(tareaHija.getIdTarea());
+                if (tareasHijasInt != null && !tareasHijasInt.isEmpty()) {
+                    ordenaTareasHijas(tareaHija);
+                    tarea.getTareasHijas().add(tareaHija);
+                } else {
+                    tarea.getTareasHijas().add(tareaHija);
+                }
+            }
+        } catch (Exception excp) {
+            logger.error("Error ordenando tareas: " + excp.getMessage());
+        }
+    }
+    
     @Override
     public Proyecto obtieneProyecto(int idProyecto) {
-
+        
         Proyecto proyecto = proyectoDAO.obtieneProyecto(idProyecto);
-        proyecto.setTareas(ordenaTareas(tareaProyectoDAO.obtieneTareasProyecto(proyecto)));
+        proyecto.setTareaPrincipal(ordenaTareas(proyecto));
         return proyecto;
     }
-
+    
     @Override
     public List<Proyecto> obtieneProyectosDashboard() {
         List<Tarea> tareas;
@@ -248,7 +216,7 @@ public class ProyectoServiceImpl implements ProyectoService {
         double proceso;
         double avance = 0;
         int sumAvance = 0;
-
+        
         List<Proyecto> proyectos = proyectoDAO.obtieneProyectosDashboard();
         if (proyectos != null) {
             for (Proyecto proyecto : proyectos) {
@@ -277,5 +245,5 @@ public class ProyectoServiceImpl implements ProyectoService {
         proyectos = null;
         return lstProyectos;
     }
-
+    
 }

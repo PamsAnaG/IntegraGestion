@@ -18,8 +18,8 @@
         <link type="text/css" href='../css/jquery-ui.theme.min.css' rel="stylesheet" media="screen" />
 
         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
         <title>Integra Gestión</title>
         <script>
@@ -137,63 +137,23 @@
                         <th>
                             Fecha fin
                         </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            Levantamiento de informaci&oacute;n
-                        </td>
-                        <td>
-                            01/05/2016
-                        </td>
-                        <td>
-                            10/05/2016
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            Construcci&oacute;n
-                        </td>
-                        <td>
-                            11/05/2016
-                        </td>
-                        <td>
-                            19/06/2016
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            3
-                        </td>
-                        <td>
-                            Pruebas
-                        </td>
-                        <td>
-                            20/06/2016
-                        </td>
-                        <td>
-                            25/07/2016
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            4
-                        </td>
-                        <td>
-                            Implantaci&oacute;n
-                        </td>
-                        <td>
-                            25/07/2016
-                        </td>
-                        <td>
-                            10/08/2016
-                        </td>
-                    </tr>
+                    </tr>  
+                    <c:forEach var="tarea" varStatus="numeroTarea" items="${proyecto.tareaPrincipal.tareasHijas}">
+                        <tr>
+                            <td>
+                                ${numeroTarea.count}
+                            </td>
+                            <td>
+                                ${tarea.nombre}
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${tarea.fechaInicio}" pattern="yyyy-MM-dd" />
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${tarea.fechaFin}" pattern="yyyy-MM-dd" />
+                            </td>
+                        </tr>     
+                    </c:forEach>        
                 </table>
             </div>
             <div id="tabs-2">
@@ -215,202 +175,58 @@
                             Recursos
                         </th>
                     </tr>
-                    <tr>
-                        <td class="tareaCabecera">
-                            1
-                        </td>
-                        <td colspan="2" class="tareaCabecera">
-                            Levantamiento de informaci&oacute;n
-                        </td>
-                        <td class="tareaCabecera">
-                            01/05/2016
-                        </td>
-                        <td class="tareaCabecera">
-                            10/05/2016
-                        </td>
-                        <td class="tareaCabecera" title="Rogelio Gómez, Tania Jiménez">
-                            RG, TJ                            
-                        </td>                                                
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            Tarea
-                        </td>
-                        <td>
-                            Descripci&oacute;n
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            1.1
-                        </td>
-                        <td>
-                            Requerimientos funcionales
-                        </td>
-                        <td>
-                            01/0/2016
-                        </td>
-                        <td>
-                            03/0/2016
-                        </td>
-                        <td title="José Flores">
-                            JF
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            1.2
-                        </td>
-                        <td>
-                            Requerimientos no funcionales
-                        </td>
-                        <td>
-                            04/0/2016
-                        </td>
-                        <td>
-                            05/0/2016
-                        </td>
-                        <td title="José Flores">
-                            JF
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            1.3
-                        </td>
-                        <td>
-                            Propuesta tecnol&oacute;gica
-                        </td>
-                        <td>
-                            06/0/2016
-                        </td>
-                        <td>
-                            07/0/2016
-                        </td>
-                        <td title="José Flores">
-                            JF
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            1.4
-                        </td>
-                        <td>
-                            Entrega demo no funcional
-                        </td>
-                        <td>
-                            07/0/2016
-                        </td>
-                        <td>
-                            10/0/2016
-                        </td>
-                        <td title="José Flores">
-                            JF
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tareaCabecera">
-                            2
-                        </td>
-                        <td colspan="2" class="tareaCabecera">
-                            Construcci&oacute;n                            
-                        </td>
-                        <td class="tareaCabecera">
-                            11/05/2016
-                        </td>
-                        <td class="tareaCabecera">
-                            19/05/2016
-                        </td>
-                        <td class="tareaCabecera" title="Rogelio Gómez, Tania Jiménez">
-                            RG, TJ
-                        </td>                                                
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            2.1
-                        </td>
-                        <td>
-                            Diseño de base de datos
-                        </td>
-                        <td>
-                            11/05/2016
-                        </td>
-                        <td>
-                            13/05/2016
-                        </td>
-                        <td title="Daniel Jarabo">
-                            DJ
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            2.2
-                        </td>
-                        <td>
-                            Creaci&oacute;n de proyecto
-                        </td>
-                        <td>
-                            13/05/2016
-                        </td>
-                        <td>
-                            15/05/2016
-                        </td>
-                        <td title="Arely Ortega">
-                            AO
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            2.3
-                        </td>
-                        <td>
-                            M&oacute;dulo de Administraci&oacute;n
-                        </td>
-                        <td>
-                            15/05/2016
-                        </td>
-                        <td>
-                            16/05/2016
-                        </td>
-                        <td title="Arely Ortega">
-                            AO
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            2.4
-                        </td>
-                        <td>
-                            M&oacute;dulo de recepci&oacute;n de documentos
-                        </td>
-                        <td>
-                            16/05/2016
-                        </td>
-                        <td>
-                            20/05/2016
-                        </td>
-                        <td title="Arely Ortega">
-                            AO
-                        </td>
-                    </tr>
+                    <c:forEach var="tarea" varStatus="numeroTarea" items="${proyecto.tareaPrincipal.tareasHijas}">
+                        <tr>
+                            <td class="tareaCabecera">
+                                ${numeroTarea.count}
+                            </td>
+                            <td colspan="2" class="tareaCabecera">
+                                ${tarea.nombre}
+                            </td>
+                            <td class="tareaCabecera">
+                                <fmt:formatDate value="${tarea.fechaInicio}" pattern="yyyy-MM-dd" />
+                            </td>
+                            <td class="tareaCabecera">
+                                <fmt:formatDate value="${tarea.fechaFin}" pattern="yyyy-MM-dd" />
+                            </td>
+                            <td class="tareaCabecera" title="Rogelio Gómez, Tania Jiménez">
+                                RG, TJ                            
+                            </td>                                                
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                Tarea
+                            </td>
+                            <td>
+                                Descripci&oacute;n
+                            </td>
+                        </tr>
+                        <c:forEach var="tareaHija" varStatus="numeroHija" items="${tarea.tareasHijas}">
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    ${numeroTarea.count}.${numeroHija.count}
+                                </td>
+                                <td>
+                                    ${tareaHija.nombre}
+                                </td>
+                                <td>
+                                    <fmt:formatDate value="${tareaHija.fechaInicio}" pattern="yyyy-MM-dd" />
+                                </td>
+                                <td>
+                                    <fmt:formatDate value="${tareaHija.fechaInicio}" pattern="yyyy-MM-dd" />
+                                </td>
+                                <td title="José Flores">
+                                    <c:forEach var="responsable" varStatus="respNumero" items="${tareaHija.responsables}">
+                                        ${responsable.nombre}
+                                    </c:forEach>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </c:forEach>                    
                 </table>
             </div>
             <div id="tabs-3">

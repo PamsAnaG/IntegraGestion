@@ -29,6 +29,7 @@ public class Proyecto implements Serializable {
     private Cliente cliente = new Cliente();
     private ArchivoProyecto archivoProyecto;
     private List<Tarea> tareas = new ArrayList();
+    private Tarea tareaPrincipal;
     private double avance;
     private int estatusAvance;    
 
@@ -226,6 +227,20 @@ public class Proyecto implements Serializable {
      */
     public void setEstatusAvance(int estatusAvance) {
         this.estatusAvance = estatusAvance;
+    }
+
+    /**
+     * @return the tareaPrincipal
+     */
+    public Tarea getTareaPrincipal() {
+        return tareaPrincipal;
+    }
+
+    /**
+     * @param tareaPrincipal the tareaPrincipal to set
+     */
+    public void setTareaPrincipal(Tarea tareaPrincipal) {
+        this.tareaPrincipal = tareaPrincipal;
     }
 
 }

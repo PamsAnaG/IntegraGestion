@@ -6,6 +6,8 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.domain.Proyecto;
+import com.demexis.igestion.domain.Recurso;
+import com.demexis.igestion.domain.Rol;
 import com.demexis.igestion.domain.Tarea;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -85,4 +87,52 @@ public class TareaProyectoDAOImpl extends IgestionJdbcDaoSupport implements Tare
         }
     };
 
+    @Override
+    public Tarea obtieneTareaPadre(int idProyecto) {
+        String query = getQueries().getProperty("getTareasProyecto");
+
+        Tarea tarea = null;
+
+        List<Tarea> tareas = getJdbcTemplate().query(query, MAPPER_TAREA_PROYECTO, new Object[]{idProyecto});
+
+        if (!tareas.isEmpty()) {
+            tarea = tareas.get(0);
+        }
+
+        return tarea;
+    }
+
+    @Override
+    public List<Recurso> obtieneResponsableTareas(Tarea tarea) {
+        String query = getQueries().getProperty("getResponsablesTarea");
+
+        List<Recurso> recursos = getJdbcTemplate().query(query, MAPPER_RECURSO, new Object[]{tarea.getIdTarea()});
+
+        return recursos;
+    }
+
+    private static RowMapper<Recurso> MAPPER_RECURSO = new RowMapper<Recurso>() {
+        Recurso obj;
+
+        public Recurso mapRow(ResultSet rs, int rowNum) throws SQLException {
+            obj = new Recurso();
+
+            obj.setIdRecurso(rs.getInt("ID_RECURSO"));
+            obj.setTipoRecurso(rs.getString("TIPO_RECURSO"));
+            obj.setCostoHora(rs.getInt("COSTO_HORA"));
+            obj.setIdUsuario(rs.getInt("ID_USUARIO"));
+            obj.setUsuario(rs.getString("USUARIO"));
+            obj.setApMaterno(rs.getString("APMATERNO"));
+            obj.setApPaterno(rs.getString("APPATERNO"));
+            obj.setCorreoElectronico(rs.getString("CORREO_ELECTRONICO"));
+            obj.setNombre(rs.getString("NOMBRE_RECURSO"));
+            obj.setNumeroMovil(rs.getString("NUMERO_MOVIL"));
+            Rol rol = new Rol();
+            rol.setNombre(rs.getString("NOMBRE_ROL"));
+            rol.setDescripcion(rs.getString("DESCRIPCION_ROL"));
+            obj.setRol(rol);
+
+            return obj;
+        }
+    };
 }
