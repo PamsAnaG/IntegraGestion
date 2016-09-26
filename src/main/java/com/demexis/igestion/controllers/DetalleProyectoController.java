@@ -7,6 +7,7 @@ package com.demexis.igestion.controllers;
 
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.servicios.ProyectoService;
+import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,12 @@ public class DetalleProyectoController {
     public ModelAndView inicio(@ModelAttribute("Usuario") Proyecto proyecto, HttpServletRequest request) {
         
         Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyecto.getIdProyecto());
-
+        
+        Gson gson = new Gson();
+        
         ModelAndView model = new ModelAndView();
         model.addObject("proyecto", proyectoDetalle);
+        model.addObject("proyectoJson", gson.toJson(proyectoDetalle));
         model.setViewName("detalleProyecto");
 
         return model;

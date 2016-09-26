@@ -4,22 +4,28 @@
     Author     : Gabriel
 --%>
 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/DC975DE4-44C0-5F49-B0BB-C0594382E048/main.js" charset="UTF-8"></script><script type="text/javascript" src='../js/jquery.js'></script>
+        <script type="text/javascript" src='../js/jquery.js'></script>
         <script type="text/javascript" src='../js/jquery-ui.js'></script>
         <script type="text/javascript" src='../js/jquery-ui.min.js'></script>
+        <script type="text/javascript" src='../js/jquery.treetable.js'></script>
+        <script type="text/javascript" src='../js/detalleProyecto.js'></script>
+        
         <link href="../img/Demexis.ico" rel="shortcut icon" />
+        
         <link type="text/css" href='../css/structure.css' rel="stylesheet" media="screen" />        
+        <link type="text/css" href='../css/jquery.treetable.css' rel="stylesheet" />
+        <link type="text/css" href="../css/jquery.treetable.theme.default.css" rel="stylesheet" />
         <link type="text/css" href='../css/jquery-ui.structure.min.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery-ui.theme.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery-ui.theme.min.css' rel="stylesheet" media="screen" />
-
-        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
         <title>Integra Gestión</title>
         <script>
@@ -67,6 +73,8 @@
 
     </head>    
     <body>
+        
+        <input type="text" hidden="true" id="proyectoJSON" value='${proyectoJson}'>
 
         <div style="display:none" id="dialog" title="Configuración alerta">
             Medio de entrega:<br>
@@ -157,17 +165,18 @@
                 </table>
             </div>
             <div id="tabs-2">
-                <table class="tablaDetProyecto">
+                <!--table id="tblDetalleProyecto" class="tablaDetProyecto"-->
+                <table id="tblDetalleProyecto" class="treetable">
                     <tr>
                         <th>
                             Grupo
-                        </th>                    
-                        <th colspan="2">
+                        </th>
+                        <th>
                             Descripci&oacute;n
-                        </th>                    
+                        </th>
                         <th>
                             Fecha de inicio
-                        </th>                    
+                        </th>
                         <th>
                             Fecha fin
                         </th>
@@ -175,58 +184,6 @@
                             Recursos
                         </th>
                     </tr>
-                    <c:forEach var="tarea" varStatus="numeroTarea" items="${proyecto.tareaPrincipal.tareasHijas}">
-                        <tr>
-                            <td class="tareaCabecera">
-                                ${numeroTarea.count}
-                            </td>
-                            <td colspan="2" class="tareaCabecera">
-                                ${tarea.nombre}
-                            </td>
-                            <td class="tareaCabecera">
-                                <fmt:formatDate value="${tarea.fechaInicio}" pattern="yyyy-MM-dd" />
-                            </td>
-                            <td class="tareaCabecera">
-                                <fmt:formatDate value="${tarea.fechaFin}" pattern="yyyy-MM-dd" />
-                            </td>
-                            <td class="tareaCabecera" title="Rogelio Gómez, Tania Jiménez">
-                                RG, TJ                            
-                            </td>                                                
-                        </tr>
-                        <tr>
-                            <td>
-                            </td>
-                            <td>
-                                Tarea
-                            </td>
-                            <td>
-                                Descripci&oacute;n
-                            </td>
-                        </tr>
-                        <c:forEach var="tareaHija" varStatus="numeroHija" items="${tarea.tareasHijas}">
-                            <tr>
-                                <td>
-                                </td>
-                                <td>
-                                    ${numeroTarea.count}.${numeroHija.count}
-                                </td>
-                                <td>
-                                    ${tareaHija.nombre}
-                                </td>
-                                <td>
-                                    <fmt:formatDate value="${tareaHija.fechaInicio}" pattern="yyyy-MM-dd" />
-                                </td>
-                                <td>
-                                    <fmt:formatDate value="${tareaHija.fechaInicio}" pattern="yyyy-MM-dd" />
-                                </td>
-                                <td title="José Flores">
-                                    <c:forEach var="responsable" varStatus="respNumero" items="${tareaHija.responsables}">
-                                        ${responsable.nombre}
-                                    </c:forEach>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:forEach>                    
                 </table>
             </div>
             <div id="tabs-3">
@@ -548,7 +505,11 @@
         </div>
         <footer id="main">            
         </footer>
-
+                
+        <script>
+            $("#tblDetalleProyecto").treetable({ expandable: true });
+            generaTablaDetalle();
+        </script>
     </body>
 </html>
 
