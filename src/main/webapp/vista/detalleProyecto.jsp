@@ -168,10 +168,10 @@
                 <!--table id="tblDetalleProyecto" class="tablaDetProyecto"-->
                 <table id="tblDetalleProyecto" class="treetable">
                     <tr>
-                        <th>
+                        <th style='text-align:left;'>
                             Grupo
                         </th>
-                        <th>
+                        <th style='text-align:left;'>
                             Descripci&oacute;n
                         </th>
                         <th>
