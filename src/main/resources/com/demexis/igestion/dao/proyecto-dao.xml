@@ -9,14 +9,14 @@
             <props>
                 <prop key="guardaTareaProyecto">
                     <![CDATA[
-                        INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, 'A')
+                        INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS, FECHA_REGISTRO)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, 'A', NOW())
                     ]]>
                 </prop>
                 <prop key="guardaProyecto">
                     <![CDATA[
-                        INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS, FECHA_REGISTRO)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
                     ]]>
                 </prop>
                 <prop key="guardaArchivoProyecto">
@@ -44,8 +44,8 @@
                 </prop>
                 <prop key="guardaResponsableTarea">
                     <![CDATA[
-                        INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS)
-                        VALUES (?, ?, ?)
+                        INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS, FECHA_REGISTRO)
+                        VALUES (?, ?, ?, NOW())
                     ]]>
                 </prop>                              
             </props>

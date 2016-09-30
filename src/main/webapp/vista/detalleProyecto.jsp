@@ -17,9 +17,9 @@
         <script type="text/javascript" src='../js/jquery-ui.min.js'></script>
         <script type="text/javascript" src='../js/jquery.treetable.js'></script>
         <script type="text/javascript" src='../js/detalleProyecto.js'></script>
-        
+
         <link href="../img/Demexis.ico" rel="shortcut icon" />
-        
+
         <link type="text/css" href='../css/structure.css' rel="stylesheet" media="screen" />        
         <link type="text/css" href='../css/jquery.treetable.css' rel="stylesheet" />
         <link type="text/css" href="../css/jquery.treetable.theme.default.css" rel="stylesheet" />
@@ -32,10 +32,45 @@
             $(function() {
                 $("#tabs").tabs();
                 $(document).tooltip();
-                $("#dialog").dialog({autoOpen: false});
+                $("#dialog").dialog({
+                    height: 350,
+                    modal: true,
+                    resizable: false,
+                    autoOpen: false,
+                    open: function() {
+                        if ($(this).data('porcentaje') === 0) {
+                            $("#porcentajeC").hide();
+                        } else {
+                            $("#porcentajeC").show();
+                        }
+                    },
+                    buttons: {
+                        Programar: function() {
+                            var tipoAlert = 0;
+                            if ($('#calendario').is(':checked')) {
+                                tipoAlert = 1;
+                            } else if ($('#mensaje').is(':checked')) {
+                                tipoAlert = 2;
+                            } else if ($('#push').is(':checked')) {
+                                tipoAlert = 3;
+                            } else if ($('#correo').is(':checked')) {
+                                tipoAlert = 4;
+                            }
+                            $.ajax({
+                                method: "POST",
+                                url: "guardaAlerta",
+                                data: {idTarea: $(this).data('idTarea'), tipoAlerta: tipoAlert, faseAlerta: $(this).data('faseAlerta')}
+                            })
+                                    .done(function(msg) {
+                                        alert("Data Saved: " + msg);
+                                    });
+                            $(this).dialog("close");
+                        }
+                    }
+                });
             });
-            function muestraDialog() {
-                $("#dialog").dialog('open');
+            function muestraDialog(idTarea, porcentaje, faseAlerta) {
+                $("#dialog").data('porcentaje', porcentaje).data('idTarea', idTarea).data('faseAlerta', faseAlerta).dialog('open');
             }
         </script>
         <style>
@@ -73,15 +108,19 @@
 
     </head>    
     <body>
-        
+
         <input type="text" hidden="true" id="proyectoJSON" value='${proyectoJson}'>
 
         <div style="display:none" id="dialog" title="Configuración alerta">
             Medio de entrega:<br>
-            <input type="checkbox" name="Calendario">Programación calendario<br>
-            <input type="checkbox" name="Calendario">Mensaje texto<br>
-            <input type="checkbox" name="Calendario">Aviso móvil<br>
-            <input type="checkbox" name="Calendario">Correo electrónico<br>
+            <input type="checkbox" id="calendario" name="calendario">Programación calendario<br>
+            <input type="checkbox" id="mensaje" name="mensaje">Mensaje texto<br>
+            <input type="checkbox" id="push" name="push">Aviso móvil<br>
+            <input type="checkbox" id="correo" name="correo">Correo electrónico<br>
+            <div id="porcentajeC">
+                Porcentaje de avance
+                <input type="text" id="porcentaje" name="procentaje"/>
+            </div>            
         </div>
 
 
@@ -257,11 +296,11 @@
                 </table>
             </div>
             <div id="tabs-4">
-                <table class="tablaDetProyecto">
+                <table border="1" id="tblAlertasProyecto" class="tablaDetProyecto">
                     <tr>
                         <th>
                             Grupo
-                        </th>                    
+                        </th>
                         <th>
                             Descripci&oacute;n
                         </th>                    
@@ -286,228 +325,17 @@
                         <th>
                             Fin de tarea anticipado
                         </th>
-                    </tr>
-                    <tr>
-                        <td class="tareaCabecera">
-                            1
-                        </td>
-                        <td class="tareaCabecera">
-                            Levantamiento de informaci&oacute;n
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>                        
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td onclick="javascript: muestraDialog()">
-                            Requerimientos funcionales
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PT
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> C
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            40 MA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-
-                        </td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>                        
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            Requerimientos no funcionales
-                        </td>
-                        <td onclick="javascript: muestraDialog()">                            </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> C
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            60 MA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> P
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            1 TA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            1 PC
-                        </td>                        
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            Propuesta tecnol&oacute;gica
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">                            
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> C
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            60 MA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> P
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            1 TA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            1 PC
-                        </td>                        
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            Entrega demo no funcional
-                        </td>
-                        <td onclick="javascript: muestraDialog()">                            
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> C
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> P
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            1 PC
-                        </td>                        
-                    </tr>  
-                    <tr>
-                        <td class="tareaCabecera">
-                            2
-                        </td>
-                        <td class="tareaCabecera">
-                            Construcci&oacute;n
-                        </td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                        <td onclick="javascript: muestraDialog()"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            Diseño de base de datos
-                        </td>
-                        <td onclick="javascript: muestraDialog()">   
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">                            
-                        </td>                        
-                    </tr>  
-                    <tr>
-                        <td></td>
-                        <td>
-                            Creación de proyecto
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>                        
-                        <td onclick="javascript: muestraDialog()"> 
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PTA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>                        
-                    </tr>  
-                    <tr>
-                        <td></td>
-                        <td>
-                            Módulo de Administración
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> TA
-                        </td>                        
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                            1 PTA
-                        </td>                        
-                    </tr>  
-                    <tr>
-                        <td></td>
-                        <td>
-                            Módulo de recepción de documentos
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>                        
-                        <td onclick="javascript: muestraDialog()">
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> PA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()"> 
-                            <img src="../img/correcto.png" width="10" height="10" alt=''> TA
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>
-                        <td onclick="javascript: muestraDialog()">
-                        </td>                        
-                    </tr>  
+                    </tr>                                                                  
                 </table>
             </div>
         </div>
         <footer id="main">            
         </footer>
-                
+
         <script>
-            $("#tblDetalleProyecto").treetable({ expandable: true });
+            $("#tblAlertasProyecto").treetable({expandable: true});
+            generaTablaAlertas();
+            $("#tblDetalleProyecto").treetable({expandable: true});
             generaTablaDetalle();
         </script>
     </body>

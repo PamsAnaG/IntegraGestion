@@ -168,8 +168,7 @@ public class ProyectoServiceImpl implements ProyectoService {
     private void imprimeTareas(Tarea tarea) {
         try {
             List<Tarea> tareasHijas = tarea.getTareasHijas();
-            for (Tarea tareaHija : tareasHijas) {
-                logger.debug("Tarea |" + tareaHija.getNombre() + " Hija de | " + tarea.getNombre());
+            for (Tarea tareaHija : tareasHijas) {                
                 List<Tarea> tareasHijasInt = tareaHija.getTareasHijas();
                 if (tareasHijasInt != null && !tareasHijasInt.isEmpty()) {
                     imprimeTareas(tareaHija);

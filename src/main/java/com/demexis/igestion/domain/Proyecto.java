@@ -31,7 +31,8 @@ public class Proyecto implements Serializable {
     private List<Tarea> tareas = new ArrayList();
     private Tarea tareaPrincipal;
     private double avance;
-    private int estatusAvance;    
+    private int estatusAvance;
+    private List<Alerta> alertas = new ArrayList();
 
     /**
      * @return the idProyecto
@@ -241,6 +242,20 @@ public class Proyecto implements Serializable {
      */
     public void setTareaPrincipal(Tarea tareaPrincipal) {
         this.tareaPrincipal = tareaPrincipal;
+    }
+
+    /**
+     * @return the alertas
+     */
+    public List<Alerta> getAlertas() {
+        return alertas;
+    }
+
+    /**
+     * @param alertas the alertas to set
+     */
+    public void setAlertas(List<Alerta> alertas) {
+        this.alertas = alertas;
     }
 
 }

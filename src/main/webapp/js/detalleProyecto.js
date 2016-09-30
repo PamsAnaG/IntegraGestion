@@ -27,6 +27,46 @@
         $("#tblDetalleProyecto").treetable("collapseAll");
     }
     
+    function generaTablaAlertas() {
+        var proyecto = parseJSON($('#proyectoJSON').val());
+        var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
+        for (var i = 0; i < tareasHijas.length; i++) {
+            var node = $("#tblAlertasProyecto").treetable("node", i+1);
+            $("#tblAlertasProyecto").treetable("loadBranch", node, 
+                    "<tr data-tt-id="+(i+1)+">" + 
+                        "<td class='tareaCabecera' style='text-align:center;'>" + (i+1) + "</td>" +
+                        "<td class='tareaCabecera' style='text-align:center;'>" + tareasHijas[i].nombre + "</td>" + 
+                        "<td class='tareaCabecera' style='text-align:center;'></td>" + 
+                        "<td class='tareaCabecera' style='text-align:center;'></td>" + 
+                        "<td class='tareaCabecera' style='text-align:center;'></td>" + 
+                    "</tr>");
+            
+            despliegaHijasAlerta(tareasHijas[i].tareasHijas, (i+1));
+        }
+        $("#tblAlertasProyecto").treetable("collapseAll");
+    }
+    
+    
+    function despliegaHijasAlerta(tareasHijas, itmP) {
+        for (var j = 0; j < tareasHijas.length; j++) {
+            var node = $("#tblAlertasProyecto").treetable("node", itmP);
+            var data =                     
+                    "<tr data-tt-id="+itmP+"."+(j+1)+" data-tt-parent-id="+itmP+">" + 
+                        "<td></td>" +                        
+                        "<td style='text-align:center;'>" + tareasHijas[j].nombre + "</td>" + 
+                        "<td onclick=\"javascript: muestraDialog(" + tareasHijas[j].idTarea + ", 0, 1)\" style='text-align:center;'></td>" + 
+                        "<td onclick=\"javascript: muestraDialog(" + tareasHijas[j].idTarea + ", 0, 2)\" style='text-align:center;'></td>" + 
+                        "<td onclick=\"javascript: muestraDialog(" + tareasHijas[j].idTarea + ", 0, 3)\" style='text-align:center;'></td>" + 
+                        "<td onclick=\"javascript: muestraDialog(" + tareasHijas[j].idTarea + ", 1, 4)\" style='text-align:center;'></td>" + 
+                        "<td onclick=\"javascript: muestraDialog(" + tareasHijas[j].idTarea + ", 0, 5)\" style='text-align:center;'></td>" + 
+                        "<td onclick=\"javascript: muestraDialog(" + tareasHijas[j].idTarea + ", 0, 6)\" style='text-align:center;'></td>";
+            $("#tblAlertasProyecto").treetable("loadBranch", node, data);
+            if (tareasHijas[j].tareasHijas.length > 0) {
+                despliegaHijasAlerta(tareasHijas[j].tareasHijas, itmP+"."+(j+1));
+            }
+        }
+    }
+    
     function despliegaHijas(tareasHijas, itmP) {
         for (var j = 0; j < tareasHijas.length; j++) {
             var node = $("#tblDetalleProyecto").treetable("node", itmP);
