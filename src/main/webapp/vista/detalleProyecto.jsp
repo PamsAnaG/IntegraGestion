@@ -17,6 +17,7 @@
         <script type="text/javascript" src='../js/jquery-ui.min.js'></script>
         <script type="text/javascript" src='../js/jquery.treetable.js'></script>
         <script type="text/javascript" src='../js/detalleProyecto.js'></script>
+        <script type="text/javascript" src='../js/kalendae.js'></script>
 
         <link href="../img/Demexis.ico" rel="shortcut icon" />
 
@@ -28,51 +29,6 @@
         <link type="text/css" href='../css/jquery-ui.theme.min.css' rel="stylesheet" media="screen" />
 
         <title>Integra Gestión</title>
-        <script>
-            $(function() {
-                $("#tabs").tabs();
-                $(document).tooltip();
-                $("#dialog").dialog({
-                    height: 350,
-                    modal: true,
-                    resizable: false,
-                    autoOpen: false,
-                    open: function() {
-                        if ($(this).data('porcentaje') === 0) {
-                            $("#porcentajeC").hide();
-                        } else {
-                            $("#porcentajeC").show();
-                        }
-                    },
-                    buttons: {
-                        Programar: function() {
-                            var tipoAlert = 0;
-                            if ($('#calendario').is(':checked')) {
-                                tipoAlert = 1;
-                            } else if ($('#mensaje').is(':checked')) {
-                                tipoAlert = 2;
-                            } else if ($('#push').is(':checked')) {
-                                tipoAlert = 3;
-                            } else if ($('#correo').is(':checked')) {
-                                tipoAlert = 4;
-                            }
-                            $.ajax({
-                                method: "POST",
-                                url: "guardaAlerta",
-                                data: {idTarea: $(this).data('idTarea'), tipoAlerta: tipoAlert, faseAlerta: $(this).data('faseAlerta')}
-                            })
-                                    .done(function(msg) {
-                                        alert("Data Saved: " + msg);
-                                    });
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            });
-            function muestraDialog(idTarea, porcentaje, faseAlerta) {
-                $("#dialog").data('porcentaje', porcentaje).data('idTarea', idTarea).data('faseAlerta', faseAlerta).dialog('open');
-            }
-        </script>
         <style>
             .ui-tabs{
                 width: 90%;
@@ -121,6 +77,12 @@
                 Porcentaje de avance
                 <input type="text" id="porcentaje" name="procentaje"/>
             </div>            
+        </div>
+        
+        <div style="display:none" id="dialogRecursos" title="Selecci&oacute;n de Recursos">
+            <c:forEach var="recurso" varStatus="numeroRecurso" items="${recursos}">
+                <input type="checkbox" id="chkR${recurso.idRecurso}" data-value="${recurso.idRecurso}" data-value2="${recurso.abreviacion}" data-value3="${recurso.nombre}">${recurso.nombre}<br>
+            </c:forEach>          
         </div>
 
 
@@ -204,8 +166,10 @@
                 </table>
             </div>
             <div id="tabs-2">
+                <center><input id="guardaCambiosDP" type="button" class="pure-button pure-button-primary" 
+                               value="Guardar Cambios" onclick="guardarCambios();"/></center>
                 <!--table id="tblDetalleProyecto" class="tablaDetProyecto"-->
-                <table id="tblDetalleProyecto" class="treetable">
+                <table id="tblDetalleProyecto"  style="font-size:medium;">
                     <tr>
                         <th style='text-align:left;'>
                             Grupo

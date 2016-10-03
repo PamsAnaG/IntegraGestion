@@ -58,6 +58,4 @@ public class Recurso extends Usuario{
         this.idRecurso = idRecurso;
     }
     
-    
-    
 }

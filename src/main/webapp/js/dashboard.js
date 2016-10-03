@@ -17,10 +17,10 @@
             bar.progressbar({ 
                 value: parseFloat(bar.data('value')),
                 create: function(event, ui) {
-                    $(this).find('.ui-widget-header').css({'background-color': backColor})
+                    $(this).find('.ui-widget-header').css({'background-color': backColor});
                 }
-            })
-        })
+            });
+        });
     });
 
     function detalleProyecto(idProyecto) {

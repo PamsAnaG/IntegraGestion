@@ -6,16 +6,17 @@
 package com.demexis.igestion.controllers;
 
 import com.demexis.igestion.domain.Proyecto;
-import com.demexis.igestion.domain.TipoProyecto;
+import com.demexis.igestion.domain.RecursoRsmn;
 import com.demexis.igestion.servicios.ProyectoService;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,16 +41,47 @@ public class DetalleProyectoController {
     public ModelAndView inicio(@ModelAttribute("Usuario") Proyecto proyecto, HttpServletRequest request) {
 
         Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyecto.getIdProyecto());
+        
+        List<RecursoRsmn> lstRecursos = new ArrayList<RecursoRsmn>();
+        RecursoRsmn recurso1 = new RecursoRsmn();
+        recurso1.setIdRecurso(1);
+        recurso1.setNombre("Gabriel Bretado");
+        recurso1.setAbreviacion("GB");
+        recurso1.setTipoRecurso("Desarrolaldor HTML");
+        RecursoRsmn recurso2 = new RecursoRsmn();
+        recurso2.setIdRecurso(2);
+        recurso2.setNombre("Pamela Gutierrez");
+        recurso2.setAbreviacion("PG");
+        recurso2.setTipoRecurso("Desarrolaldor Java");
+        lstRecursos.add(recurso1);
+        lstRecursos.add(recurso2);
 
         Gson gson = new Gson();
 
         ModelAndView model = new ModelAndView();
         model.addObject("proyecto", proyectoDetalle);
+        model.addObject("recursos", lstRecursos);
         model.addObject("proyectoJson", gson.toJson(proyectoDetalle));
         model.setViewName("detalleProyecto");
 
         return model;
 
+    }
+    
+    @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    public String guardaCambiosDP(@RequestParam String jsonCambios) {
+        logger.debug("Guardando cambios: [" + jsonCambios + "]");
+        
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            Object o = builder.create().fromJson(jsonCambios, Object.class);
+            System.out.println("O: " + o.toString());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return "Correcto";
     }
 
     @PostMapping(value = "/guardaAlerta", produces = MediaType.TEXT_PLAIN_VALUE)

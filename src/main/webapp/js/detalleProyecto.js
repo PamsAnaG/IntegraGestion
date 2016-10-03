@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+    var mapEdiciones = {};
 
     function parseJSON(data) {
         return window.JSON && window.JSON.parse ? window.JSON.parse( data ) : (new Function("return " + data))(); 
@@ -16,15 +17,38 @@
             $("#tblDetalleProyecto").treetable("loadBranch", node, 
                     "<tr data-tt-id="+(i+1)+">" + 
                         "<td class='tareaCabecera'>" + (i+1) + "</td>" +
-                        "<td class='tareaCabecera'>" + tareasHijas[i].nombre + "</td>" + 
-                        "<td class='tareaCabecera' style='text-align:center;'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" + 
-                        "<td class='tareaCabecera' style='text-align:center;'>" + convertDate(tareasHijas[i].fechaFin) + "</td>" + 
-                        "<td class='tareaCabecera' style='text-align:center;' title='Rogelio Gómez, Tania Jiménez'>RG, TJ</td>" + 
+                        "<td id='dpnd"+tareasHijas[i].idTarea+"' class='tareaCabecera' ondblclick='activaEdicion("+tareasHijas[i].idTarea+",1);' onblur='terminaEdicion();'>" + tareasHijas[i].nombre + "</td>" + 
+                        "<td id='dpfi"+tareasHijas[i].idTarea+"' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion("+tareasHijas[i].idTarea+",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" + 
+                        "<td id='dpff"+tareasHijas[i].idTarea+"' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion("+tareasHijas[i].idTarea+",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>" + 
+                        "<td id='dpre"+tareasHijas[i].idTarea+"' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion("+tareasHijas[i].idTarea+",4);' onblur='terminaEdicion();' title='Rogelio Gómez, Tania Jiménez'>RG, TJ</td>" + 
                     "</tr>");
             
             despliegaHijas(tareasHijas[i].tareasHijas, (i+1));
         }
         $("#tblDetalleProyecto").treetable("collapseAll");
+    }
+    
+    function despliegaHijas(tareasHijas, itmP) {
+        for (var j = 0; j < tareasHijas.length; j++) {
+            var node = $("#tblDetalleProyecto").treetable("node", itmP);
+            var data = 
+                    "<tr data-tt-id="+itmP+"."+(j+1)+" data-tt-parent-id="+itmP+">" + 
+                        "<td>" + itmP+"."+(j+1) + "</td>" +
+                        "<td id='dpnd"+tareasHijas[j].idTarea+"' ondblclick='activaEdicion("+tareasHijas[j].idTarea+",1);' onblur='terminaEdicion();'>" + tareasHijas[j].nombre + "</td>" + 
+                        "<td id='dpfi"+tareasHijas[j].idTarea+"' style='text-align:center;' ondblclick='activaEdicion("+tareasHijas[j].idTarea+",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaInicio) + "</td>" + 
+                        "<td id='dpff"+tareasHijas[j].idTarea+"' style='text-align:center;' ondblclick='activaEdicion("+tareasHijas[j].idTarea+",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
+            var responsables = tareasHijas[j].responsables;
+            var nombresResponsables = "";
+            for (var k = 0; k < responsables.length; k++) {
+                nombresResponsables = nombresResponsables + responsables[k].nombre + "," ;
+            }
+            data = data + "<td id='dpre"+tareasHijas[j].idTarea+"' style='text-align:center;' ondblclick='activaEdicion("+tareasHijas[j].idTarea+",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' >" + nombresResponsables + "</td>" + 
+                    "</tr>";
+            $("#tblDetalleProyecto").treetable("loadBranch", node, data);
+            if (tareasHijas[j].tareasHijas.length > 0) {
+                despliegaHijas(tareasHijas[j].tareasHijas, itmP+"."+(j+1));
+            }
+        }
     }
     
     function generaTablaAlertas() {
@@ -67,31 +91,184 @@
         }
     }
     
-    function despliegaHijas(tareasHijas, itmP) {
-        for (var j = 0; j < tareasHijas.length; j++) {
-            var node = $("#tblDetalleProyecto").treetable("node", itmP);
-            var data = 
-                    "<tr data-tt-id="+itmP+"."+(j+1)+" data-tt-parent-id="+itmP+">" + 
-                        "<td>" + itmP+"."+(j+1) + "</td>" +
-                        "<td>" + tareasHijas[j].nombre + "</td>" + 
-                        "<td style='text-align:center;'>" + convertDate(tareasHijas[j].fechaInicio) + "</td>" + 
-                        "<td style='text-align:center;'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
-            var responsables = tareasHijas[j].responsables;
-            var nombresResponsables = "";
-            for (var k = 0; k < responsables.length; k++) {
-                nombresResponsables = nombresResponsables + responsables[k].nombre + "," ;
-            }
-            data = data + "<td style='text-align:center;' title='" + nombresResponsables + "' >" + nombresResponsables + "</td>" + 
-                    "</tr>";
-            $("#tblDetalleProyecto").treetable("loadBranch", node, data);
-            if (tareasHijas[j].tareasHijas.length > 0) {
-                despliegaHijas(tareasHijas[j].tareasHijas, itmP+"."+(j+1));
-            }
-        }
-    }
-    
     function convertDate(inputFormat) {
         function pad(s) { return (s < 10) ? '0' + s : s; }
         var d = new Date(inputFormat);
         return [d.getFullYear(), pad(d.getMonth()+1), pad(d.getDate())].join('-');
+    }
+    
+    var idTD, valorTD, tmpIdTarea, tmpIdColumna;
+    var esActivaEdicion = false;
+    function activaEdicion(idTarea, idColumna) {
+        if (!esActivaEdicion) {
+            tmpIdColumna = idColumna;
+            tmpIdTarea = idTarea;
+            var esFecha = false;
+            switch (idColumna) {
+                case 1: idTD = "dpnd" + idTarea;
+                        break;
+                case 2: idTD = "dpfi" + idTarea;
+                        esFecha = true;
+                        break;
+                case 3: idTD = "dpff" + idTarea;
+                        esFecha = true;
+                        break;
+                case 4: idTD = "dpre" + idTarea;
+                        break;
+            }
+            valorTD = document.getElementById(idTD).textContent;
+            if (idColumna !== 4) {
+                document.getElementById(idTD).setAttribute('contenteditable', true);
+                var html = $(("#"+idTD)).html();
+                var input = $('<input id="'+idTD+'TMP" type="text" style="width:100%;" onblur="terminaEdicion();"/>');
+                input.val(html);
+                $("#"+idTD).html(input);
+                if (esFecha) {
+                    new Kalendae.Input(idTD+"TMP", {months:1,direction:'future',format:'YYYY-MM-DD'});
+                } 
+                document.getElementById(idTD+"TMP").focus();
+            } else {
+                document.getElementById(idTD).focus();
+                muestraRecursos();
+            }
+            esActivaEdicion = true;
+        }
+    }
+    
+    var mapRecursos = {};
+    var tmpRecursos="", tmpAbreviaciones="";
+    function terminaEdicion() {
+        esActivaEdicion = false;
+        var tmpValorTD;
+        if (tmpIdColumna !== 4) {
+            tmpValorTD = document.getElementById(idTD+"TMP").value;
+            $(("#"+idTD+"TMP")).remove();
+        } else {
+            tmpValorTD = tmpAbreviaciones;
+            document.getElementById(idTD).setAttribute('title', tmpRecursos);
+        }
+        document.getElementById(idTD).textContent = tmpValorTD;
+        if (!(tmpValorTD === valorTD)) {
+            if (tmpIdTarea in mapEdiciones) {
+                var tmpTareaE = mapEdiciones[tmpIdTarea];
+                switch (tmpIdColumna) {
+                    case 1: tmpTareaE.descripcion = tmpValorTD;
+                            break;
+                    case 2: tmpTareaE.fechaInicio = tmpValorTD;
+                            break;
+                    case 3: tmpTareaE.fechaFin = tmpValorTD;
+                            break;
+                    case 4: tmpTareaE.recursos = mapRecursos;
+                            break;
+                }
+                mapEdiciones[tmpIdTarea] = tmpTareaE;
+            } else {
+                var tDesc=null, tFechaIni=null, tFechaFin=null, tRecursos=null;
+                switch (tmpIdColumna) {
+                    case 1: tDesc = tmpValorTD;
+                            break;
+                    case 2: tFechaIni = tmpValorTD;
+                            break;
+                    case 3: tFechaFin = tmpValorTD;
+                            break;
+                    case 4: tRecursos = mapRecursos;
+                            break;
+                }
+                mapEdiciones[tmpIdTarea] = new TareaE(tmpIdTarea, tDesc, tFechaIni, tFechaFin, tRecursos, "m");
+            }
+        }
+        document.getElementById(idTD).setAttribute('contenteditable', false);
+        idTD = null; valorTD = null; tmpIdTarea = null; 
+        tmpRecursos= ""; tmpAbreviaciones = ""; mapRecursos = {};
+    }
+    
+    function TareaE (idTarea, descripcion, fechaInicio, fechaFin, recursos, accion) {
+        this.idTarea = idTarea;
+        this.descripcion = descripcion;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.recursos = recursos;
+        this.accion = accion;
+    }
+    
+    function guardarCambios() {
+        alert(JSON.stringify(mapEdiciones));
+        $.ajax({
+            method: "POST",
+            url: "guardaCambiosDP",
+            data: {jsonCambios: JSON.stringify(mapEdiciones)}
+        });
+    }
+    
+    
+    $(function() {
+        $("#tabs").tabs();
+        $(document).tooltip();
+        $("#dialog").dialog({
+            height: 350,
+            modal: true,
+            resizable: false,
+            autoOpen: false,
+            open: function() {
+                if ($(this).data('porcentaje') === 0) {
+                    $("#porcentajeC").hide();
+                } else {
+                    $("#porcentajeC").show();
+                }
+            },
+            buttons: {
+                Programar: function() {
+                    var tipoAlert = 0;
+                    if ($('#calendario').is(':checked')) {
+                        tipoAlert = 1;
+                    } else if ($('#mensaje').is(':checked')) {
+                        tipoAlert = 2;
+                    } else if ($('#push').is(':checked')) {
+                        tipoAlert = 3;
+                    } else if ($('#correo').is(':checked')) {
+                        tipoAlert = 4;
+                    }
+                    $.ajax({
+                        method: "POST",
+                        url: "guardaAlerta",
+                        data: {idTarea: $(this).data('idTarea'), tipoAlerta: tipoAlert, faseAlerta: $(this).data('faseAlerta')}
+                    })
+                            .done(function(msg) {
+                                alert("Data Saved: " + msg);
+                            });
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
+        $("#dialogRecursos").dialog({
+            height: 350,
+            modal: true,
+            resizable: false,
+            autoOpen: false,
+            open: function() {},
+            close: function() { 
+                var $recursosA = $("#dialogRecursos").find(":checkbox");
+                $recursosA.each(function() {
+                    if($(this).is(':checked')) {
+                        mapRecursos[$(this).data('value')] = 1;
+                        tmpRecursos += $(this).data('value3') + "  ";
+                        tmpAbreviaciones += $(this).data('value2') + "  ";
+                    }
+                });
+                terminaEdicion();
+            },
+            buttons: {
+                Asignar: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
+    });
+    function muestraDialog(idTarea, porcentaje, faseAlerta) {
+        $("#dialog").data('porcentaje', porcentaje).data('idTarea', idTarea).data('faseAlerta', faseAlerta).dialog('open');
+    }
+    function muestraRecursos() {
+        $("#dialogRecursos").dialog('open');
     }
