@@ -10,6 +10,7 @@ import com.demexis.igestion.domain.RecursoRsmn;
 import com.demexis.igestion.servicios.ProyectoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -75,8 +76,8 @@ public class DetalleProyectoController {
         
         try {
             GsonBuilder builder = new GsonBuilder();
-            Object o = builder.create().fromJson(jsonCambios, Object.class);
-            System.out.println("O: " + o.toString());
+            LinkedTreeMap mapCambios = (LinkedTreeMap)builder.create().fromJson(jsonCambios, Object.class);
+            System.out.println("O: " + mapCambios.toString());
         } catch(Exception e) {
             e.printStackTrace();
         }
