@@ -196,7 +196,9 @@
         $.ajax({
             method: "POST",
             url: "guardaCambiosDP",
-            data: {jsonCambios: JSON.stringify(mapEdiciones)}
+            data: JSON.stringify(mapEdiciones),
+            type: "json",
+            contentType: "application/json;charset=UTF-8"
         });
     }
     

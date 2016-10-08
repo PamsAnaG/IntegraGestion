@@ -29,7 +29,7 @@
                     <![CDATA[
                         SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM V_PROYECTO p JOIN V_CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'A'
                     ]]>
-                </prop>                
+                </prop>
                 <prop key="obtieneDatosProyecto">
                     <![CDATA[
                         SELECT ID_PROYECTO, NOMBRE, FECHA_INICIO, FECHA_FIN, ESTATUS, 
@@ -45,9 +45,19 @@
                 <prop key="guardaResponsableTarea">
                     <![CDATA[
                         INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS, FECHA_REGISTRO)
-                        VALUES (?, ?, ?, NOW())
+                        VALUES (?, ?, ?, NOW());
                     ]]>
-                </prop>                              
+                </prop>
+                <prop key="actualizaInfoTareaDinamico">
+                    <![CDATA[
+                        UPDATE TAREA_PROYECTO SET 
+                    ]]>
+                </prop>
+                <prop key="actualizaEstatusRecursoTarea">
+                    <![CDATA[
+                        UPDATE REL_RECURSO_TAREA SET ESTATUS = '?' WHERE ID_TAREA = ? AND ID_RECURSO = ?;
+                    ]]>
+                </prop>
             </props>
         </property>
     </bean>

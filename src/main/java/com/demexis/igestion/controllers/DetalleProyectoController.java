@@ -11,15 +11,21 @@ import com.demexis.igestion.servicios.ProyectoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
+import com.sun.xml.internal.xsom.impl.scd.Iterators;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.RequestWrapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,20 +75,23 @@ public class DetalleProyectoController {
 
     }
     
-    @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE, consumes = "application/json")
     @ResponseBody
-    public String guardaCambiosDP(@RequestParam String jsonCambios) {
+    public String guardaCambiosDP(@RequestBody String jsonCambios) {
         logger.debug("Guardando cambios: [" + jsonCambios + "]");
         
+        String respuesta = "0";
         try {
             GsonBuilder builder = new GsonBuilder();
-            LinkedTreeMap mapCambios = (LinkedTreeMap)builder.create().fromJson(jsonCambios, Object.class);
-            System.out.println("O: " + mapCambios.toString());
+            Map mapCambios = (LinkedTreeMap)builder.create().fromJson(jsonCambios, Object.class);
+            int correctos = proyectoService.guardaCambiosTarea(mapCambios);
+            respuesta = (correctos != mapCambios.size()) ? "0" : "1";
         } catch(Exception e) {
+            logger.error("Error en la lectura del JSON de cambios tarea: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return "Correcto";
+        return respuesta;
     }
 
     @PostMapping(value = "/guardaAlerta", produces = MediaType.TEXT_PLAIN_VALUE)
