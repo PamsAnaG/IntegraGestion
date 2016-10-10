@@ -56,13 +56,41 @@ function generaTablaAlertas() {
     var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
     for (var i = 0; i < tareasHijas.length; i++) {
         var node = $("#tblAlertasProyecto").treetable("node", i + 1);
+        var htmlalertas1 = "";
+        var htmlalertas2 = "";
+        var htmlalertas3 = "";
+        var htmlalertas4 = "";
+        var htmlalertas5 = "";
+        var htmlalertas6 = "";
+        var htmlalertas7 = "";
+        for (var jAlertas = 0; jAlertas < tareasHijas[i].alertas.length; jAlertas++) {
+            if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 1) {
+                htmlalertas1 = htmlalertas1 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 2) {
+                htmlalertas2 = htmlalertas2 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 3) {
+                htmlalertas3 = htmlalertas3 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 4) {
+                htmlalertas4 = htmlalertas4 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 5) {
+                htmlalertas5 = htmlalertas5 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 6) {
+                htmlalertas6 = htmlalertas6 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 7) {
+                htmlalertas7 = htmlalertas7 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+            }
+        }
         $("#tblAlertasProyecto").treetable("loadBranch", node,
                 "<tr data-tt-id=" + (i + 1) + ">" +
                 "<td class='tareaCabecera' style='text-align:center;'>" + (i + 1) + "</td>" +
                 "<td class='tareaCabecera' style='text-align:center;'>" + tareasHijas[i].nombre + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;'></td>" +
-                "<td class='tareaCabecera' style='text-align:center;'></td>" +
-                "<td class='tareaCabecera' style='text-align:center;'></td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-1\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas1 + "')\">" + htmlalertas1 + "</td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-2\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas2 + "')\">" + htmlalertas2 + "</td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-3\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas3 + "')\">" + htmlalertas3 + "</td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-4\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas4 + "')\">" + htmlalertas4 + "</td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-5\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas5 + "')\">" + htmlalertas5 + "</td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-6\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas6 + "')\">" + htmlalertas6 + "</td>" +
+                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-7\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas7 + "')\">" + htmlalertas7 + "</td>" +
                 "</tr>");
 
         despliegaHijasAlerta(tareasHijas[i].tareasHijas, (i + 1));
