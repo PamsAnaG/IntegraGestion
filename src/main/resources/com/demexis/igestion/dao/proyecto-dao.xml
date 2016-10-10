@@ -47,7 +47,17 @@
                         INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS, FECHA_REGISTRO)
                         VALUES (?, ?, ?, NOW())
                     ]]>
-                </prop>                              
+                </prop>   
+                <prop key="actualizaInfoTareaDinamico">
+                     <![CDATA[
+                        UPDATE TAREA_PROYECTO SET 
+                      ]]>
+                </prop>
+                <prop key="actualizaEstatusRecursoTarea">
+                     <![CDATA[
+                         UPDATE REL_RECURSO_TAREA SET ESTATUS = '?' WHERE ID_TAREA = ? AND ID_RECURSO = ?;
+                     ]]>
+                </prop>
             </props>
         </property>
     </bean>

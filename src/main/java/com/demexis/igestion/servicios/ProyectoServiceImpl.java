@@ -12,11 +12,13 @@ import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
 import com.demexis.igestion.domain.TipoProyecto;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import net.sf.mpxj.ProjectFile;
 import net.sf.mpxj.Resource;
 import net.sf.mpxj.ResourceAssignment;
@@ -56,6 +58,7 @@ public class ProyectoServiceImpl implements ProyectoService {
     TareaProyectoDAO tareaProyectoDAO;
 
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
+    private final SimpleDateFormat fechaYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public Proyecto guardaProyecto(Proyecto proyecto) {
@@ -250,6 +253,73 @@ public class ProyectoServiceImpl implements ProyectoService {
     @Override
     public Proyecto obtieneProyectoBD(int idProyecto) {
         return proyectoDAO.obtieneProyecto(idProyecto);
+    }
+
+    @Override
+    public int guardaCambiosTarea(Map cambios) {
+        int actualizadas = 0;
+        int idTarea = 0;
+        int duracion = 0;
+        boolean actualiza = false;
+        String descripcion;
+        Date fechaInicio;
+        Date fechaFin;
+
+        Map cambiosDP;
+        Map recursos;
+
+        try {
+            Iterator i = cambios.keySet().iterator();
+            while (i.hasNext()) {
+                String key = (String) i.next();
+                logger.info("Procesando información de Tarea: " + cambios.get(key));
+
+                cambiosDP = (Map) cambios.get(key);
+                if (cambiosDP.get("idTarea") != null) {
+                    idTarea = (Double.valueOf(String.valueOf(cambiosDP.get("idTarea")))).intValue();
+
+                    if (((String) cambiosDP.get("accion")).equals("m")) {
+                        logger.info("Actualización de información de Tarea... [" + idTarea + "]");
+
+                        descripcion = ((String) cambiosDP.get("descripcion")) != null ? (String) cambiosDP.get("descripcion") : null;
+                        fechaInicio = ((String) cambiosDP.get("fechaInicio")) != null ? fechaYYYYMMDD.parse((String) cambiosDP.get("fechaInicio")) : null;
+                        fechaFin = ((String) cambiosDP.get("fechaFin")) != null ? fechaYYYYMMDD.parse((String) cambiosDP.get("fechaFin")) : null;
+                        if ((fechaInicio != null && fechaFin == null)) {
+                            fechaFin = fechaInicio;
+                        } else if ((fechaFin != null && fechaInicio == null)) {
+                            fechaInicio = fechaFin;
+                        }
+                        if (fechaInicio != null && fechaFin != null) {
+                            if (fechaInicio.equals(fechaFin)) {
+                                duracion = 1;
+                            } else {
+                                duracion = (int) ((fechaFin.getTime() - fechaInicio.getTime()) / MILLSECS_PER_DAY);
+                            }
+                        }
+                        if (descripcion != null || fechaInicio != null || fechaFin != null) {
+                            actualiza = proyectoDAO.actualizaInfoTarea(idTarea, descripcion, fechaInicio, fechaFin, duracion);
+                        }
+
+                        recursos = (Map) cambiosDP.get("recursos");
+                        if (recursos != null) {
+                            logger.info("Procesando recursos...");
+                            Iterator j = recursos.keySet().iterator();
+                            while (j.hasNext()) {
+                                String keyR = (String) j.next();
+                                actualiza = proyectoDAO.actualizaRecursosTarea(idTarea, Integer.parseInt(keyR), (Double.valueOf(String.valueOf(recursos.get(keyR)))).intValue());
+                            }
+                        }
+
+                        if (actualiza) {
+                            actualizadas++;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return actualizadas;
     }
 
 }

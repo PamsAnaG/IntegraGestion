@@ -8,6 +8,7 @@ package com.demexis.igestion.servicios;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Tarea;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -26,5 +27,7 @@ public interface ProyectoService {
     public Proyecto obtieneProyectoBD(int idProyecto);
     
     public List<Proyecto> obtieneProyectosDashboard();
+    
+    public int guardaCambiosTarea(Map cambios);
 
 }

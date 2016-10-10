@@ -15,6 +15,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import static java.util.stream.DoubleStream.builder;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,16 +81,18 @@ public class DetalleProyectoController {
     public String guardaCambiosDP(@RequestParam String jsonCambios) {
         logger.debug("Guardando cambios: [" + jsonCambios + "]");
 
+        String respuesta = "0";
         try {
             GsonBuilder builder = new GsonBuilder();
-            Object o = builder.create().fromJson(jsonCambios, Object.class);
-            System.out.println("O: " + o.toString());
+            Map mapCambios = (LinkedTreeMap) builder.create().fromJson(jsonCambios, Object.class);
+            int correctos = proyectoService.guardaCambiosTarea(mapCambios);
+            respuesta = (correctos != mapCambios.size()) ? "0" : "1";
         } catch (Exception e) {
-            LinkedTreeMap mapCambios = (LinkedTreeMap) builder.create().fromJson(jsonCambios, Object.class);
-            System.out.println("O: " + mapCambios.toString());
+            logger.error("Error en la lectura del JSON de cambios tarea: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        return "Correcto";
+        return respuesta;
     }
 
     @PostMapping(value = "/guardaAlerta", produces = MediaType.TEXT_PLAIN_VALUE)

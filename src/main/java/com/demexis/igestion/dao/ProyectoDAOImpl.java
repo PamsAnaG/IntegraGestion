@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -34,6 +35,87 @@ import org.springframework.jdbc.support.KeyHolder;
 public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoDAO {
 
     private Logger logger = Logger.getLogger(CargaProyectoController.class);
+
+    @Override
+    public boolean actualizaInfoTarea(int idTarea, String descripcion, Date fechaInicio, Date fechaFin, int duracion) {
+        String queryActualiza = getQueries().getProperty("actualizaInfoTareaDinamico");
+        boolean actualizado = true;
+
+        String coma;
+        boolean frst = true;
+        int i = 0;
+        int length = 1;
+
+        if (descripcion != null) {
+            length++;
+        }
+        if (fechaInicio != null) {
+            length++;
+        }
+        if (fechaFin != null) {
+            length++;
+        }
+        if (duracion != 0) {
+            length++;
+        }
+        Object[] params = new Object[length];
+
+        if (descripcion != null) {
+            queryActualiza += " NOMBRE = ?";
+            params[i++] = descripcion;
+            frst = frst ? false : frst;
+        }
+        if (fechaInicio != null) {
+            coma = frst ? "" : ",";
+            frst = frst ? false : frst;
+            queryActualiza += coma + " FECHA_INICIO = ?";
+            params[i++] = fechaInicio;
+        }
+        if (fechaFin != null) {
+            coma = frst ? "" : ",";
+            frst = frst ? false : frst;
+            queryActualiza += coma + " FECHA_FIN = ?";
+            params[i++] = fechaFin;
+        }
+        if (duracion != 0) {
+            coma = frst ? "" : ",";
+            queryActualiza += coma + " DURACION = ?";
+            params[i++] = duracion;
+        }
+        queryActualiza += " WHERE ID_TAREA = ?";
+        params[i++] = idTarea;
+
+        logger.info("Parametros actualización: " + params.length);
+        try {
+            getJdbcTemplate().update(queryActualiza, params);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            actualizado = false;
+        }
+
+        return actualizado;
+    }
+
+    @Override
+    public boolean actualizaRecursosTarea(int idTarea, int idRecurso, int accion) {
+        boolean actualizaRecTarea = true;
+
+        try {
+            if (accion == 1) {
+                getJdbcTemplate().update(
+                        getQueries().getProperty("guardaResponsableTarea"),
+                        new Object[]{idTarea, idRecurso, "A"});
+            } else {
+                getJdbcTemplate().update(
+                        getQueries().getProperty("actualizaEstatusRecursoTarea"),
+                        new Object[]{"E", idTarea, idRecurso});
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            actualizaRecTarea = false;
+        }
+        return actualizaRecTarea;
+    }
 
     @Override
     public Tarea guardaTarea(Tarea tarea, int idProyecto) {
