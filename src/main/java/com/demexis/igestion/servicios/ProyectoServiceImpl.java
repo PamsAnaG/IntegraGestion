@@ -225,25 +225,28 @@ public class ProyectoServiceImpl implements ProyectoService {
         if (proyectos != null) {
             for (Proyecto proyecto : proyectos) {
                 tareas = tareaProyectoDAO.obtieneTareasProyectoDashboard(proyecto.getIdProyecto());
-                for (Tarea tarea : tareas) {
-                    if (current.compareTo(tarea.getFechaFin()) > 0
-                            && tarea.getPorcentajeCompletado() < 100
-                            && alertado != 3) {
-                        alertado = 3;
-                    } else if (current.compareTo(tarea.getFechaFin()) <= 0
-                            && current.compareTo(tarea.getFechaInicio()) > 0
-                            && (alertado != 3 && alertado != 2)) {
-                        proceso = 100 / tarea.getDuracion();
-                        avance = ((current.getTime() - tarea.getFechaInicio().getTime()) / MILLSECS_PER_DAY) * proceso;
-                        if (tarea.getPorcentajeCompletado() < avance) {
-                            alertado = 2;
+                if (tareas != null) {
+                    for (Tarea tarea : tareas) {
+                        if (current.compareTo(tarea.getFechaFin()) > 0
+                                && tarea.getPorcentajeCompletado() < 100
+                                && alertado != 3) {
+                            alertado = 3;
+                        } else if (current.compareTo(tarea.getFechaFin()) <= 0
+                                && current.compareTo(tarea.getFechaInicio()) > 0
+                                && (alertado != 3 && alertado != 2)) {
+                            proceso = 100 / tarea.getDuracion();
+                            avance = ((current.getTime() - tarea.getFechaInicio().getTime()) / MILLSECS_PER_DAY) * proceso;
+                            if (tarea.getPorcentajeCompletado() < avance) {
+                                alertado = 2;
+                            }
                         }
+                        sumAvance = sumAvance + tarea.getPorcentajeCompletado();
                     }
-                    sumAvance = sumAvance + tarea.getPorcentajeCompletado();
+                    proyecto.setAvance(sumAvance / tareas.size());
+                    proyecto.setEstatusAvance(alertado);
+                    lstProyectos.add(proyecto);
+
                 }
-                proyecto.setAvance(sumAvance / tareas.size());
-                proyecto.setEstatusAvance(alertado);
-                lstProyectos.add(proyecto);
             }
         }
         proyectos = null;
