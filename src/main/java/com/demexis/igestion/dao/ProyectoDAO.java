@@ -8,9 +8,7 @@ package com.demexis.igestion.dao;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.domain.Tarea;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -28,10 +26,6 @@ public interface ProyectoDAO {
 
     public Proyecto obtieneProyecto(int idProyecto);
 
-    public List<Proyecto> obtieneProyectosDashboard();
-    
-    public boolean actualizaInfoTarea(int idTarea, String descripcion, Date fechaInicio, Date fechaFin, int duracion);
-    
-    public boolean actualizaRecursosTarea(int idTarea, int idRecurso, int accion);
+    public List<Proyecto> obtieneProyectosDashboard();    
 
 }

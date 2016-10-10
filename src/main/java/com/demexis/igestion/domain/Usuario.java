@@ -5,6 +5,7 @@
  */
 package com.demexis.igestion.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author pamela.gutierrez
  */
-public class Usuario {
+public class Usuario implements Serializable {
 
     private int idUsuario;
     private String usuario;

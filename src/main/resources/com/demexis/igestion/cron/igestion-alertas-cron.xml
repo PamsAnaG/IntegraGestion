@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+    
+    <bean id="enviaAlertasCron" class="com.demexis.igestion.cron.EnviaAlertasCron" />
+    
+    <bean id="enviaAlertasJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="enviaAlertasCron" />
+        <property name="targetMethod" value="ejecutaTarea" />
+        <property name="concurrent" value="false" />
+    </bean>
+    
+    <bean id="enviaAlertasCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="enviaAlertasJobDetail" />
+        <property name="cronExpression" value="0 0/1 7-20 ? * MON-FRI" />
+        <!--   Seconds Minutes Hours Day-of-Month Month Day-of-Week Year(optional field)-->
+    </bean>
+    
+</beans>

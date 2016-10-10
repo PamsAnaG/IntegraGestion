@@ -25,7 +25,9 @@ public class Tarea implements Cloneable {
     private int idUnicoTarea;
     private List<Recurso> responsables = new ArrayList();
     private List<Tarea> tareasHijas = new ArrayList();
+    private List<Alerta> alertas = new ArrayList();
     private int tareaGrupo;
+    private int idProyecto;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -189,6 +191,34 @@ public class Tarea implements Cloneable {
      */
     public void setTareaGrupo(int tareaGrupo) {
         this.tareaGrupo = tareaGrupo;
+    }
+
+    /**
+     * @return the alertas
+     */
+    public List<Alerta> getAlertas() {
+        return alertas;
+    }
+
+    /**
+     * @param alertas the alertas to set
+     */
+    public void setAlertas(List<Alerta> alertas) {
+        this.alertas = alertas;
+    }
+
+    /**
+     * @return the idProyecto
+     */
+    public int getIdProyecto() {
+        return idProyecto;
+    }
+
+    /**
+     * @param idProyecto the idProyecto to set
+     */
+    public void setIdProyecto(int idProyecto) {
+        this.idProyecto = idProyecto;
     }
 
 }

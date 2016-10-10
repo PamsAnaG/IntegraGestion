@@ -17,6 +17,8 @@ public interface UsuarioDAO {
 
     public Usuario obtenUsuario(Usuario usuario);
     
+    public Usuario obtenUsuario(int idUsuario);
+    
     public Usuario getPrivilegiosUsuario(Usuario usuario);
     
     public List<Recurso> getUsuariosRecursos();

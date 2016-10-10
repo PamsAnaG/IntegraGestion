@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="">
-  <Resource auth="Container" defaultAutoCommit="true" driverClassName="com.mysql.jdbc.Driver" maxActive="500" maxIdle="-1" maxWait="10" name="jdbc/igestionJNDI" password="Desarrollo" timeBetweenEvictionRunsMillis="30000" type="javax.sql.DataSource" url="jdbc:mysql://127.0.0.1:3306/integra?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" username="desarrollo">
-    </Resource>
+  <!--<Resource auth="Container" defaultAutoCommit="true" driverClassName="com.mysql.jdbc.Driver" maxActive="500" maxIdle="-1" maxWait="10" name="jdbc/igestionJNDI" password="Desarrollo" timeBetweenEvictionRunsMillis="30000" type="javax.sql.DataSource" url="jdbc:mysql://127.0.0.1:3306/integra?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" username="desarrollo">
+    </Resource>-->
 </Context>

@@ -37,4 +37,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioDao.getUsuariosRecursos();
     }
 
+    @Override
+    public Usuario informacionUsuario(int idUsuario) {
+        return usuarioDao.obtenUsuario(idUsuario);
+    }
+
 }

@@ -31,7 +31,15 @@
                     FROM V_RECURSO
                     WHERE ID_ROL = ?
                 ]]>
-                </prop>                
+                </prop>   
+                <prop key="obtenInfoUsuarioID">
+	        <![CDATA[
+	            SELECT ID_USUARIO, NOMBRE, APPATERNO, APMATERNO, USUARIO, PASSWORD, 
+                    CORREO_ELECTRONICO, NUMERO_MOVIL, ID_ROL, NOMBRE_ROL, DESCRIPCION
+                    FROM V_USUARIO
+                    WHERE ID_USUARIO = ?
+                ]]>
+                </prop>             
             </props>
         </property>
     </bean>

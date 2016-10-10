@@ -123,4 +123,18 @@ public class UsuarioDAOImpl extends IgestionJdbcDaoSupport implements UsuarioDAO
         return null;
     }
 
+    @Override
+    public Usuario obtenUsuario(int idUsuario) {
+
+        String query = getQueries().getProperty("obtenInfoUsuarioID");
+
+        List<Usuario> usuarios = getJdbcTemplate().query(query, MAPPER_USUARIO, new Object[]{idUsuario});
+
+        if (!usuarios.isEmpty()) {
+            return usuarios.get(0);
+        } else {
+            return null;
+        }
+    }
+
 }

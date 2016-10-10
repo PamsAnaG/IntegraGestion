@@ -5,27 +5,23 @@
  */
 package com.demexis.igestion.controllers;
 
-import com.demexis.igestion.dao.ProyectoDAO;
-import com.demexis.igestion.domain.ArchivoProyecto;
 import com.demexis.igestion.domain.Asociado;
 import com.demexis.igestion.domain.ClaseProyecto;
 import com.demexis.igestion.domain.Cliente;
+import com.demexis.igestion.domain.ConstantesIntegra;
 import com.demexis.igestion.domain.ModalidadProyecto;
 import com.demexis.igestion.domain.Proyecto;
-import com.demexis.igestion.domain.Tarea;
 import com.demexis.igestion.domain.TipoFacturacion;
 import com.demexis.igestion.domain.TipoProyecto;
+import com.demexis.igestion.domain.Usuario;
 import com.demexis.igestion.servicios.AsociadoService;
 import com.demexis.igestion.servicios.ClaseProyectoService;
 import com.demexis.igestion.servicios.ClienteService;
 import com.demexis.igestion.servicios.ProyectoService;
 import com.demexis.igestion.servicios.TipoProyectoService;
-import java.util.HashMap;
+import com.google.gson.Gson;
 import java.util.List;
-import net.sf.mpxj.ProjectFile;
-import net.sf.mpxj.Task;
-import net.sf.mpxj.mpp.MPPReader;
-import net.sf.mpxj.reader.ProjectReader;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -36,7 +32,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -64,16 +59,20 @@ public class CargaProyectoController {
     ClaseProyectoService claseProyectoService;
 
     @RequestMapping(value = "/cargap", method = RequestMethod.POST)
-    public ModelAndView cargaProyecto(@ModelAttribute("proyecto") Proyecto proyecto, ModelMap model) {
+    public ModelAndView cargaProyecto(@ModelAttribute("proyecto") Proyecto proyecto, ModelMap model, HttpServletRequest request) {
 
-        logger.debug("Cargando proyecto...");
+        logger.debug("Cargando proyecto..." + proyecto.getNombre());
+        Usuario usuarioFirmado = (Usuario) request.getSession().getAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString());
 
+        proyecto.setUsuarioAlta(usuarioFirmado.getIdUsuario());
         Proyecto proyectoAlmacenado = proyectoService.almacenaProyecto(proyecto);
         
-        logger.debug("Cliente proyecto " + proyectoAlmacenado.getCliente().getNombre());
+        Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyectoAlmacenado.getIdProyecto());
+        Gson gson = new Gson();
 
         ModelAndView modelR = new ModelAndView();
-        modelR.addObject("proyecto", proyectoAlmacenado);
+        modelR.addObject("proyecto", proyectoDetalle);
+        modelR.addObject("proyectoJson", gson.toJson(proyectoDetalle));
         modelR.setViewName("detalleProyecto");
 
         return modelR;

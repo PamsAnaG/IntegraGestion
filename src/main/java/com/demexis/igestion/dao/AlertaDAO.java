@@ -6,6 +6,8 @@
 package com.demexis.igestion.dao;
 
 import com.demexis.igestion.domain.Alerta;
+import com.demexis.igestion.domain.Tarea;
+import java.util.List;
 
 /**
  *
@@ -14,5 +16,11 @@ import com.demexis.igestion.domain.Alerta;
 public interface AlertaDAO {
 
     public Alerta guardaAlertaproyecto(Alerta alerta, int idTarea);
+    
+    public List<Alerta> obtieneAlertasProyecto(int idTarea);
+    
+    public List<Tarea> obtieneAlertasActivas();
+    
+    public void actualizaEstadoAlerta(String estado, int idAlerta);
 
 }

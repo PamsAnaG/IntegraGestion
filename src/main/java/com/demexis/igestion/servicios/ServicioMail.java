@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.demexis.igestion.domain;
+package com.demexis.igestion.servicios;
 
 /**
  *
  * @author pamela.gutierrez
  */
-public enum ConstantesIntegra {
+public interface ServicioMail {
 
-    USUARIO_SESSION_INTEGRA, P, A, C, T, PR;
-
+    public void sendMail(String userMail, String subject, String mensaje, String mailUsuariosForCC, String mailUsuariosForTo);
 }

@@ -9,14 +9,14 @@
             <props>
                 <prop key="guardaTareaProyecto">
                     <![CDATA[
-                        INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS, FECHA_REGISTRO)
+                        INSERT INTO TAREA_PROYECTO (ID_TAREA_PADRE, NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION, PORCENTAJE_COMPLETADO, ID_PROYECTO, ESTATUS, FECHA_REGISTRO )
                         VALUES (?, ?, ?, ?, ?, ?, ?, 'A', NOW())
                     ]]>
                 </prop>
                 <prop key="guardaProyecto">
                     <![CDATA[
-                        INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS, FECHA_REGISTRO)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                        INSERT INTO PROYECTO (NOMBRE, FECHA_INICIO, FECHA_FIN, ID_CLIENTE, ID_TIPO_PROYECTO, ID_CLASE_PROYECTO, ID_TP_FACTURACION, ID_MODALIDAD, ESTATUS, FECHA_REGISTRO, ID_USUARIO_ALTA)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)
                     ]]>
                 </prop>
                 <prop key="guardaArchivoProyecto">
@@ -29,7 +29,7 @@
                     <![CDATA[
                         SELECT p.ID_PROYECTO, p.NOMBRE, c.NOMBRE CLIENTE FROM V_PROYECTO p JOIN V_CLIENTE c ON c.ID_CLIENTE = p.ID_CLIENTE WHERE p.ESTATUS = 'A'
                     ]]>
-                </prop>
+                </prop>                
                 <prop key="obtieneDatosProyecto">
                     <![CDATA[
                         SELECT ID_PROYECTO, NOMBRE, FECHA_INICIO, FECHA_FIN, ESTATUS, 
@@ -37,7 +37,7 @@
                         ID_TIPO_PROYECTO, TIPO_NOMBRE, TIPO_DESCRIPCION, ID_TP_FACTURACION, 
                         NOMBRE_FACTURACION, DESCRIPCION_FACTURACION, ID_CLASE_PROYECTO, 
                         NOMBRE_CLASE, DESCRIPCION_CLASE, ID_MODALIDAD, NOMBRE_MODALIDAD, 
-                        DESCRIPCION_MODALIDAD
+                        DESCRIPCION_MODALIDAD, USUARIO_ALTA
                         FROM V_PROYECTO
                         WHERE ID_PROYECTO = ?;
                     ]]>
@@ -45,19 +45,9 @@
                 <prop key="guardaResponsableTarea">
                     <![CDATA[
                         INSERT INTO REL_RECURSO_TAREA (ID_TAREA, ID_RECURSO, ESTATUS, FECHA_REGISTRO)
-                        VALUES (?, ?, ?, NOW());
+                        VALUES (?, ?, ?, NOW())
                     ]]>
-                </prop>
-                <prop key="actualizaInfoTareaDinamico">
-                    <![CDATA[
-                        UPDATE TAREA_PROYECTO SET 
-                    ]]>
-                </prop>
-                <prop key="actualizaEstatusRecursoTarea">
-                    <![CDATA[
-                        UPDATE REL_RECURSO_TAREA SET ESTATUS = '?' WHERE ID_TAREA = ? AND ID_RECURSO = ?;
-                    ]]>
-                </prop>
+                </prop>                              
             </props>
         </property>
     </bean>

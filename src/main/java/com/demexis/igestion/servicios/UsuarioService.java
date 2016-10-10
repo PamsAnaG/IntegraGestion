@@ -16,6 +16,8 @@ import java.util.List;
 public interface UsuarioService {
 
     public Usuario informacionUsuario(Usuario usuario);
+    
+    public Usuario informacionUsuario(int idUsuario);
 
     public Usuario privilegiosUsuario(Usuario usuario);
     

@@ -31,11 +31,11 @@ public class AutenticacionController {
     @Autowired
     UsuarioService usuarioService;
 
-    @RequestMapping(value = "/inicio", method = { RequestMethod.GET, RequestMethod.GET })
+    @RequestMapping(value = "/inicio", method = {RequestMethod.GET, RequestMethod.GET})
     public ModelAndView inicio() {
 
         Usuario usuario = new Usuario();
-        
+
         ModelAndView model = new ModelAndView();
         model.setViewName("inicio");
         model.addObject("Usuario", usuario);
@@ -55,9 +55,8 @@ public class AutenticacionController {
             // RECUPERAMOS LOS DATOS DEL USUARIO DESDE LA BASE DE DATOS
             usuarioBD = usuarioService.privilegiosUsuario(usuarioBD);
             if (!usuarioBD.getPrivilegio().isEmpty()) {
-                // GUARDAMOS AL USUARIO FIRMADO EN LA SESION
-                HttpSession session = request.getSession();
-                session.setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), usuarioBD);
+                // GUARDAMOS AL USUARIO FIRMADO EN LA SESION                
+                request.getSession().setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), usuarioBD);
                 model.setViewName("redirect:dashboard");
                 model.addObject("Usuario", usuario);
             }

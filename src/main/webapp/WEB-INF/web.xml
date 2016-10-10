@@ -3,13 +3,14 @@
     <servlet>
         <servlet-name>gestion</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <!--<load-on-startup>1</load-on-startup>-->
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
                 classpath:com/demexis/igestion/context/iGestionContext.xml 
                 classpath:com/demexis/igestion/context/persistence-igestion.xml 
                 classpath:com/demexis/igestion/dao/*-dao.xml
+                classpath:com/demexis/igestion/cron/*-cron.xml
             </param-value>
         </init-param>
     </servlet>

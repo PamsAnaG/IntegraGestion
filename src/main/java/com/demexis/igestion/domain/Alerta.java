@@ -12,10 +12,13 @@ package com.demexis.igestion.domain;
  */
 public class Alerta {
     
-    private int idAlerta;
+    private int idAlerta;    
     private int idTipoAlerta;
+    private String nombreTipoAlerta;
     private int idFaseTareaAlerta;
-    private int procentajeAvance;    
+    private String nombreFaseTareaAlerta;    
+    private int procentajeAvance;
+    private String estatus;
 
     /**
      * @return the idAlerta
@@ -71,6 +74,48 @@ public class Alerta {
      */
     public void setProcentajeAvance(int procentajeAvance) {
         this.procentajeAvance = procentajeAvance;
+    }        
+
+    /**
+     * @return the nombreTipoAlerta
+     */
+    public String getNombreTipoAlerta() {
+        return nombreTipoAlerta;
+    }
+
+    /**
+     * @param nombreTipoAlerta the nombreTipoAlerta to set
+     */
+    public void setNombreTipoAlerta(String nombreTipoAlerta) {
+        this.nombreTipoAlerta = nombreTipoAlerta;
+    }
+
+    /**
+     * @return the nombreFaseTareaAlerta
+     */
+    public String getNombreFaseTareaAlerta() {
+        return nombreFaseTareaAlerta;
+    }
+
+    /**
+     * @param nombreFaseTareaAlerta the nombreFaseTareaAlerta to set
+     */
+    public void setNombreFaseTareaAlerta(String nombreFaseTareaAlerta) {
+        this.nombreFaseTareaAlerta = nombreFaseTareaAlerta;
+    }
+
+    /**
+     * @return the estatus
+     */
+    public String getEstatus() {
+        return estatus;
+    }
+
+    /**
+     * @param estatus the estatus to set
+     */
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
     
 }

@@ -37,7 +37,7 @@
     </head>
 
     <body>
-        <form:form method="post" action="cargap" enctype="multipart/form-data" commandName="proyecto">
+        <form:form acceptCharset="ISO-8859-1" method="post" action="cargap" enctype="multipart/form-data" commandName="proyecto">
         <center><div></br></br>
                 <table class="tablaProyecto" style="margin-bottom: 0;">
                     <tr>

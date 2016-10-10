@@ -9,10 +9,38 @@
             <props>
                 <prop key="guardaAlertaProyecto">
                     <![CDATA[
-                        INSERT INTO ALERTA_PROYECTO (ID_TAREA, ID_TIPO_ALERTA, ID_FASE_TAREA_ALERTA, PORCENTAJE_AVANCE, FECHA_ALTA, ESTATUS)
+                        INSERT INTO ALERTA_PROYECTO (ID_TAREA, ID_TIPO_ALERTA, ID_FASE_TAREA_ALERTA, PORCENTAJE_AVANCE, FECHA_REGISTRO, ESTATUS)
                         VALUES (?, ?, ?, ?, NOW(), 'A')
                     ]]>
-                </prop>                   
+                </prop>
+                <prop key="obtieneAlertasProyecto">
+                    <![CDATA[
+                        SELECT ID_ALERTA, ID_TAREA, ID_TIPO_ALERTA, 
+                        NOMBRE_TIPO, DESCRIPCION, ID_FASE_TAREA_ALERTA, NOMBRE_FASE,
+                        PORCENTAJE_AVANCE, FECHA_REGISTR_ALERTA, ID_PROYECTO, 
+                        ID_TAREA_PADRE, NOMBRE_TAREA, FECHA_INICIO, FECHA_FIN, 
+                        DURACION, PORCENTAJE_COMPLETADO, FECHA_REGISTRO
+                        FROM V_ALERTA_TAREA
+                        WHERE ID_TAREA = ?
+                    ]]>
+                </prop>
+                <prop key="obtieneAlertasActivas">
+                    <![CDATA[
+                        SELECT ID_ALERTA, ID_TAREA, ID_TIPO_ALERTA, 
+                        NOMBRE_TIPO, DESCRIPCION, ID_FASE_TAREA_ALERTA, NOMBRE_FASE,
+                        PORCENTAJE_AVANCE, FECHA_REGISTR_ALERTA, ID_PROYECTO, 
+                        ID_TAREA_PADRE, NOMBRE_TAREA, FECHA_INICIO, FECHA_FIN, 
+                        DURACION, PORCENTAJE_COMPLETADO, FECHA_REGISTRO, ESTATUS_ALERTA 
+                        FROM V_ALERTA_TAREA
+                        WHERE ESTATUS_ALERTA  = 'A'
+                    ]]>
+                </prop>
+                
+                <prop key="actualizaEstadoAlerta">
+                    <![CDATA[
+                        UPDATE ALERTA_PROYECTO SET ESTATUS = ? WHERE ID_ALERTA = ?
+                    ]]>
+                </prop>                                
             </props>
         </property>
     </bean>

@@ -32,6 +32,7 @@ public class Proyecto implements Serializable {
     private Tarea tareaPrincipal;
     private double avance;
     private int estatusAvance;
+    private int usuarioAlta;
     private List<Alerta> alertas = new ArrayList();
 
     /**
@@ -256,6 +257,20 @@ public class Proyecto implements Serializable {
      */
     public void setAlertas(List<Alerta> alertas) {
         this.alertas = alertas;
+    }
+
+    /**
+     * @return the usuarioAlta
+     */
+    public int getUsuarioAlta() {
+        return usuarioAlta;
+    }
+
+    /**
+     * @param usuarioAlta the usuarioAlta to set
+     */
+    public void setUsuarioAlta(int usuarioAlta) {
+        this.usuarioAlta = usuarioAlta;
     }
 
 }

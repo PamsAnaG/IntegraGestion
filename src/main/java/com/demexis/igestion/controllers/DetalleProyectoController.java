@@ -5,27 +5,23 @@
  */
 package com.demexis.igestion.controllers;
 
+import com.demexis.igestion.domain.Alerta;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.RecursoRsmn;
+import com.demexis.igestion.servicios.AlertaService;
 import com.demexis.igestion.servicios.ProyectoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
-import com.sun.xml.internal.xsom.impl.scd.Iterators;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.RequestWrapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,11 +40,14 @@ public class DetalleProyectoController {
     @Autowired
     ProyectoService proyectoService;
 
+    @Autowired
+    AlertaService alertaService;
+
     @RequestMapping(value = "/detalleProyecto", method = RequestMethod.POST)
     public ModelAndView inicio(@ModelAttribute("Usuario") Proyecto proyecto, HttpServletRequest request) {
 
         Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyecto.getIdProyecto());
-        
+
         List<RecursoRsmn> lstRecursos = new ArrayList<RecursoRsmn>();
         RecursoRsmn recurso1 = new RecursoRsmn();
         recurso1.setIdRecurso(1);
@@ -74,32 +73,35 @@ public class DetalleProyectoController {
         return model;
 
     }
-    
-    @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE, consumes = "application/json")
+
+    @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String guardaCambiosDP(@RequestBody String jsonCambios) {
+    public String guardaCambiosDP(@RequestParam String jsonCambios) {
         logger.debug("Guardando cambios: [" + jsonCambios + "]");
-        
-        String respuesta = "0";
+
         try {
             GsonBuilder builder = new GsonBuilder();
-            Map mapCambios = (LinkedTreeMap)builder.create().fromJson(jsonCambios, Object.class);
-            int correctos = proyectoService.guardaCambiosTarea(mapCambios);
-            respuesta = (correctos != mapCambios.size()) ? "0" : "1";
-        } catch(Exception e) {
-            logger.error("Error en la lectura del JSON de cambios tarea: " + e.getMessage());
-            e.printStackTrace();
+            Object o = builder.create().fromJson(jsonCambios, Object.class);
+            System.out.println("O: " + o.toString());
+        } catch (Exception e) {
+            LinkedTreeMap mapCambios = (LinkedTreeMap) builder.create().fromJson(jsonCambios, Object.class);
+            System.out.println("O: " + mapCambios.toString());
         }
 
-        return respuesta;
+        return "Correcto";
     }
 
     @PostMapping(value = "/guardaAlerta", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String guardaAlerta(@RequestParam int idTarea, @RequestParam int tipoAlerta, @RequestParam int faseAlerta) {
-        logger.debug("Guardando alerta..." + idTarea + "|" + tipoAlerta + "|" + faseAlerta);
+    public String guardaAlerta(@RequestParam int idTarea, @RequestParam int tipoAlerta, @RequestParam int faseAlerta, @RequestParam int porcentajeAvance) {
+        logger.debug("Guardando alerta..." + idTarea + "|" + tipoAlerta + "|" + faseAlerta + "|" + porcentajeAvance);
+        Alerta alerta = new Alerta();
+        alerta.setIdFaseTareaAlerta(faseAlerta);
+        alerta.setIdTipoAlerta(tipoAlerta);
 
-        return "Correcto";
+        alerta = alertaService.guardaAlertaproyecto(alerta, idTarea);
+
+        return "Correcto-" + idTarea + "-" + faseAlerta;
     }
 
 }
