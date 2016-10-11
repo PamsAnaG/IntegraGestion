@@ -3,21 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var mapEdiciones = {};
+var mapEdiciones = {}, mapDataTT = {};
+var branches = 0;
 
 function parseJSON(data) {
     return window.JSON && window.JSON.parse ? window.JSON.parse(data) : (new Function("return " + data))();
+}
+
+function agregarTarea() {
+    var node = $("#tblDetalleProyecto").treetable("node", 1);
+    $("#tblDetalleProyecto").treetable("loadBranch", node,
+            "<tr data-tt-id=1.3 data-tt-parent-id=1>" + 
+            "<td>1.3</td>" +
+            "</tr>");
 }
 
 function generaTablaDetalle() {
     var proyecto = parseJSON($('#proyectoJSON').val());
     var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
     for (var i = 0; i < tareasHijas.length; i++) {
+        branches = i + 1;
         var node = $("#tblDetalleProyecto").treetable("node", i + 1);
         var dataP = 
                 "<tr data-tt-id=" + (i + 1) + ">" +
                 "<td class='tareaCabecera'>" + (i + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();'>" + tareasHijas[i].nombre + "</td>" +
+                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP("+tareasHijas[i].idTarea+","+(i+1)+");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
                 "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
                 "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
         var responsables = tareasHijas[i].responsables;
@@ -35,16 +45,19 @@ function generaTablaDetalle() {
         $("#tblDetalleProyecto").treetable("loadBranch", node, dataP);
         despliegaHijas(tareasHijas[i].tareasHijas, (i + 1));
     }
+    mapDataTT["0"] = tareasHijas.length;
+    branches = i + 1;
     $("#tblDetalleProyecto").treetable("collapseAll");
 }
 
 function despliegaHijas(tareasHijas, itmP) {
+    mapDataTT[itmP] = tareasHijas.length;
     for (var j = 0; j < tareasHijas.length; j++) {
         var node = $("#tblDetalleProyecto").treetable("node", itmP);
         var data =
                 "<tr data-tt-id=" + itmP + "." + (j + 1) + " data-tt-parent-id=" + itmP + ">" +
                 "<td>" + itmP + "." + (j + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[j].idTarea + "' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",1);' onblur='terminaEdicion();'>" + tareasHijas[j].nombre + "</td>" +
+                "<td id='dpnd" + tareasHijas[j].idTarea + "' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP("+tareasHijas[j].idTarea+","+itmP+"."+(j+1)+");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[j].nombre + "</td>" +
                 "<td id='dpfi" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaInicio) + "</td>" +
                 "<td id='dpff" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
         var responsables = tareasHijas[j].responsables;
@@ -191,6 +204,7 @@ function activaEdicion(idTarea, idColumna) {
                 idTD = "dpre" + idTarea;
                 break;
         }
+        $("#dpnd"+tmpIdTareaMO).html(tmpvalorTD);
         valorTD = document.getElementById(idTD).textContent;
         if (idColumna !== 4) {
             document.getElementById(idTD).setAttribute('contenteditable', true);
@@ -298,6 +312,29 @@ function guardarCambios() {
                     alert("Hubo un error al guardar los cambios. Intente nuevamente.");
                 }
             });
+}
+
+var tmpIdTareaMO = 0, tmpvalorTD;
+var tmpIdTareaMO2 = 0, tmpvalorTD2;
+function muestraOpcionesDP(idTarea, idItm) {
+    //alert("Lo que sea...");
+    if (idTarea !== tmpIdTareaMO) {
+        $("#dpnd"+tmpIdTareaMO2).html(tmpvalorTD2);
+        tmpIdTareaMO = idTarea;
+        tmpvalorTD = $("#dpnd"+idTarea).html();
+        var input = $('<i class="fa fa-cog" onclick="agregarTareaH('+idItm+');"></i>');
+        $("#dpnd"+idTarea).html(input);
+        $("#dpnd"+idTarea).html($("#dpnd"+idTarea).html() + tmpvalorTD);
+        tmpIdTareaMO2 = tmpIdTareaMO; tmpvalorTD2 = tmpvalorTD;
+    }
+}
+
+function ocultaOpcionesDP() {
+    //$("#dpnd"+tmpIdTareaMO2).html(tmpvalorTD2);
+}
+
+function agregarTareaH(idImpSel) {
+    alert("Algo: " + mapDataTT[idImpSel] + ">>>" + idImpSel);
 }
 
 

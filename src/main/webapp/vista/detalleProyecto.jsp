@@ -27,6 +27,7 @@
         <link type="text/css" href='../css/jquery-ui.structure.min.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery-ui.theme.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery-ui.theme.min.css' rel="stylesheet" media="screen" />
+        <link type="text/css" href='../css/font-awesome-4.6.3/css/font-awesome.min.css' rel="stylesheet" media="screen" />
 
         <title>Integra Gestión</title>
         <style>
@@ -166,8 +167,12 @@
                 </table>
             </div>
             <div id="tabs-2">
-                <center><input id="guardaCambiosDP" type="button" class="pure-button pure-button-primary" 
-                               value="Guardar Cambios" onclick="guardarCambios();"/></center>
+                <center>
+                    <input id="guardaCambiosDP" type="button" class="pure-button pure-button-primary" 
+                               value="Guardar Cambios" onclick="guardarCambios();"/>
+                    <input id="agregarTaraDP" type="button" class="pure-button pure-button-primary" 
+                               value="Agregar Tarea" onclick="agregarTarea();"/>
+                </center>
                 <!--table id="tblDetalleProyecto" class="tablaDetProyecto"-->
                 <table id="tblDetalleProyecto"  style="font-size:medium;">
                     <tr>
