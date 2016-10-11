@@ -32,5 +32,5 @@ public interface ProyectoDAO {
     public boolean actualizaInfoTarea(int idTarea, String descripcion, Date fechaInicio, Date fechaFin, int duracion);
     
     public boolean actualizaRecursosTarea(int idTarea, int idRecurso, int accion);
-
+    
 }

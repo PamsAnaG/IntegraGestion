@@ -106,9 +106,12 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
                         getQueries().getProperty("guardaResponsableTarea"),
                         new Object[]{idTarea, idRecurso, "A"});
             } else {
-                getJdbcTemplate().update(
+                /*getJdbcTemplate().update(
                         getQueries().getProperty("actualizaEstatusRecursoTarea"),
-                        new Object[]{"E", idTarea, idRecurso});
+                        new Object[]{"E", idTarea, idRecurso});*/
+                getJdbcTemplate().update(
+                        getQueries().getProperty("eliminaRecursoTarea"),
+                        new Object[]{idTarea, idRecurso});
             }
         } catch (Exception e) {
             logger.error(e.getMessage());

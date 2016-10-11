@@ -25,5 +25,7 @@ public interface TareaProyectoDAO {
     public Tarea obtieneTareaPadre (int idProyecto);
     
     public List<Recurso> obtieneResponsableTareas (Tarea tarea);
+    
+    public List<Recurso> obtieneRecursos();
            
 }

@@ -81,7 +81,7 @@
         
         <div style="display:none" id="dialogRecursos" title="Selecci&oacute;n de Recursos">
             <c:forEach var="recurso" varStatus="numeroRecurso" items="${recursos}">
-                <input type="checkbox" id="chkR${recurso.idRecurso}" data-value="${recurso.idRecurso}" data-value2="${recurso.abreviacion}" data-value3="${recurso.nombre}">${recurso.nombre}<br>
+                <input type="checkbox" id="chkR${recurso.idRecurso}" data-value="${recurso.idRecurso}" data-value2="${recurso.abreviacion}" data-value3="${recurso.nombre} ${recurso.apPaterno}">${recurso.nombre} ${recurso.apPaterno}<br>
             </c:forEach>          
         </div>
 

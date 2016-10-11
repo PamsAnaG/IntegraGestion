@@ -136,4 +136,18 @@ public class TareaProyectoDAOImpl extends IgestionJdbcDaoSupport implements Tare
             return obj;
         }
     };
+    
+    @Override
+    public List<Recurso> obtieneRecursos() {
+        String query = getQueries().getProperty("obtieneRecursos");
+
+        List<Recurso> recursos = getJdbcTemplate().query(query, MAPPER_RECURSO, new Object[]{});
+
+        if (!recursos.isEmpty()) {
+            return recursos;
+        }
+
+        return null;
+    }
+    
 }

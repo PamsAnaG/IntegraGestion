@@ -205,7 +205,6 @@ function activaEdicion(idTarea, idColumna) {
         } else {
             document.getElementById(idTD).focus();
             tmpIdsRecursos = $(("#" + idTD)).data('value');
-            alert(tmpIdsRecursos);
             muestraRecursos();
         }
         esActivaEdicion = true;
@@ -284,14 +283,21 @@ function TareaE(idTarea, descripcion, fechaInicio, fechaFin, recursos, accion) {
 }
 
 function guardarCambios() {
-    alert(JSON.stringify(mapEdiciones));
+    //alert(JSON.stringify(mapEdiciones));
     $.ajax({
         method: "POST",
         url: "guardaCambiosDP",
         data: JSON.stringify(mapEdiciones),
         type: "json",
         contentType: "application/json;charset=UTF-8"
-    });
+    }).done(function(msg) {
+                if (msg === '1') {
+                    alert("Cambios guardados correctamente.");
+                    mapEdiciones = {};
+                } else {
+                    alert("Hubo un error al guardar los cambios. Intente nuevamente.");
+                }
+            });
 }
 
 
@@ -384,20 +390,19 @@ $(function() {
         autoOpen: false,
         open: function() {
             var $recursosA = $("#dialogRecursos").find(":checkbox");
+            tmpIdsRecursos += "";
             var recursosS = tmpIdsRecursos.split(",");
-            alert(recursosS);
             var chk;
             $recursosA.each(function() {
                 chk = false;
                 for (var r = 0; r < recursosS.length; r++) {
                     if ($(this).data("value") == recursosS[r]) {
                         chk = true;
-                        alert("Algo");
                         tmpMapRecursos[recursosS[r]] = 1;
                         break;
                     }
                 }
-                alert("idRecurso:" + recursosS[r] +">>>>>"+ $(this).data("value")+"<<<<"+chk);
+                //alert("idRecurso:" + recursosS[r] +">>>>>"+ $(this).data("value")+"<<<<"+chk);
                 $(this).prop("checked",chk);
             });
         },

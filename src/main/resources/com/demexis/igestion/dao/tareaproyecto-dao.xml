@@ -50,7 +50,15 @@
                         from V_RECURSO_TAREA
                         WHERE ID_TAREA = ?
                     ]]>
-                </prop>  
+                </prop>
+                <prop key="obtieneRecursos">
+                    <![CDATA[
+                        SELECT ID_RECURSO, TIPO_RECURSO, COSTO_HORA, ID_USUARIO, USUARIO, 
+                            NOMBRE NOMBRE_RECURSO, APPATERNO, APMATERNO,  CORREO_ELECTRONICO, NUMERO_MOVIL, 
+                            NOMBRE_ROL, DESCRIPCION DESCRIPCION_ROL 
+                        FROM V_RECURSO;
+                    ]]>
+                </prop>
             </props>
         </property>
     </bean>

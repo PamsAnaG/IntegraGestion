@@ -7,13 +7,12 @@ package com.demexis.igestion.controllers;
 
 import com.demexis.igestion.domain.Alerta;
 import com.demexis.igestion.domain.Proyecto;
-import com.demexis.igestion.domain.RecursoRsmn;
+import com.demexis.igestion.domain.Recurso;
 import com.demexis.igestion.servicios.AlertaService;
 import com.demexis.igestion.servicios.ProyectoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -49,20 +48,7 @@ public class DetalleProyectoController {
     public ModelAndView inicio(@ModelAttribute("Usuario") Proyecto proyecto, HttpServletRequest request) {
 
         Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyecto.getIdProyecto());
-
-        List<RecursoRsmn> lstRecursos = new ArrayList<RecursoRsmn>();
-        RecursoRsmn recurso1 = new RecursoRsmn();
-        recurso1.setIdRecurso(1);
-        recurso1.setNombre("Leobardo Jimenez");
-        recurso1.setAbreviacion("LJS");
-        recurso1.setTipoRecurso("Desarrolaldor HTML");
-        RecursoRsmn recurso2 = new RecursoRsmn();
-        recurso2.setIdRecurso(2);
-        recurso2.setNombre("Gabriel Bretado");
-        recurso2.setAbreviacion("GBP");
-        recurso2.setTipoRecurso("Desarrolaldor Java");
-        lstRecursos.add(recurso1);
-        lstRecursos.add(recurso2);
+        List<Recurso> lstRecursos = proyectoService.obtieneRecursos();
 
         Gson gson = new Gson();
 

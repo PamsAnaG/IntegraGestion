@@ -58,6 +58,11 @@
                          UPDATE REL_RECURSO_TAREA SET ESTATUS = ? WHERE ID_TAREA = ? AND ID_RECURSO = ?;
                      ]]>
                 </prop>
+                <prop key="eliminaRecursoTarea">
+                     <![CDATA[
+                         DELETE FROM REL_RECURSO_TAREA WHERE ID_TAREA = ? AND ID_RECURSO = ?;
+                     ]]>
+                </prop>
             </props>
         </property>
     </bean>
