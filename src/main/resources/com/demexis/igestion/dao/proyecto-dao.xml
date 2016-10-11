@@ -55,7 +55,7 @@
                 </prop>
                 <prop key="actualizaEstatusRecursoTarea">
                      <![CDATA[
-                         UPDATE REL_RECURSO_TAREA SET ESTATUS = '?' WHERE ID_TAREA = ? AND ID_RECURSO = ?;
+                         UPDATE REL_RECURSO_TAREA SET ESTATUS = ? WHERE ID_TAREA = ? AND ID_RECURSO = ?;
                      ]]>
                 </prop>
             </props>

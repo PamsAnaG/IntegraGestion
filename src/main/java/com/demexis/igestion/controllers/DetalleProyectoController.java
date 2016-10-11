@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,13 +53,13 @@ public class DetalleProyectoController {
         List<RecursoRsmn> lstRecursos = new ArrayList<RecursoRsmn>();
         RecursoRsmn recurso1 = new RecursoRsmn();
         recurso1.setIdRecurso(1);
-        recurso1.setNombre("Gabriel Bretado");
-        recurso1.setAbreviacion("GB");
+        recurso1.setNombre("Leobardo Jimenez");
+        recurso1.setAbreviacion("LJS");
         recurso1.setTipoRecurso("Desarrolaldor HTML");
         RecursoRsmn recurso2 = new RecursoRsmn();
         recurso2.setIdRecurso(2);
-        recurso2.setNombre("Pamela Gutierrez");
-        recurso2.setAbreviacion("PG");
+        recurso2.setNombre("Gabriel Bretado");
+        recurso2.setAbreviacion("GBP");
         recurso2.setTipoRecurso("Desarrolaldor Java");
         lstRecursos.add(recurso1);
         lstRecursos.add(recurso2);
@@ -77,8 +78,8 @@ public class DetalleProyectoController {
 
     @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String guardaCambiosDP(@RequestParam String jsonCambios) {
-        logger.debug("Guardando cambios: [" + jsonCambios + "]");
+    public String guardaCambiosDP(@RequestBody String jsonCambios) {
+        logger.info("Guardando cambios: [" + jsonCambios + "]");
 
         String respuesta = "0";
         try {

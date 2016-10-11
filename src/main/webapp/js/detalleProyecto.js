@@ -14,15 +14,25 @@ function generaTablaDetalle() {
     var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
     for (var i = 0; i < tareasHijas.length; i++) {
         var node = $("#tblDetalleProyecto").treetable("node", i + 1);
-        $("#tblDetalleProyecto").treetable("loadBranch", node,
+        var dataP = 
                 "<tr data-tt-id=" + (i + 1) + ">" +
                 "<td class='tareaCabecera'>" + (i + 1) + "</td>" +
                 "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();'>" + tareasHijas[i].nombre + "</td>" +
                 "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
-                "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>" +
-                "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='Rogelio Gómez, Tania Jiménez'>RG, TJ</td>" +
-                "</tr>");
-
+                "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
+        var responsables = tareasHijas[i].responsables;
+        var nombresResponsables = "";
+        var abreviaciones = "";
+        var idsRecurso = "";
+        for (var k = 0; k < responsables.length; k++) {
+            nombresResponsables = nombresResponsables + responsables[k].nombre + " " + responsables[k].apPaterno;
+            abreviaciones = abreviaciones + responsables[k].abreviacion;
+            idsRecurso = idsRecurso + responsables[k].idRecurso;
+            if (!(k === responsables.length-1)) { nombresResponsables += ", "; abreviaciones += ","; idsRecurso += ","; }
+        }
+        dataP = dataP + "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
+                "</tr>";
+        $("#tblDetalleProyecto").treetable("loadBranch", node, dataP);
         despliegaHijas(tareasHijas[i].tareasHijas, (i + 1));
     }
     $("#tblDetalleProyecto").treetable("collapseAll");
@@ -39,10 +49,15 @@ function despliegaHijas(tareasHijas, itmP) {
                 "<td id='dpff" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
         var responsables = tareasHijas[j].responsables;
         var nombresResponsables = "";
-        for (var k = 0; k < responsables.length; k++) {
-            nombresResponsables = nombresResponsables + responsables[k].nombre + ",";
+        var abreviaciones = "";
+        var idsRecurso = "";
+        for (var l = 0; l < responsables.length; l++) {
+            nombresResponsables = nombresResponsables + responsables[l].nombre + " " + responsables[l].apPaterno;
+            abreviaciones = abreviaciones + responsables[l].abreviacion;
+            idsRecurso = idsRecurso + responsables[l].idRecurso;
+            if (!(l === responsables.length-1)) { nombresResponsables += ", "; abreviaciones += ","; idsRecurso += ","; }
         }
-        data = data + "<td id='dpre" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' >" + nombresResponsables + "</td>" +
+        data = data + "<td id='dpre" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
                 "</tr>";
         $("#tblDetalleProyecto").treetable("loadBranch", node, data);
         if (tareasHijas[j].tareasHijas.length > 0) {
@@ -153,7 +168,7 @@ function convertDate(inputFormat) {
     return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join('-');
 }
 
-var idTD, valorTD, tmpIdTarea, tmpIdColumna;
+var idTD, valorTD, tmpIdTarea, tmpIdColumna, tmpIdsRecursos;
 var esActivaEdicion = false;
 function activaEdicion(idTarea, idColumna) {
     if (!esActivaEdicion) {
@@ -189,13 +204,15 @@ function activaEdicion(idTarea, idColumna) {
             document.getElementById(idTD + "TMP").focus();
         } else {
             document.getElementById(idTD).focus();
+            tmpIdsRecursos = $(("#" + idTD)).data('value');
+            alert(tmpIdsRecursos);
             muestraRecursos();
         }
         esActivaEdicion = true;
     }
 }
 
-var mapRecursos = {};
+var mapRecursos = {}, tmpMapRecursos = {};
 var tmpRecursos = "", tmpAbreviaciones = "";
 function terminaEdicion() {
     esActivaEdicion = false;
@@ -205,7 +222,8 @@ function terminaEdicion() {
         $(("#" + idTD + "TMP")).remove();
     } else {
         tmpValorTD = tmpAbreviaciones;
-        document.getElementById(idTD).setAttribute('title', tmpRecursos);
+        document.getElementById(idTD).setAttribute("title", tmpRecursos);
+        $(("#" + idTD)).data("value", tmpIdsRecursos);
     }
     document.getElementById(idTD).textContent = tmpValorTD;
     if (!(tmpValorTD === valorTD)) {
@@ -252,6 +270,8 @@ function terminaEdicion() {
     tmpRecursos = "";
     tmpAbreviaciones = "";
     mapRecursos = {};
+    tmpMapRecursos = {};
+    tmpIdsRecursos = "";
 }
 
 function TareaE(idTarea, descripcion, fechaInicio, fechaFin, recursos, accion) {
@@ -363,16 +383,46 @@ $(function() {
         resizable: false,
         autoOpen: false,
         open: function() {
+            var $recursosA = $("#dialogRecursos").find(":checkbox");
+            var recursosS = tmpIdsRecursos.split(",");
+            alert(recursosS);
+            var chk;
+            $recursosA.each(function() {
+                chk = false;
+                for (var r = 0; r < recursosS.length; r++) {
+                    if ($(this).data("value") == recursosS[r]) {
+                        chk = true;
+                        alert("Algo");
+                        tmpMapRecursos[recursosS[r]] = 1;
+                        break;
+                    }
+                }
+                alert("idRecurso:" + recursosS[r] +">>>>>"+ $(this).data("value")+"<<<<"+chk);
+                $(this).prop("checked",chk);
+            });
         },
         close: function() {
             var $recursosA = $("#dialogRecursos").find(":checkbox");
+            tmpIdsRecursos = "";
             $recursosA.each(function() {
+                if ($(this).data('value') in tmpMapRecursos) {
+                    if (!$(this).is(':checked')) {
+                        mapRecursos[$(this).data('value')] = 0;
+                    }
+                } else {
+                    if ($(this).is(':checked')) {
+                        mapRecursos[$(this).data('value')] = 1;
+                    }
+                }
                 if ($(this).is(':checked')) {
-                    mapRecursos[$(this).data('value')] = 1;
-                    tmpRecursos += $(this).data('value3') + "  ";
-                    tmpAbreviaciones += $(this).data('value2') + "  ";
+                    tmpRecursos += $(this).data('value3') + ", ";
+                    tmpAbreviaciones += $(this).data('value2') + ",";
+                    tmpIdsRecursos += $(this).data('value') + ",";
                 }
             });
+            tmpRecursos = tmpRecursos.substring(0,tmpRecursos.length-2);
+            tmpAbreviaciones = tmpAbreviaciones.substring(0,tmpAbreviaciones.length-1);
+            tmpIdsRecursos = tmpIdsRecursos.substring(0,tmpIdsRecursos.length-1);
             terminaEdicion();
         },
         buttons: {

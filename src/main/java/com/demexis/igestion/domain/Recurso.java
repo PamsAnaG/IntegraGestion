@@ -15,6 +15,7 @@ public class Recurso extends Usuario{
     private int idRecurso;
     private String tipoRecurso;
     private int costoHora;
+    private String abreviacion;
 
     /**
      * @return the tipoRecurso
@@ -56,6 +57,14 @@ public class Recurso extends Usuario{
      */
     public void setIdRecurso(int idRecurso) {
         this.idRecurso = idRecurso;
+    }
+
+    public String getAbreviacion() {
+        return abreviacion;
+    }
+
+    public void setAbreviacion() {
+        this.abreviacion = String.valueOf(this.getNombre().charAt(0)) + String.valueOf(this.getApPaterno().charAt(0)) + String.valueOf(this.getApMaterno().charAt(0));
     }
     
 }

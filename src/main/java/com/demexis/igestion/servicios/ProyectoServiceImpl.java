@@ -309,6 +309,9 @@ public class ProyectoServiceImpl implements ProyectoService {
                             Iterator j = recursos.keySet().iterator();
                             while (j.hasNext()) {
                                 String keyR = (String) j.next();
+                                System.out.println("Tarea = " + idTarea);
+                                System.out.println("Llave = " + Integer.parseInt(keyR));
+                                System.out.println("Valor = " + (Double.valueOf(String.valueOf(recursos.get(keyR)))).intValue());
                                 actualiza = proyectoDAO.actualizaRecursosTarea(idTarea, Integer.parseInt(keyR), (Double.valueOf(String.valueOf(recursos.get(keyR)))).intValue());
                             }
                         }

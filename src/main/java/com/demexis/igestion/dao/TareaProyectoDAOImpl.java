@@ -131,6 +131,7 @@ public class TareaProyectoDAOImpl extends IgestionJdbcDaoSupport implements Tare
             rol.setNombre(rs.getString("NOMBRE_ROL"));
             rol.setDescripcion(rs.getString("DESCRIPCION_ROL"));
             obj.setRol(rol);
+            obj.setAbreviacion();
 
             return obj;
         }
