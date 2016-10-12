@@ -1474,3 +1474,7 @@ striping:
 .pure-table-horizontal tbody > tr:last-child > td {
     border-bottom-width: 0;
 }
+
+.button-success {
+    background: rgb(28, 184, 65);
+}

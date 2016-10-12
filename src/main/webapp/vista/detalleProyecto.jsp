@@ -21,7 +21,7 @@
 
         <link href="../img/Demexis.ico" rel="shortcut icon" />
 
-        <link type="text/css" href='../css/structure.css' rel="stylesheet" media="screen" />        
+        <link type="text/css" href='../css/structure.css' rel="stylesheet" media="screen" />
         <link type="text/css" href='../css/jquery.treetable.css' rel="stylesheet" />
         <link type="text/css" href="../css/jquery.treetable.theme.default.css" rel="stylesheet" />
         <link type="text/css" href='../css/jquery-ui.structure.min.css' rel="stylesheet" media="screen" />
@@ -168,10 +168,10 @@
             </div>
             <div id="tabs-2">
                 <center>
+                    <input id="agregarTaraDP" type="button" class="button-success pure-button pure-button-primary" 
+                               value="Agregar Tarea" onclick="agregarTarea();"/>
                     <input id="guardaCambiosDP" type="button" class="pure-button pure-button-primary" 
                                value="Guardar Cambios" onclick="guardarCambios();"/>
-                    <input id="agregarTaraDP" type="button" class="pure-button pure-button-primary" 
-                               value="Agregar Tarea" onclick="agregarTarea();"/>
                 </center>
                 <!--table id="tblDetalleProyecto" class="tablaDetProyecto"-->
                 <table id="tblDetalleProyecto"  style="font-size:medium;">

@@ -27,5 +27,7 @@ public interface TareaProyectoDAO {
     public List<Recurso> obtieneResponsableTareas (Tarea tarea);
     
     public List<Recurso> obtieneRecursos();
+    
+    public boolean actualizaTareaProyecto(int idTarea, String estatus);
            
 }

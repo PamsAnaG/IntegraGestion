@@ -13,7 +13,7 @@
                     NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION,
                     PORCENTAJE_COMPLETADO, ESTATUS
                     FROM TAREA_PROYECTO
-                    WHERE ID_TAREA_PADRE = ?
+                    WHERE ID_TAREA_PADRE = ? AND ESTATUS = 'A'
                 ]]>
                 </prop>
                 <prop key="obtieneTareasProyectoDashboard">
@@ -27,7 +27,7 @@
                         NOMBRE, FECHA_INICIO, FECHA_FIN, DURACION,
                         PORCENTAJE_COMPLETADO, ESTATUS
                         FROM TAREA_PROYECTO
-                        WHERE ID_PROYECTO = ?
+                        WHERE ID_PROYECTO = ? AND ESTATUS = 'A'
                         ORDER BY ID_TAREA
                     ]]>
                 </prop> 
@@ -58,6 +58,11 @@
                             NOMBRE_ROL, DESCRIPCION DESCRIPCION_ROL 
                         FROM V_RECURSO;
                     ]]>
+                </prop>
+                <prop key="actualizaEstatusTareaProyecto">
+                     <![CDATA[
+                         UPDATE TAREA_PROYECTO SET ESTATUS = ? WHERE ID_TAREA = ?;
+                     ]]>
                 </prop>
             </props>
         </property>

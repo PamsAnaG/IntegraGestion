@@ -149,5 +149,20 @@ public class TareaProyectoDAOImpl extends IgestionJdbcDaoSupport implements Tare
 
         return null;
     }
+
+    @Override
+    public boolean actualizaTareaProyecto(int idTarea, String estatus) {
+        boolean actualizaRecTarea = true;
+
+        try {
+            getJdbcTemplate().update(
+                        getQueries().getProperty("actualizaEstatusTareaProyecto"),
+                        new Object[]{estatus, idTarea});
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            actualizaRecTarea = false;
+        }
+        return actualizaRecTarea;
+    }
     
 }

@@ -266,11 +266,14 @@ public class ProyectoServiceImpl implements ProyectoService {
         boolean actualiza = false;
         String descripcion;
         String accion;
+        String sIdTarea;
+        String sKeyTarea;
         Date fechaInicio;
         Date fechaFin;
 
         Map cambiosDP;
         Map recursos;
+        HashMap<String, Integer> nuevasTareas = new HashMap<String, Integer>();
 
         try {
             Iterator i = cambios.keySet().iterator();
@@ -279,15 +282,27 @@ public class ProyectoServiceImpl implements ProyectoService {
                 logger.info("Procesando información de Tarea: " + cambios.get(key));
 
                 cambiosDP = (Map) cambios.get(key);
+                sIdTarea = String.valueOf(cambiosDP.get("idTarea"));
                 if (cambiosDP.get("idTarea") != null) {
                     accion = ((String) cambiosDP.get("accion"));
                     if (accion.equals("a")) {
-                        String[] sIdTarea = String.valueOf(cambiosDP.get("idTarea")).split("-");
-                        idTarea = (Double.valueOf(sIdTarea[sIdTarea.length-1])).intValue();
-                        logger.info("Insertando hija de tarea... [" + idTarea + "] - Proyecto["+idProyecto+"]");
-                    } else {
+                        String[] tmpIdTarea = sIdTarea.split("-");
+                        sKeyTarea = "";
+                        for (int k = 1; k < tmpIdTarea.length; k++) sKeyTarea = sKeyTarea + tmpIdTarea[k] + "-";
+                        sKeyTarea = sKeyTarea.substring(0, sKeyTarea.length()-1);
+                        if (nuevasTareas.containsKey(sKeyTarea)) {
+                            idTarea = nuevasTareas.get(sKeyTarea);
+                        } else {
+                            idTarea = (Double.valueOf(tmpIdTarea[tmpIdTarea.length-1])).intValue();
+                        }
+                        logger.info("Insertando hija de Tarea... [" + idTarea + "] - Proyecto["+idProyecto+"]");
+                    } else { 
                         idTarea = (Double.valueOf(String.valueOf(cambiosDP.get("idTarea")))).intValue();
-                        logger.info("Actualización de información de Tarea... [" + idTarea + "]");
+                        if (accion.equals("m")) {
+                            logger.info("Actualización de información de Tarea... [" + idTarea + "]");
+                        } else {
+                            logger.info("Eliminar Tarea... [" + idTarea + "]");
+                        }
                     }
 
                     descripcion = ((String) cambiosDP.get("descripcion")) != null ? (String) cambiosDP.get("descripcion") : null;
@@ -324,6 +339,7 @@ public class ProyectoServiceImpl implements ProyectoService {
                             nuevaTarea = proyectoDAO.guardaTarea(nuevaTarea, idProyecto);
                             if (nuevaTarea.getIdTarea() != 0) {
                                 idTarea = nuevaTarea.getIdTarea();
+                                nuevasTareas.put(sIdTarea, idTarea);
                                 actualiza = true;
                             } else {
                                 actualiza = false;
@@ -332,9 +348,11 @@ public class ProyectoServiceImpl implements ProyectoService {
                             if (descripcion != null || fechaInicio != null || fechaFin != null) {
                                 actualiza = proyectoDAO.actualizaInfoTarea(idTarea, descripcion, fechaInicio, fechaFin, duracion);
                             }
+                        } else if (accion.equals("e")) {
+                            actualiza = tareaProyectoDAO.actualizaTareaProyecto(idTarea, "E");
                         }
                         
-                        if (actualiza) {
+                        if (actualiza && !accion.equals("e")) {
                             recursos = (Map) cambiosDP.get("recursos");
                             if (recursos != null) {
                                 logger.info("Procesando recursos...");
