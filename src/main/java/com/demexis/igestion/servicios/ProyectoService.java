@@ -29,7 +29,7 @@ public interface ProyectoService {
     
     public List<Proyecto> obtieneProyectosDashboard();
     
-    public int guardaCambiosTarea(Map cambios);
+    public int guardaCambiosTarea(Map cambios, int idProyecto);
     
     public List<Recurso> obtieneRecursos();
 

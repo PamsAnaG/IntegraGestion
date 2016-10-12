@@ -5,31 +5,30 @@
  */
 var mapEdiciones = {}, mapDataTT = {};
 var branches = 0;
+var idProyecto, idTareaPrincipal;
 
 function parseJSON(data) {
     return window.JSON && window.JSON.parse ? window.JSON.parse(data) : (new Function("return " + data))();
 }
 
 function agregarTarea() {
-    var node = $("#tblDetalleProyecto").treetable("node", 1);
-    $("#tblDetalleProyecto").treetable("loadBranch", node,
-            "<tr data-tt-id=1.3 data-tt-parent-id=1>" + 
-            "<td>1.3</td>" +
-            "</tr>");
+    agregarTareaH(branches, idTareaPrincipal, true);
 }
 
 function generaTablaDetalle() {
     var proyecto = parseJSON($('#proyectoJSON').val());
     var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
+    idProyecto = proyecto.idProyecto;
+    idTareaPrincipal = proyecto.tareaPrincipal.idTarea;
     for (var i = 0; i < tareasHijas.length; i++) {
         branches = i + 1;
         var node = $("#tblDetalleProyecto").treetable("node", i + 1);
         var dataP = 
                 "<tr data-tt-id=" + (i + 1) + ">" +
                 "<td class='tareaCabecera'>" + (i + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP("+tareasHijas[i].idTarea+","+(i+1)+");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
-                "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
-                "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
+                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP("+tareasHijas[i].idTarea+","+(i+1)+");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
+                "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
+                "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
         var responsables = tareasHijas[i].responsables;
         var nombresResponsables = "";
         var abreviaciones = "";
@@ -40,7 +39,7 @@ function generaTablaDetalle() {
             idsRecurso = idsRecurso + responsables[k].idRecurso;
             if (!(k === responsables.length-1)) { nombresResponsables += ", "; abreviaciones += ","; idsRecurso += ","; }
         }
-        dataP = dataP + "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
+        dataP = dataP + "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
                 "</tr>";
         $("#tblDetalleProyecto").treetable("loadBranch", node, dataP);
         despliegaHijas(tareasHijas[i].tareasHijas, (i + 1));
@@ -57,9 +56,9 @@ function despliegaHijas(tareasHijas, itmP) {
         var data =
                 "<tr data-tt-id=" + itmP + "." + (j + 1) + " data-tt-parent-id=" + itmP + ">" +
                 "<td>" + itmP + "." + (j + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[j].idTarea + "' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP("+tareasHijas[j].idTarea+","+itmP+"."+(j+1)+");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[j].nombre + "</td>" +
-                "<td id='dpfi" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaInicio) + "</td>" +
-                "<td id='dpff" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
+                "<td id='dpnd" + tareasHijas[j].idTarea + "' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP("+tareasHijas[j].idTarea+",\""+itmP+"."+(j+1)+"\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[j].nombre + "</td>" +
+                "<td id='dpfi" + tareasHijas[j].idTarea + "' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaInicio) + "</td>" +
+                "<td id='dpff" + tareasHijas[j].idTarea + "' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
         var responsables = tareasHijas[j].responsables;
         var nombresResponsables = "";
         var abreviaciones = "";
@@ -70,7 +69,7 @@ function despliegaHijas(tareasHijas, itmP) {
             idsRecurso = idsRecurso + responsables[l].idRecurso;
             if (!(l === responsables.length-1)) { nombresResponsables += ", "; abreviaciones += ","; idsRecurso += ","; }
         }
-        data = data + "<td id='dpre" + tareasHijas[j].idTarea + "' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
+        data = data + "<td id='dpre" + tareasHijas[j].idTarea + "' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
                 "</tr>";
         $("#tblDetalleProyecto").treetable("loadBranch", node, data);
         if (tareasHijas[j].tareasHijas.length > 0) {
@@ -230,6 +229,7 @@ var tmpRecursos = "", tmpAbreviaciones = "";
 function terminaEdicion() {
     esActivaEdicion = false;
     var tmpValorTD;
+    var accion = "";
     if (tmpIdColumna !== 4) {
         tmpValorTD = document.getElementById(idTD + "TMP").value;
         $(("#" + idTD + "TMP")).remove();
@@ -239,6 +239,12 @@ function terminaEdicion() {
         $(("#" + idTD)).data("value", tmpIdsRecursos);
     }
     document.getElementById(idTD).textContent = tmpValorTD;
+    tmpvalorTD2 = tmpValorTD;
+    if ($("#"+idTD).data("nuevo") == "1") {
+        accion = "a";
+    } else {
+        accion = "m";
+    }
     if (!(tmpValorTD === valorTD)) {
         if (tmpIdTarea in mapEdiciones) {
             var tmpTareaE = mapEdiciones[tmpIdTarea];
@@ -273,7 +279,7 @@ function terminaEdicion() {
                     tRecursos = mapRecursos;
                     break;
             }
-            mapEdiciones[tmpIdTarea] = new TareaE(tmpIdTarea, tDesc, tFechaIni, tFechaFin, tRecursos, "m");
+            mapEdiciones[tmpIdTarea] = new TareaE(tmpIdTarea, tDesc, tFechaIni, tFechaFin, tRecursos, accion);
         }
     }
     document.getElementById(idTD).setAttribute('contenteditable', false);
@@ -297,13 +303,11 @@ function TareaE(idTarea, descripcion, fechaInicio, fechaFin, recursos, accion) {
 }
 
 function guardarCambios() {
-    //alert(JSON.stringify(mapEdiciones));
-    $.ajax({
+    alert(JSON.stringify(mapEdiciones));
+    /*$.ajax({
         method: "POST",
         url: "guardaCambiosDP",
-        data: JSON.stringify(mapEdiciones),
-        type: "json",
-        contentType: "application/json;charset=UTF-8"
+        data: {jsonCambios: JSON.stringify(mapEdiciones), idProyecto: idProyecto}
     }).done(function(msg) {
                 if (msg === '1') {
                     alert("Cambios guardados correctamente.");
@@ -311,18 +315,19 @@ function guardarCambios() {
                 } else {
                     alert("Hubo un error al guardar los cambios. Intente nuevamente.");
                 }
-            });
+            });*/
 }
 
 var tmpIdTareaMO = 0, tmpvalorTD;
 var tmpIdTareaMO2 = 0, tmpvalorTD2;
 function muestraOpcionesDP(idTarea, idItm) {
-    //alert("Lo que sea...");
-    if (idTarea !== tmpIdTareaMO) {
+    //alert(idTarea+"Lo que sea..."+idItm);
+    if (idTarea !== tmpIdTareaMO && !esActivaEdicion) {
         $("#dpnd"+tmpIdTareaMO2).html(tmpvalorTD2);
         tmpIdTareaMO = idTarea;
         tmpvalorTD = $("#dpnd"+idTarea).html();
-        var input = $('<i class="fa fa-cog" onclick="agregarTareaH('+idItm+');"></i>');
+        var input = $('<i class="fa fa-plus-circle" onclick="agregarTareaH(\''+idItm+'\',\''+idTarea+'\',false);"></i>  ' + 
+                        '<i class="fa fa-minus-circle" onclick="eliminarTareaH(\''+idItm+'\','+idTarea+');"></i>  <i/>');
         $("#dpnd"+idTarea).html(input);
         $("#dpnd"+idTarea).html($("#dpnd"+idTarea).html() + tmpvalorTD);
         tmpIdTareaMO2 = tmpIdTareaMO; tmpvalorTD2 = tmpvalorTD;
@@ -333,8 +338,65 @@ function ocultaOpcionesDP() {
     //$("#dpnd"+tmpIdTareaMO2).html(tmpvalorTD2);
 }
 
-function agregarTareaH(idImpSel) {
-    alert("Algo: " + mapDataTT[idImpSel] + ">>>" + idImpSel);
+function agregarTareaH(idImpSel, idTareaSel, isPrincipal) {
+    //alert("Algo: " + mapDataTT[idImpSel] + ">>>" + idImpSel);
+    alert("nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel);
+    var nHijo = "0";
+    var xxxx="";
+    if (idImpSel in mapDataTT) { 
+        nHijo = ""+mapDataTT[idImpSel];
+        mapDataTT[idImpSel] = parseInt(mapDataTT[idImpSel])+1;
+        xxxx = idImpSel;
+    } else {
+        if (isPrincipal) {
+            mapDataTT[idImpSel] = 0;
+            xxxx = idImpSel;
+        } else {
+            mapDataTT[idImpSel+"."+(parseInt(nHijo)+1)] = 0;
+            xxxx = idImpSel+"."+(parseInt(nHijo)+1);
+        }
+    }
+    alert("nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel);
+    var idTmpTarea;
+    var idHijo;
+    var dataTT = "";
+    if (isPrincipal) {
+        idHijo = idImpSel;
+        idTmpTarea = idImpSel + "-" + idTareaSel;
+        dataTT = "<tr data-tt-id="+idHijo+">";
+        branches = branches + 1;
+    } else {
+        idHijo = idImpSel+"."+(parseInt(nHijo)+1);
+        idTmpTarea = nHijo + "-" + idTareaSel;
+        dataTT = "<tr data-tt-id="+idHijo+" data-tt-parent-id="+idImpSel+">";
+    }
+    var node = $("#tblDetalleProyecto").treetable("node", idImpSel);
+    $("#tblDetalleProyecto").treetable("loadBranch", node,
+            dataTT + 
+                "<td>"+idHijo+"</td>" +
+                "<td id='dpnd" + idTmpTarea + "' data-nuevo='1' ondblclick='activaEdicion(\"" + idTmpTarea + "\",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\""+idTmpTarea+"\",\""+idHijo+"\");' onmouseout='ocultaOpcionesDP();'></td>" + 
+                "<td id='dpfi" + idTmpTarea + "' data-nuevo='1' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",2);' onblur='terminaEdicion();'>"+fechaActual()+"</td>" + 
+                "<td id='dpff" + idTmpTarea + "' data-nuevo='1' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",3);' onblur='terminaEdicion();'>"+fechaActual()+"</td>" + 
+                "<td id='dpre" + idTmpTarea + "' data-nuevo='1' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",4);' onblur='terminaEdicion();' title='' data-value='' ></td>" +
+            "</tr>");
+}
+
+
+function fechaActual() {
+    var hoy = new Date();
+    var dd = hoy.getDate();
+    var mm = hoy.getMonth()+1; //hoy es 0!
+    var yyyy = hoy.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd;
+    } 
+
+    if(mm<10) {
+        mm='0'+mm;
+    } 
+
+    return yyyy+'-'+mm+'-'+dd;
 }
 
 

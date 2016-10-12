@@ -64,14 +64,14 @@ public class DetalleProyectoController {
 
     @PostMapping(value = "/guardaCambiosDP", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String guardaCambiosDP(@RequestBody String jsonCambios) {
+    public String guardaCambiosDP(@RequestParam String jsonCambios, @RequestParam int idProyecto) {
         logger.info("Guardando cambios: [" + jsonCambios + "]");
 
         String respuesta = "0";
         try {
             GsonBuilder builder = new GsonBuilder();
             Map mapCambios = (LinkedTreeMap) builder.create().fromJson(jsonCambios, Object.class);
-            int correctos = proyectoService.guardaCambiosTarea(mapCambios);
+            int correctos = proyectoService.guardaCambiosTarea(mapCambios, idProyecto);
             respuesta = (correctos != mapCambios.size()) ? "0" : "1";
         } catch (Exception e) {
             logger.error("Error en la lectura del JSON de cambios tarea: " + e.getMessage());

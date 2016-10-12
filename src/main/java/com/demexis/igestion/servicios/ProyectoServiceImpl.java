@@ -259,12 +259,13 @@ public class ProyectoServiceImpl implements ProyectoService {
     }
 
     @Override
-    public int guardaCambiosTarea(Map cambios) {
+    public int guardaCambiosTarea(Map cambios, int idProyecto) {
         int actualizadas = 0;
         int idTarea = 0;
         int duracion = 0;
         boolean actualiza = false;
         String descripcion;
+        String accion;
         Date fechaInicio;
         Date fechaFin;
 
@@ -279,43 +280,77 @@ public class ProyectoServiceImpl implements ProyectoService {
 
                 cambiosDP = (Map) cambios.get(key);
                 if (cambiosDP.get("idTarea") != null) {
-                    idTarea = (Double.valueOf(String.valueOf(cambiosDP.get("idTarea")))).intValue();
-
-                    if (((String) cambiosDP.get("accion")).equals("m")) {
+                    accion = ((String) cambiosDP.get("accion"));
+                    if (accion.equals("a")) {
+                        String[] sIdTarea = String.valueOf(cambiosDP.get("idTarea")).split("-");
+                        idTarea = (Double.valueOf(sIdTarea[sIdTarea.length-1])).intValue();
+                        logger.info("Insertando hija de tarea... [" + idTarea + "] - Proyecto["+idProyecto+"]");
+                    } else {
+                        idTarea = (Double.valueOf(String.valueOf(cambiosDP.get("idTarea")))).intValue();
                         logger.info("Actualización de información de Tarea... [" + idTarea + "]");
+                    }
 
-                        descripcion = ((String) cambiosDP.get("descripcion")) != null ? (String) cambiosDP.get("descripcion") : null;
-                        fechaInicio = ((String) cambiosDP.get("fechaInicio")) != null ? fechaYYYYMMDD.parse((String) cambiosDP.get("fechaInicio")) : null;
-                        fechaFin = ((String) cambiosDP.get("fechaFin")) != null ? fechaYYYYMMDD.parse((String) cambiosDP.get("fechaFin")) : null;
-                        if ((fechaInicio != null && fechaFin == null)) {
-                            fechaFin = fechaInicio;
-                        } else if ((fechaFin != null && fechaInicio == null)) {
-                            fechaInicio = fechaFin;
+                    descripcion = ((String) cambiosDP.get("descripcion")) != null ? (String) cambiosDP.get("descripcion") : null;
+                    fechaInicio = ((String) cambiosDP.get("fechaInicio")) != null ? fechaYYYYMMDD.parse((String) cambiosDP.get("fechaInicio")) : null;
+                    fechaFin = ((String) cambiosDP.get("fechaFin")) != null ? fechaYYYYMMDD.parse((String) cambiosDP.get("fechaFin")) : null;
+                    if ((fechaInicio != null && fechaFin == null)) {
+                        fechaFin = fechaInicio;
+                    } else if ((fechaFin != null && fechaInicio == null)) {
+                        fechaInicio = fechaFin;
+                    }
+                    if (fechaInicio != null && fechaFin != null) {
+                        if (fechaInicio.equals(fechaFin)) {
+                            duracion = 1;
+                        } else {
+                            duracion = (int) ((fechaFin.getTime() - fechaInicio.getTime()) / MILLSECS_PER_DAY);
                         }
-                        if (fechaInicio != null && fechaFin != null) {
-                            if (fechaInicio.equals(fechaFin)) {
+                    }
+
+                    try {
+                        if (accion.equals("a")) {
+                            if (fechaInicio == null && fechaFin == null) {
+                                fechaInicio = fechaYYYYMMDD.parse(fechaYYYYMMDD.format(new Date()));
+                                fechaFin = fechaYYYYMMDD.parse(fechaYYYYMMDD.format(new Date()));
                                 duracion = 1;
+                            }
+                            Tarea nuevaTarea = new Tarea();
+                            nuevaTarea.setIdTareaPadre(idTarea);
+                            nuevaTarea.setNombre(descripcion);
+                            nuevaTarea.setFechaInicio(fechaInicio);
+                            nuevaTarea.setFechaFin(fechaFin);
+                            nuevaTarea.setDuracion(duracion);
+                            nuevaTarea.setPorcentajeCompletado(0);
+                            nuevaTarea.setIdProyecto(idProyecto);
+                            nuevaTarea = proyectoDAO.guardaTarea(nuevaTarea, idProyecto);
+                            if (nuevaTarea.getIdTarea() != 0) {
+                                idTarea = nuevaTarea.getIdTarea();
+                                actualiza = true;
                             } else {
-                                duracion = (int) ((fechaFin.getTime() - fechaInicio.getTime()) / MILLSECS_PER_DAY);
+                                actualiza = false;
+                            }
+                        } else if (accion.equals("m")) {
+                            if (descripcion != null || fechaInicio != null || fechaFin != null) {
+                                actualiza = proyectoDAO.actualizaInfoTarea(idTarea, descripcion, fechaInicio, fechaFin, duracion);
                             }
                         }
-                        if (descripcion != null || fechaInicio != null || fechaFin != null) {
-                            actualiza = proyectoDAO.actualizaInfoTarea(idTarea, descripcion, fechaInicio, fechaFin, duracion);
-                        }
-
-                        recursos = (Map) cambiosDP.get("recursos");
-                        if (recursos != null) {
-                            logger.info("Procesando recursos...");
-                            Iterator j = recursos.keySet().iterator();
-                            while (j.hasNext()) {
-                                String keyR = (String) j.next();
-                                actualiza = proyectoDAO.actualizaRecursosTarea(idTarea, Integer.parseInt(keyR), (Double.valueOf(String.valueOf(recursos.get(keyR)))).intValue());
+                        
+                        if (actualiza) {
+                            recursos = (Map) cambiosDP.get("recursos");
+                            if (recursos != null) {
+                                logger.info("Procesando recursos...");
+                                Iterator j = recursos.keySet().iterator();
+                                while (j.hasNext()) {
+                                    String keyR = (String) j.next();
+                                    actualiza = proyectoDAO.actualizaRecursosTarea(idTarea, Integer.parseInt(keyR), (Double.valueOf(String.valueOf(recursos.get(keyR)))).intValue());
+                                }
                             }
                         }
-
+                        
                         if (actualiza) {
                             actualizadas++;
                         }
+                    } catch (Exception bd) {
+                        bd.printStackTrace();
                     }
                 }
             }
