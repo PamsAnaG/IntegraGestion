@@ -79,7 +79,7 @@
                 <input type="text" id="porcentaje" name="procentaje"/>
             </div>            
         </div>
-        
+
         <div style="display:none" id="dialogRecursos" title="Selecci&oacute;n de Recursos">
             <c:forEach var="recurso" varStatus="numeroRecurso" items="${recursos}">
                 <input type="checkbox" id="chkR${recurso.idRecurso}" data-value="${recurso.idRecurso}" data-value2="${recurso.abreviacion}" data-value3="${recurso.nombre} ${recurso.apPaterno}">${recurso.nombre} ${recurso.apPaterno}<br>
@@ -169,11 +169,10 @@
             <div id="tabs-2">
                 <center>
                     <input id="agregarTaraDP" type="button" class="button-success pure-button pure-button-primary" 
-                               value="Agregar Tarea" onclick="agregarTarea();"/>
+                           value="Agregar Tarea" onclick="agregarTarea();"/>
                     <input id="guardaCambiosDP" type="button" class="pure-button pure-button-primary" 
-                               value="Guardar Cambios" onclick="guardarCambios();"/>
+                           value="Guardar Cambios" onclick="guardarCambios();"/>
                 </center>
-                <!--table id="tblDetalleProyecto" class="tablaDetProyecto"-->
                 <table id="tblDetalleProyecto"  style="font-size:medium;">
                     <tr>
                         <th style='text-align:left;'>
@@ -207,61 +206,19 @@
                             Tipo
                         </th>                        
                     </tr>
-                    <tr>                        
-                        <td>
-                            RG
-                        </td>
-                        <td>
-                            Rogelio G&oacute;mez
-                        </td>
-                        <td>
-                            L&iacute;der de proyecto
-                        </td>                        
-                    </tr>
-                    <tr>                        
-                        <td>
-                            TJ
-                        </td>
-                        <td>
-                            Tania Jim&eacute;nez
-                        </td>
-                        <td>
-                            Gerente de proyecto
-                        </td>                        
-                    </tr>
-                    <tr>                        
-                        <td>
-                            JF
-                        </td>
-                        <td>
-                            Jos&eacute; Flores
-                        </td>
-                        <td>
-                            ABAP
-                        </td>                        
-                    </tr>
-                    <tr>                        
-                        <td>
-                            DJ
-                        </td>
-                        <td>
-                            Daniel Jarabo
-                        </td>
-                        <td>
-                            BD
-                        </td>                        
-                    </tr>
-                    <tr>                        
-                        <td>
-                            AO
-                        </td>
-                        <td>
-                            Arely Ortega
-                        </td>
-                        <td>
-                            Java
-                        </td>                        
-                    </tr>
+                    <c:forEach var="responsable" varStatus="numeroResp" items="${recursosProyecto}">
+                        <tr>                        
+                            <td>
+                                ${responsable.idRecurso}
+                            </td>
+                            <td>
+                                ${responsable.nombre}&nbsp;${responsable.apPaterno}&nbsp;${responsable.apMaterno}
+                            </td>
+                            <td>
+                                ${responsable.tipoRecurso}
+                            </td>                        
+                        </tr>                            
+                    </c:forEach>              
                 </table>
             </div>
             <div id="tabs-4">

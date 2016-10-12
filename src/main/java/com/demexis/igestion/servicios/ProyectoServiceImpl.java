@@ -242,11 +242,15 @@ public class ProyectoServiceImpl implements ProyectoService {
                         }
                         sumAvance = sumAvance + tarea.getPorcentajeCompletado();
                     }
-                    proyecto.setAvance(sumAvance / tareas.size());
-                    proyecto.setEstatusAvance(alertado);
-                    lstProyectos.add(proyecto);
-
                 }
+                if (tareas != null && !tareas.isEmpty()) {
+                    proyecto.setAvance(sumAvance / tareas.size());
+                } else {
+                    proyecto.setAvance(0);
+                }
+                proyecto.setEstatusAvance(alertado);
+                lstProyectos.add(proyecto);
+
             }
         }
         proyectos = null;
@@ -288,15 +292,17 @@ public class ProyectoServiceImpl implements ProyectoService {
                     if (accion.equals("a")) {
                         String[] tmpIdTarea = sIdTarea.split("-");
                         sKeyTarea = "";
-                        for (int k = 1; k < tmpIdTarea.length; k++) sKeyTarea = sKeyTarea + tmpIdTarea[k] + "-";
-                        sKeyTarea = sKeyTarea.substring(0, sKeyTarea.length()-1);
+                        for (int k = 1; k < tmpIdTarea.length; k++) {
+                            sKeyTarea = sKeyTarea + tmpIdTarea[k] + "-";
+                        }
+                        sKeyTarea = sKeyTarea.substring(0, sKeyTarea.length() - 1);
                         if (nuevasTareas.containsKey(sKeyTarea)) {
                             idTarea = nuevasTareas.get(sKeyTarea);
                         } else {
-                            idTarea = (Double.valueOf(tmpIdTarea[tmpIdTarea.length-1])).intValue();
+                            idTarea = (Double.valueOf(tmpIdTarea[tmpIdTarea.length - 1])).intValue();
                         }
-                        logger.info("Insertando hija de Tarea... [" + idTarea + "] - Proyecto["+idProyecto+"]");
-                    } else { 
+                        logger.info("Insertando hija de Tarea... [" + idTarea + "] - Proyecto[" + idProyecto + "]");
+                    } else {
                         idTarea = (Double.valueOf(String.valueOf(cambiosDP.get("idTarea")))).intValue();
                         if (accion.equals("m")) {
                             logger.info("Actualización de información de Tarea... [" + idTarea + "]");
@@ -351,7 +357,7 @@ public class ProyectoServiceImpl implements ProyectoService {
                         } else if (accion.equals("e")) {
                             actualiza = tareaProyectoDAO.actualizaTareaProyecto(idTarea, "E");
                         }
-                        
+
                         if (actualiza && !accion.equals("e")) {
                             recursos = (Map) cambiosDP.get("recursos");
                             if (recursos != null) {
@@ -363,7 +369,7 @@ public class ProyectoServiceImpl implements ProyectoService {
                                 }
                             }
                         }
-                        
+
                         if (actualiza) {
                             actualizadas++;
                         }
@@ -381,6 +387,11 @@ public class ProyectoServiceImpl implements ProyectoService {
     @Override
     public List<Recurso> obtieneRecursos() {
         return tareaProyectoDAO.obtieneRecursos();
+    }
+
+    @Override
+    public List<Recurso> obtieneRecursosProyecto(Proyecto proyecto) {
+        return proyectoDAO.obtieneRecursosProyecto(proyecto);
     }
 
 }

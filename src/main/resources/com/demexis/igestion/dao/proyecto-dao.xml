@@ -63,6 +63,17 @@
                          DELETE FROM REL_RECURSO_TAREA WHERE ID_TAREA = ? AND ID_RECURSO = ?;
                      ]]>
                 </prop>
+                <prop key="getRecursosProyecto">
+                     <![CDATA[
+                         SELECT ID_USUARIO, ID_RECURSO, 
+                            NOMBRE_RECURSO, APPATERNO, APMATERNO, USUARIO, 
+                            TIPO_RECURSO, COSTO_HORA, USUARIO, CORREO_ELECTRONICO, 
+                            NUMERO_MOVIL, NOMBRE_ROL, DESCRIPCION_ROL
+                            FROM V_RECURSO_TAREA
+                            WHERE ID_PROYECTO = ?
+                            GROUP BY ID_USUARIO, ID_RECURSO
+                     ]]>
+                </prop>
             </props>
         </property>
     </bean>

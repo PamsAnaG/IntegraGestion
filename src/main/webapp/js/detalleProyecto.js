@@ -10,15 +10,19 @@ var idProyecto, idTareaPrincipal;
 function generaTablaDetalle() {
     var proyecto = parseJSON($('#proyectoJSON').val());
     var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
+    /*if (tareasHijas.length > 0) {
+        $("#tblDetalleProyecto").show();
+    }*/
     idProyecto = proyecto.idProyecto;
     idTareaPrincipal = proyecto.tareaPrincipal.idTarea;
+
     for (var i = 0; i < tareasHijas.length; i++) {
         branches = i + 1;
         var node = $("#tblDetalleProyecto").treetable("node", i + 1);
-        var dataP = 
+        var dataP =
                 "<tr data-tt-id=" + (i + 1) + ">" +
                 "<td class='tareaCabecera'>" + (i + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\""+tareasHijas[i].idTarea+"\",\""+(i+1)+"\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
+                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\"" + tareasHijas[i].idTarea + "\",\"" + (i + 1) + "\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
                 "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
                 "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
         var responsables = tareasHijas[i].responsables;
@@ -29,7 +33,11 @@ function generaTablaDetalle() {
             nombresResponsables = nombresResponsables + responsables[k].nombre + " " + responsables[k].apPaterno;
             abreviaciones = abreviaciones + responsables[k].abreviacion;
             idsRecurso = idsRecurso + responsables[k].idRecurso;
-            if (!(k === responsables.length-1)) { nombresResponsables += ", "; abreviaciones += ","; idsRecurso += ","; }
+            if (!(k === responsables.length - 1)) {
+                nombresResponsables += ", ";
+                abreviaciones += ",";
+                idsRecurso += ",";
+            }
         }
         dataP = dataP + "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
                 "</tr>";
@@ -48,7 +56,7 @@ function despliegaHijas(tareasHijas, itmP) {
         var data =
                 "<tr data-tt-id=" + itmP + "." + (j + 1) + " data-tt-parent-id=" + itmP + ">" +
                 "<td>" + itmP + "." + (j + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[j].idTarea + "' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\""+tareasHijas[j].idTarea+"\",\""+itmP+"."+(j+1)+"\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[j].nombre + "</td>" +
+                "<td id='dpnd" + tareasHijas[j].idTarea + "' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\"" + tareasHijas[j].idTarea + "\",\"" + itmP + "." + (j + 1) + "\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[j].nombre + "</td>" +
                 "<td id='dpfi" + tareasHijas[j].idTarea + "' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaInicio) + "</td>" +
                 "<td id='dpff" + tareasHijas[j].idTarea + "' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[j].fechaFin) + "</td>";
         var responsables = tareasHijas[j].responsables;
@@ -59,7 +67,11 @@ function despliegaHijas(tareasHijas, itmP) {
             nombresResponsables = nombresResponsables + responsables[l].nombre + " " + responsables[l].apPaterno;
             abreviaciones = abreviaciones + responsables[l].abreviacion;
             idsRecurso = idsRecurso + responsables[l].idRecurso;
-            if (!(l === responsables.length-1)) { nombresResponsables += ", "; abreviaciones += ","; idsRecurso += ","; }
+            if (!(l === responsables.length - 1)) {
+                nombresResponsables += ", ";
+                abreviaciones += ",";
+                idsRecurso += ",";
+            }
         }
         data = data + "<td id='dpre" + tareasHijas[j].idTarea + "' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[j].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
                 "</tr>";
@@ -188,7 +200,7 @@ function activaEdicion(idTarea, idColumna) {
                 idTD = "dpre" + idTarea;
                 break;
         }
-        $("#dpnd"+tmpIdTareaMO).html(tmpValorTDesc);
+        $("#dpnd" + tmpIdTareaMO).html(tmpValorTDesc);
         valorTD = document.getElementById(idTD).textContent;
         if (idColumna !== 4) {
             document.getElementById(idTD).setAttribute('contenteditable', true);
@@ -224,7 +236,7 @@ function terminaEdicion() {
         $(("#" + idTD)).data("value", tmpIdsRecursos);
     }
     document.getElementById(idTD).textContent = tmpValorTD;
-    if ($("#"+idTD).data("nuevo") === "1") {
+    if ($("#" + idTD).data("nuevo") === "1") {
         accion = "a";
     } else {
         accion = "m";
@@ -283,14 +295,15 @@ var tmpIdTareaMO2 = 0, tmpvalorTDesc2;
 function muestraOpcionesDP(idTarea, idItm) {
     //alert(idTarea+"Lo que sea..."+idItm);
     if (idTarea !== tmpIdTareaMO && !esActivaEdicion) {
-        $("#dpnd"+tmpIdTareaMO2).html(tmpvalorTDesc2);
+        $("#dpnd" + tmpIdTareaMO2).html(tmpvalorTDesc2);
         tmpIdTareaMO = idTarea;
-        tmpValorTDesc = $("#dpnd"+idTarea).html();
-        var input = $('<i class="fa fa-plus-circle" onclick="agregarTareaH(\''+idItm+'\',\''+idTarea+'\',false);"></i>  ' + 
-                        '<i class="fa fa-minus-circle" onclick="eliminarTareaH(\''+idItm+'\',\''+idTarea+'\');"></i>  <i/>');
-        $("#dpnd"+idTarea).html(input);
-        $("#dpnd"+idTarea).html($("#dpnd"+idTarea).html() + tmpValorTDesc);
-        tmpIdTareaMO2 = tmpIdTareaMO; tmpvalorTDesc2 = tmpValorTDesc;
+        tmpValorTDesc = $("#dpnd" + idTarea).html();
+        var input = $('<i class="fa fa-plus-circle" onclick="agregarTareaH(\'' + idItm + '\',\'' + idTarea + '\',false);"></i>  ' +
+                '<i class="fa fa-minus-circle" onclick="eliminarTareaH(\'' + idItm + '\',\'' + idTarea + '\');"></i>  <i/>');
+        $("#dpnd" + idTarea).html(input);
+        $("#dpnd" + idTarea).html($("#dpnd" + idTarea).html() + tmpValorTDesc);
+        tmpIdTareaMO2 = tmpIdTareaMO;
+        tmpvalorTDesc2 = tmpValorTDesc;
     }
 }
 
@@ -305,18 +318,18 @@ function agregarTareaH(idImpSel, idTareaSel, isPrincipal) {
     //alert("Algo: " + mapDataTT[idImpSel] + ">>>" + idImpSel);
     //alert("nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel);
     var nHijo = "0";
-    var xxxx="";
-    if (idImpSel in mapDataTT) { 
-        nHijo = ""+mapDataTT[idImpSel];
-        mapDataTT[idImpSel] = parseInt(mapDataTT[idImpSel])+1;
+    var xxxx = "";
+    if (idImpSel in mapDataTT) {
+        nHijo = "" + mapDataTT[idImpSel];
+        mapDataTT[idImpSel] = parseInt(mapDataTT[idImpSel]) + 1;
         xxxx = idImpSel;
     } else {
         if (isPrincipal) {
             mapDataTT[idImpSel] = 0;
             xxxx = idImpSel;
         } else {
-            mapDataTT[idImpSel+"."+(parseInt(nHijo)+1)] = 0;
-            xxxx = idImpSel+"."+(parseInt(nHijo)+1);
+            mapDataTT[idImpSel + "." + (parseInt(nHijo) + 1)] = 0;
+            xxxx = idImpSel + "." + (parseInt(nHijo) + 1);
         }
     }
     //alert("nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel);
@@ -327,22 +340,22 @@ function agregarTareaH(idImpSel, idTareaSel, isPrincipal) {
     if (isPrincipal) {
         idHijo = idImpSel;
         idTmpTarea = idImpSel + "-" + idTareaSel;
-        dataTT = "<tr data-tt-id="+idHijo+">";
+        dataTT = "<tr data-tt-id=" + idHijo + ">";
         branches = branches + 1;
         clase = "tareaCabecera";
     } else {
-        idHijo = idImpSel+"."+(parseInt(nHijo)+1);
+        idHijo = idImpSel + "." + (parseInt(nHijo) + 1);
         idTmpTarea = nHijo + "-" + idTareaSel;
-        dataTT = "<tr data-tt-id="+idHijo+" data-tt-parent-id="+idImpSel+">";
+        dataTT = "<tr data-tt-id=" + idHijo + " data-tt-parent-id=" + idImpSel + ">";
     }
     var node = $("#tblDetalleProyecto").treetable("node", idImpSel);
     $("#tblDetalleProyecto").treetable("loadBranch", node,
-            dataTT + 
-                "<td class='"+clase+"'>"+idHijo+"</td>" +
-                "<td id='dpnd" + idTmpTarea + "' data-nuevo='1' class='"+clase+"' ondblclick='activaEdicion(\"" + idTmpTarea + "\",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\""+idTmpTarea+"\",\""+idHijo+"\");' onmouseout='ocultaOpcionesDP();'></td>" + 
-                "<td id='dpfi" + idTmpTarea + "' data-nuevo='1' class='"+clase+"' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",2);' onblur='terminaEdicion();'>"+fechaActual()+"</td>" + 
-                "<td id='dpff" + idTmpTarea + "' data-nuevo='1' class='"+clase+"' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",3);' onblur='terminaEdicion();'>"+fechaActual()+"</td>" + 
-                "<td id='dpre" + idTmpTarea + "' data-nuevo='1' class='"+clase+"' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",4);' onblur='terminaEdicion();' title='' data-value='' ></td>" +
+            dataTT +
+            "<td class='" + clase + "'>" + idHijo + "</td>" +
+            "<td id='dpnd" + idTmpTarea + "' data-nuevo='1' class='" + clase + "' ondblclick='activaEdicion(\"" + idTmpTarea + "\",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\"" + idTmpTarea + "\",\"" + idHijo + "\");' onmouseout='ocultaOpcionesDP();'></td>" +
+            "<td id='dpfi" + idTmpTarea + "' data-nuevo='1' class='" + clase + "' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",2);' onblur='terminaEdicion();'>" + fechaActual() + "</td>" +
+            "<td id='dpff" + idTmpTarea + "' data-nuevo='1' class='" + clase + "' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",3);' onblur='terminaEdicion();'>" + fechaActual() + "</td>" +
+            "<td id='dpre" + idTmpTarea + "' data-nuevo='1' class='" + clase + "' style='text-align:center;' ondblclick='activaEdicion(\"" + idTmpTarea + "\",4);' onblur='terminaEdicion();' title='' data-value='' ></td>" +
             "</tr>");
     mapEdiciones[idTmpTarea] = new TareaE(idTmpTarea, null, null, null, null, "a");
 }
@@ -355,26 +368,26 @@ function eliminarTareaH(idImpSel, idTareaSel) {
             delete mapEdiciones[idTareaSel];
         } else {
             mapEdiciones[idTareaSel] = new TareaE(idTareaSel, null, null, null, null, "e");
-        } 
-    } else {  
+        }
+    } else {
         mapEdiciones[idTareaSel] = new TareaE(idTareaSel, null, null, null, null, "e");
-    } 
+    }
 }
 
 function guardarCambios() {
-    alert(JSON.stringify(mapEdiciones));
+    //alert(JSON.stringify(mapEdiciones));
     $.ajax({
         method: "POST",
         url: "guardaCambiosDP",
         data: {jsonCambios: JSON.stringify(mapEdiciones), idProyecto: idProyecto}
     }).done(function(msg) {
-                if (msg === '1') {
-                    alert("Cambios guardados correctamente.");
-                    mapEdiciones = {};
-                } else {
-                    alert("Hubo un error al guardar los cambios. Intente nuevamente.");
-                }
-            });
+        if (msg === '1') {
+            alert("Cambios guardados correctamente.");
+            mapEdiciones = {};
+        } else {
+            alert("Hubo un error al guardar los cambios. Intente nuevamente.");
+        }
+    });
 }
 
 
@@ -394,18 +407,18 @@ function parseJSON(data) {
 function fechaActual() {
     var hoy = new Date();
     var dd = hoy.getDate();
-    var mm = hoy.getMonth()+1; //hoy es 0!
+    var mm = hoy.getMonth() + 1; //hoy es 0!
     var yyyy = hoy.getFullYear();
 
-    if(dd<10) {
-        dd='0'+dd;
-    } 
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
 
-    if(mm<10) {
-        mm='0'+mm;
-    } 
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
 
-    return yyyy+'-'+mm+'-'+dd;
+    return yyyy + '-' + mm + '-' + dd;
 }
 
 function convertDate(inputFormat) {
@@ -419,6 +432,7 @@ function convertDate(inputFormat) {
 $(function() {
     $("#tabs").tabs();
     $(document).tooltip();
+    //$("#tblDetalleProyecto").hide();
     $("#dialog").dialog({
         height: 350,
         modal: true,
@@ -518,7 +532,7 @@ $(function() {
                     }
                 }
                 //alert("idRecurso:" + recursosS[r] +">>>>>"+ $(this).data("value")+"<<<<"+chk);
-                $(this).prop("checked",chk);
+                $(this).prop("checked", chk);
             });
         },
         close: function() {
@@ -540,9 +554,9 @@ $(function() {
                     tmpIdsRecursos += $(this).data('value') + ",";
                 }
             });
-            tmpRecursos = tmpRecursos.substring(0,tmpRecursos.length-2);
-            tmpAbreviaciones = tmpAbreviaciones.substring(0,tmpAbreviaciones.length-1);
-            tmpIdsRecursos = tmpIdsRecursos.substring(0,tmpIdsRecursos.length-1);
+            tmpRecursos = tmpRecursos.substring(0, tmpRecursos.length - 2);
+            tmpAbreviaciones = tmpAbreviaciones.substring(0, tmpAbreviaciones.length - 1);
+            tmpIdsRecursos = tmpIdsRecursos.substring(0, tmpIdsRecursos.length - 1);
             terminaEdicion();
         },
         buttons: {

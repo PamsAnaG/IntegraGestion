@@ -11,6 +11,7 @@ import com.demexis.igestion.domain.Cliente;
 import com.demexis.igestion.domain.ModalidadProyecto;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
+import com.demexis.igestion.domain.Rol;
 import com.demexis.igestion.domain.Tarea;
 import com.demexis.igestion.domain.TipoFacturacion;
 import com.demexis.igestion.domain.TipoProyecto;
@@ -107,8 +108,8 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
                         new Object[]{idTarea, idRecurso, "A"});
             } else {
                 /*getJdbcTemplate().update(
-                        getQueries().getProperty("actualizaEstatusRecursoTarea"),
-                        new Object[]{"E", idTarea, idRecurso});*/
+                 getQueries().getProperty("actualizaEstatusRecursoTarea"),
+                 new Object[]{"E", idTarea, idRecurso});*/
                 getJdbcTemplate().update(
                         getQueries().getProperty("eliminaRecursoTarea"),
                         new Object[]{idTarea, idRecurso});
@@ -275,5 +276,44 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
                 getQueries().getProperty("guardaResponsableTarea"),
                 new Object[]{tarea.getIdTarea(), recurso.getIdRecurso(), "A"});
     }
+
+    @Override
+    public List<Recurso> obtieneRecursosProyecto(Proyecto proyecto) {
+        String query = getQueries().getProperty("getRecursosProyecto");
+
+        List<Recurso> recursos = getJdbcTemplate().query(query, MAPPER_RECURSO, new Object[]{proyecto.getIdProyecto()});
+
+        if (!recursos.isEmpty()) {
+            return recursos;
+        }
+
+        return null;
+    }
+
+    private static RowMapper<Recurso> MAPPER_RECURSO = new RowMapper<Recurso>() {
+        Recurso obj;
+
+        public Recurso mapRow(ResultSet rs, int rowNum) throws SQLException {
+            obj = new Recurso();
+
+            obj.setIdRecurso(rs.getInt("ID_RECURSO"));
+            obj.setTipoRecurso(rs.getString("TIPO_RECURSO"));
+            obj.setCostoHora(rs.getInt("COSTO_HORA"));
+            obj.setIdUsuario(rs.getInt("ID_USUARIO"));
+            obj.setUsuario(rs.getString("USUARIO"));
+            obj.setApMaterno(rs.getString("APMATERNO"));
+            obj.setApPaterno(rs.getString("APPATERNO"));
+            obj.setCorreoElectronico(rs.getString("CORREO_ELECTRONICO"));
+            obj.setNombre(rs.getString("NOMBRE_RECURSO"));
+            obj.setNumeroMovil(rs.getString("NUMERO_MOVIL"));
+            Rol rol = new Rol();
+            rol.setNombre(rs.getString("NOMBRE_ROL"));
+            rol.setDescripcion(rs.getString("DESCRIPCION_ROL"));
+            obj.setRol(rol);
+            obj.setAbreviacion();
+
+            return obj;
+        }
+    };
 
 }

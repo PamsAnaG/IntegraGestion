@@ -48,12 +48,14 @@ public class DetalleProyectoController {
 
         Proyecto proyectoDetalle = proyectoService.obtieneProyecto(proyecto.getIdProyecto());
         List<Recurso> lstRecursos = proyectoService.obtieneRecursos();
+        List<Recurso> recursosProyecto = proyectoService.obtieneRecursosProyecto(proyecto);
 
         Gson gson = new Gson();
 
         ModelAndView model = new ModelAndView();
         model.addObject("proyecto", proyectoDetalle);
         model.addObject("recursos", lstRecursos);
+        model.addObject("recursosProyecto", recursosProyecto);
         model.addObject("proyectoJson", gson.toJson(proyectoDetalle));
         model.setViewName("detalleProyecto");
 

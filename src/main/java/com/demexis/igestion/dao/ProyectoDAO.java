@@ -33,4 +33,6 @@ public interface ProyectoDAO {
     
     public boolean actualizaRecursosTarea(int idTarea, int idRecurso, int accion);
     
+    public List<Recurso> obtieneRecursosProyecto(Proyecto proyecto);
+    
 }
