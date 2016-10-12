@@ -145,6 +145,15 @@ public class ProyectoServiceImpl implements ProyectoService {
                     }
                 } else {
                     logger.error("Archivo de proyecto incorrecto...");
+                    logger.error("Se creara la tarea default...");
+                    Tarea tarea = new Tarea();
+                    tarea.setNombre(proyecto.getNombre());
+                    tarea.setFechaInicio(proyecto.getFechaInicio());
+                    tarea.setFechaFin(proyecto.getFechaFin());
+                    tarea.setDuracion(0);
+                    tarea.setPorcentajeCompletado(0);
+                    tarea.setIdProyecto(proyecto.getIdProyecto());
+                    proyectoDAO.guardaTarea(tarea, proyecto.getIdProyecto());
                 }
             } catch (Exception excp) {
                 excp.printStackTrace();

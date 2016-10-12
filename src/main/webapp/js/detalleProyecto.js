@@ -5,48 +5,53 @@
  */
 var mapEdiciones = {}, mapDataTT = {};
 var branches = 0;
-var idProyecto, idTareaPrincipal;
+var idProyecto, idTareaPrincipal = 0;
 
 function generaTablaDetalle() {
     var proyecto = parseJSON($('#proyectoJSON').val());
-    var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
-    /*if (tareasHijas.length > 0) {
-        $("#tblDetalleProyecto").show();
-    }*/
-    idProyecto = proyecto.idProyecto;
-    idTareaPrincipal = proyecto.tareaPrincipal.idTarea;
-
-    for (var i = 0; i < tareasHijas.length; i++) {
-        branches = i + 1;
-        var node = $("#tblDetalleProyecto").treetable("node", i + 1);
-        var dataP =
-                "<tr data-tt-id=" + (i + 1) + ">" +
-                "<td class='tareaCabecera'>" + (i + 1) + "</td>" +
-                "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\"" + tareasHijas[i].idTarea + "\",\"" + (i + 1) + "\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
-                "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
-                "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
-        var responsables = tareasHijas[i].responsables;
-        var nombresResponsables = "";
-        var abreviaciones = "";
-        var idsRecurso = "";
-        for (var k = 0; k < responsables.length; k++) {
-            nombresResponsables = nombresResponsables + responsables[k].nombre + " " + responsables[k].apPaterno;
-            abreviaciones = abreviaciones + responsables[k].abreviacion;
-            idsRecurso = idsRecurso + responsables[k].idRecurso;
-            if (!(k === responsables.length - 1)) {
-                nombresResponsables += ", ";
-                abreviaciones += ",";
-                idsRecurso += ",";
+    if (proyecto != null && proyecto.tareaPrincipal != null) {
+        idProyecto = proyecto.idProyecto;
+        if (proyecto.tareaPrincipal != null) {
+            idTareaPrincipal = proyecto.tareaPrincipal.idTarea;
+            if (proyecto.tareaPrincipal.tareasHijas != null) {
+                var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
+                /*if (tareasHijas.length > 0) {
+                    $("#tblDetalleProyecto").show();
+                }*/
+                for (var i = 0; i < tareasHijas.length; i++) {
+                    branches = i + 1;
+                    var node = $("#tblDetalleProyecto").treetable("node", i + 1);
+                    var dataP =
+                            "<tr data-tt-id=" + (i + 1) + ">" +
+                            "<td class='tareaCabecera'>" + (i + 1) + "</td>" +
+                            "<td id='dpnd" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",1);' onblur='terminaEdicion();' onmouseover='muestraOpcionesDP(\"" + tareasHijas[i].idTarea + "\",\"" + (i + 1) + "\");' onmouseout='ocultaOpcionesDP();'>" + tareasHijas[i].nombre + "</td>" +
+                            "<td id='dpfi" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",2);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaInicio) + "</td>" +
+                            "<td id='dpff" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",3);' onblur='terminaEdicion();'>" + convertDate(tareasHijas[i].fechaFin) + "</td>";
+                    var responsables = tareasHijas[i].responsables;
+                    var nombresResponsables = "";
+                    var abreviaciones = "";
+                    var idsRecurso = "";
+                    for (var k = 0; k < responsables.length; k++) {
+                        nombresResponsables = nombresResponsables + responsables[k].nombre + " " + responsables[k].apPaterno;
+                        abreviaciones = abreviaciones + responsables[k].abreviacion;
+                        idsRecurso = idsRecurso + responsables[k].idRecurso;
+                        if (!(k === responsables.length - 1)) {
+                            nombresResponsables += ", ";
+                            abreviaciones += ",";
+                            idsRecurso += ",";
+                        }
+                    }
+                    dataP = dataP + "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
+                            "</tr>";
+                    $("#tblDetalleProyecto").treetable("loadBranch", node, dataP);
+                    despliegaHijas(tareasHijas[i].tareasHijas, (i + 1));
+                }
+                mapDataTT["0"] = tareasHijas.length;
+                branches = i + 1;
+                $("#tblDetalleProyecto").treetable("collapseAll");
             }
         }
-        dataP = dataP + "<td id='dpre" + tareasHijas[i].idTarea + "' class='tareaCabecera' data-nuevo='0' style='text-align:center;' ondblclick='activaEdicion(" + tareasHijas[i].idTarea + ",4);' onblur='terminaEdicion();' title='" + nombresResponsables + "' data-value='" + idsRecurso + "' >" + abreviaciones + "</td>" +
-                "</tr>";
-        $("#tblDetalleProyecto").treetable("loadBranch", node, dataP);
-        despliegaHijas(tareasHijas[i].tareasHijas, (i + 1));
     }
-    mapDataTT["0"] = tareasHijas.length;
-    branches = i + 1;
-    $("#tblDetalleProyecto").treetable("collapseAll");
 }
 
 function despliegaHijas(tareasHijas, itmP) {
@@ -84,49 +89,51 @@ function despliegaHijas(tareasHijas, itmP) {
 
 function generaTablaAlertas() {
     var proyecto = parseJSON($('#proyectoJSON').val());
-    var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
-    for (var i = 0; i < tareasHijas.length; i++) {
-        var node = $("#tblAlertasProyecto").treetable("node", i + 1);
-        var htmlalertas1 = "";
-        var htmlalertas2 = "";
-        var htmlalertas3 = "";
-        var htmlalertas4 = "";
-        var htmlalertas5 = "";
-        var htmlalertas6 = "";
-        var htmlalertas7 = "";
-        for (var jAlertas = 0; jAlertas < tareasHijas[i].alertas.length; jAlertas++) {
-            if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 1) {
-                htmlalertas1 = htmlalertas1 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
-            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 2) {
-                htmlalertas2 = htmlalertas2 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
-            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 3) {
-                htmlalertas3 = htmlalertas3 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
-            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 4) {
-                htmlalertas4 = htmlalertas4 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
-            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 5) {
-                htmlalertas5 = htmlalertas5 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
-            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 6) {
-                htmlalertas6 = htmlalertas6 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
-            } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 7) {
-                htmlalertas7 = htmlalertas7 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+    if (proyecto != null && proyecto.tareaPrincipal != null && proyecto.tareaPrincipal.tareasHijas != null) {
+        var tareasHijas = proyecto.tareaPrincipal.tareasHijas;
+        for (var i = 0; i < tareasHijas.length; i++) {
+            var node = $("#tblAlertasProyecto").treetable("node", i + 1);
+            var htmlalertas1 = "";
+            var htmlalertas2 = "";
+            var htmlalertas3 = "";
+            var htmlalertas4 = "";
+            var htmlalertas5 = "";
+            var htmlalertas6 = "";
+            var htmlalertas7 = "";
+            for (var jAlertas = 0; jAlertas < tareasHijas[i].alertas.length; jAlertas++) {
+                if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 1) {
+                    htmlalertas1 = htmlalertas1 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 2) {
+                    htmlalertas2 = htmlalertas2 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 3) {
+                    htmlalertas3 = htmlalertas3 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 4) {
+                    htmlalertas4 = htmlalertas4 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 5) {
+                    htmlalertas5 = htmlalertas5 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 6) {
+                    htmlalertas6 = htmlalertas6 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                } else if (tareasHijas[i].alertas[jAlertas].idFaseTareaAlerta === 7) {
+                    htmlalertas7 = htmlalertas7 + tareasHijas[i].alertas[jAlertas].nombreTipoAlerta;
+                }
             }
-        }
-        $("#tblAlertasProyecto").treetable("loadBranch", node,
-                "<tr data-tt-id=" + (i + 1) + ">" +
-                "<td class='tareaCabecera' style='text-align:center;'>" + (i + 1) + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;'>" + tareasHijas[i].nombre + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-1\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas1 + "')\">" + htmlalertas1 + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-2\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas2 + "')\">" + htmlalertas2 + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-3\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas3 + "')\">" + htmlalertas3 + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-4\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas4 + "')\">" + htmlalertas4 + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-5\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas5 + "')\">" + htmlalertas5 + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-6\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas6 + "')\">" + htmlalertas6 + "</td>" +
-                "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-7\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas7 + "')\">" + htmlalertas7 + "</td>" +
-                "</tr>");
+            $("#tblAlertasProyecto").treetable("loadBranch", node,
+                    "<tr data-tt-id=" + (i + 1) + ">" +
+                    "<td class='tareaCabecera' style='text-align:center;'>" + (i + 1) + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;'>" + tareasHijas[i].nombre + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-1\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas1 + "')\">" + htmlalertas1 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-2\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas2 + "')\">" + htmlalertas2 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-3\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas3 + "')\">" + htmlalertas3 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-4\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas4 + "')\">" + htmlalertas4 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-5\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas5 + "')\">" + htmlalertas5 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-6\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas6 + "')\">" + htmlalertas6 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-7\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas7 + "')\">" + htmlalertas7 + "</td>" +
+                    "</tr>");
 
-        despliegaHijasAlerta(tareasHijas[i].tareasHijas, (i + 1));
+            despliegaHijasAlerta(tareasHijas[i].tareasHijas, (i + 1));
+        }
+        $("#tblAlertasProyecto").treetable("collapseAll");
     }
-    $("#tblAlertasProyecto").treetable("collapseAll");
 }
 
 
@@ -311,6 +318,7 @@ function ocultaOpcionesDP() {
 }
 
 function agregarTarea() {
+    if (branches === 0) branches = 1;
     agregarTareaH(branches, idTareaPrincipal, true);
 }
 
@@ -375,7 +383,7 @@ function eliminarTareaH(idImpSel, idTareaSel) {
 }
 
 function guardarCambios() {
-    //alert(JSON.stringify(mapEdiciones));
+    alert(JSON.stringify(mapEdiciones));
     $.ajax({
         method: "POST",
         url: "guardaCambiosDP",
