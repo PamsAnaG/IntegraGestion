@@ -62,10 +62,10 @@ public class EnviaAlertasCron {
             List<Tarea> tareasAlertas = alertaService.obtieneAlertasActivas();
 
             for (Tarea tarea : tareasAlertas) {
-                List<Recurso> recursos = tareaDao.obtieneResponsableTareas(tarea);                
-                tarea.setResponsables(recursos);                
+                List<Recurso> recursos = tareaDao.obtieneResponsableTareas(tarea);
+                tarea.setResponsables(recursos);
                 // SI LA ALERTA ESTA ACTIVA
-                if (tarea.getAlertas().get(0).getEstatus().equals("A")) {                    
+                if (tarea.getAlertas().get(0).getEstatus().equals("A")) {
                     // VERIFICAMOS SI DEBE ENVIARSE LA NOTIFICACION
                     boolean enviaNotificacion = false;
                     if (tarea.getAlertas().get(0).getIdFaseTareaAlerta() == 1) { // INICIO TAREA
@@ -109,8 +109,10 @@ public class EnviaAlertasCron {
                             for (Recurso recurso : tarea.getResponsables()) {
                                 destinatarios += recurso.getCorreoElectronico() + ",";
                                 responsables += recurso.getNombre() + " " + recurso.getApPaterno() + " " + recurso.getApMaterno() + ",";
+                            }                            
+                            if (!responsables.equals("")) {
+                                responsables = responsables.substring(0, responsables.lastIndexOf(","));
                             }
-                            responsables = responsables.substring(0, responsables.lastIndexOf(","));
                             String contenidoCorreo = alertaCorreoContenido;
                             contenidoCorreo = contenidoCorreo.replace("NOMBRE_PROYECTO", proyecto.getNombre());
                             contenidoCorreo = contenidoCorreo.replace("NOMBRE_CLIENTE", proyecto.getCliente().getNombre());

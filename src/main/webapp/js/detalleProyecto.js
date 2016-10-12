@@ -383,7 +383,7 @@ function eliminarTareaH(idImpSel, idTareaSel) {
 }
 
 function guardarCambios() {
-    alert(JSON.stringify(mapEdiciones));
+    //alert(JSON.stringify(mapEdiciones));
     $.ajax({
         method: "POST",
         url: "guardaCambiosDP",
