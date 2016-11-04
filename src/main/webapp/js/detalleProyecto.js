@@ -324,23 +324,26 @@ function agregarTarea() {
 
 function agregarTareaH(idImpSel, idTareaSel, isPrincipal) {
     //alert("Algo: " + mapDataTT[idImpSel] + ">>>" + idImpSel);
-    //alert("nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel);
     var nHijo = "0";
-    var xxxx = "";
+    //var xxxx = "";
     if (idImpSel in mapDataTT) {
         nHijo = "" + mapDataTT[idImpSel];
         mapDataTT[idImpSel] = parseInt(mapDataTT[idImpSel]) + 1;
-        xxxx = idImpSel;
+        //xxxx = idImpSel;
+        if (!isPrincipal) {
+            mapDataTT[idImpSel + "." + (parseInt(nHijo) + 1)] = 0;
+            //xxxx = idImpSel + "." + (parseInt(nHijo) + 1);
+        }
     } else {
         if (isPrincipal) {
             mapDataTT[idImpSel] = 0;
-            xxxx = idImpSel;
+            //xxxx = idImpSel;
         } else {
             mapDataTT[idImpSel + "." + (parseInt(nHijo) + 1)] = 0;
-            xxxx = idImpSel + "." + (parseInt(nHijo) + 1);
+            //xxxx = idImpSel + "." + (parseInt(nHijo) + 1);
         }
     }
-    //alert("nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel);
+    //alert("isPrincipal="+isPrincipal+"::nHijo="+nHijo+"::idImpSel="+idImpSel+"::mapDataTT[idImpSel]="+mapDataTT[xxxx]+"::idTareaSel="+idTareaSel+"::xxxx="+xxxx);
     var idTmpTarea;
     var idHijo;
     var dataTT = "";
