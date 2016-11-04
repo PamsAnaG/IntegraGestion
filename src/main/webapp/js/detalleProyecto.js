@@ -122,12 +122,12 @@ function generaTablaAlertas() {
                     "<td class='tareaCabecera' style='text-align:center;'>" + (i + 1) + "</td>" +
                     "<td class='tareaCabecera' style='text-align:center;'>" + tareasHijas[i].nombre + "</td>" +
                     "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-1\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas1 + "')\">" + htmlalertas1 + "</td>" +
-                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-2\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas2 + "')\">" + htmlalertas2 + "</td>" +
-                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-3\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas3 + "')\">" + htmlalertas3 + "</td>" +
-                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-4\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas4 + "')\">" + htmlalertas4 + "</td>" +
-                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-5\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas5 + "')\">" + htmlalertas5 + "</td>" +
-                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-6\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas6 + "')\">" + htmlalertas6 + "</td>" +
-                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-7\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 1, '" + htmlalertas7 + "')\">" + htmlalertas7 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-2\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 2, '" + htmlalertas2 + "')\">" + htmlalertas2 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-3\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 3, '" + htmlalertas3 + "')\">" + htmlalertas3 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-4\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 4, '" + htmlalertas4 + "')\">" + htmlalertas4 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-5\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 5, '" + htmlalertas5 + "')\">" + htmlalertas5 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-6\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 6, '" + htmlalertas6 + "')\">" + htmlalertas6 + "</td>" +
+                    "<td class='tareaCabecera' style='text-align:center;' id=\"" + tareasHijas[i].idTarea + "-7\" onclick=\"javascript: muestraDialog(" + tareasHijas[i].idTarea + ", 0, 7, '" + htmlalertas7 + "')\">" + htmlalertas7 + "</td>" +
                     "</tr>");
 
             despliegaHijasAlerta(tareasHijas[i].tareasHijas, (i + 1));
