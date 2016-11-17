@@ -51,13 +51,12 @@ public class AutenticacionController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(@ModelAttribute("Usuario") Usuario usuario, HttpServletRequest request) {
 
-        logger.debug("Firmando usuario - [" + usuario.getUsuario() + "] | [" + usuario.getPassword() + "]");
+        logger.debug("Firmando usuario - [" + usuario.getUsuario() + "]");
 
         ModelAndView model = new ModelAndView();
         Usuario usuarioBD = usuarioService.informacionUsuario(usuario);
         if (usuarioBD != null) {
             // RECUPERAMOS LOS DATOS DEL USUARIO DESDE LA BASE DE DATOS
-            logger.debug("Comparando - [" + encriptar.encriptaPassword(usuario.getPassword()) + "] | [" + usuarioBD.getPassword() + "]");
             if (encriptar.encriptaPassword(usuario.getPassword()).equals(usuarioBD.getPassword())) {
                 usuarioBD = usuarioService.privilegiosUsuario(usuarioBD);
                 if (!usuarioBD.getPrivilegio().isEmpty()) {
