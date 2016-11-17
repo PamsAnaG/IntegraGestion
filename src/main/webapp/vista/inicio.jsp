@@ -5,14 +5,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
         <title>Integra Gesti&oacute;n</title>
         <link href="../img/Demexis.ico" rel="shortcut icon" />
 
         <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-        
+
         <link href="../css/pure.css" rel="stylesheet">
         <link href="../css/integra.css" rel="stylesheet">
 
@@ -36,7 +36,10 @@
                         <input class="pure-button pure-input-1 pure-button-primary" type="submit" id="entrar" name="entrar" value="Entrar"/> 
                     </div>
                 </fieldset>
+                <c:if test="${not empty Mensaje}">
+                    ${Mensaje}
+                </c:if>
             </form:form>
-        </div>
+        </div>        
     </body>
 </html>

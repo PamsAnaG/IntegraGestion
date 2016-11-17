@@ -7,6 +7,7 @@ package com.demexis.igestion.controllers;
 
 import com.demexis.igestion.domain.ConstantesIntegra;
 import com.demexis.igestion.domain.Usuario;
+import com.demexis.igestion.servicios.EncriptaPassword;
 import com.demexis.igestion.servicios.UsuarioService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,6 +32,9 @@ public class AutenticacionController {
     @Autowired
     UsuarioService usuarioService;
 
+    @Autowired
+    EncriptaPassword encriptar;
+
     @RequestMapping(value = "/inicio", method = {RequestMethod.GET, RequestMethod.GET})
     public ModelAndView inicio() {
 
@@ -47,18 +51,25 @@ public class AutenticacionController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(@ModelAttribute("Usuario") Usuario usuario, HttpServletRequest request) {
 
-        logger.debug("Firmando usuario - [" + usuario.getUsuario() + "]");
+        logger.debug("Firmando usuario - [" + usuario.getUsuario() + "] | [" + usuario.getPassword() + "]");
 
         ModelAndView model = new ModelAndView();
         Usuario usuarioBD = usuarioService.informacionUsuario(usuario);
         if (usuarioBD != null) {
             // RECUPERAMOS LOS DATOS DEL USUARIO DESDE LA BASE DE DATOS
-            usuarioBD = usuarioService.privilegiosUsuario(usuarioBD);
-            if (!usuarioBD.getPrivilegio().isEmpty()) {
-                // GUARDAMOS AL USUARIO FIRMADO EN LA SESION                
-                request.getSession().setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), usuarioBD);
-                model.setViewName("redirect:dashboard");
+            logger.debug("Comparando - [" + encriptar.encriptaPassword(usuario.getPassword()) + "] | [" + usuarioBD.getPassword() + "]");
+            if (encriptar.encriptaPassword(usuario.getPassword()).equals(usuarioBD.getPassword())) {
+                usuarioBD = usuarioService.privilegiosUsuario(usuarioBD);
+                if (!usuarioBD.getPrivilegio().isEmpty()) {
+                    // GUARDAMOS AL USUARIO FIRMADO EN LA SESION                
+                    request.getSession().setAttribute(ConstantesIntegra.USUARIO_SESSION_INTEGRA.toString(), usuarioBD);
+                    model.setViewName("redirect:dashboard");
+                    model.addObject("Usuario", usuario);
+                }
+            } else {
+                model.setViewName("inicio");
                 model.addObject("Usuario", usuario);
+                model.addObject("Mensaje", "Usuarios/password incorrecto");
             }
         } else {
             model.setViewName("inicio");
