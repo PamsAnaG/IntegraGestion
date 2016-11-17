@@ -112,10 +112,10 @@
                     Fechas
                 </th>
                 <td>
-                    <fmt:formatDate value="${proyecto.fechaInicio}" pattern="yyyy-MM-dd" />
+                    <fmt:formatDate value="${proyecto.fechaInicio}" pattern="dd/MM/yyyy" />
                 </td>
                 <td>
-                    <fmt:formatDate value="${proyecto.fechaFin}" pattern="yyyy-MM-dd" />
+                    <fmt:formatDate value="${proyecto.fechaFin}" pattern="dd/MM/yyyy" />
                 </td>
                 <th>
                     Tipo
@@ -157,10 +157,10 @@
                                 ${tarea.nombre}
                             </td>
                             <td>
-                                <fmt:formatDate value="${tarea.fechaInicio}" pattern="yyyy-MM-dd" />
+                                <fmt:formatDate value="${tarea.fechaInicio}" pattern="dd/MM/yyyy" />
                             </td>
                             <td>
-                                <fmt:formatDate value="${tarea.fechaFin}" pattern="yyyy-MM-dd" />
+                                <fmt:formatDate value="${tarea.fechaFin}" pattern="dd/MM/yyyy" />
                             </td>
                         </tr>     
                     </c:forEach>        

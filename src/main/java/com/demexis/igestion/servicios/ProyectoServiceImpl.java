@@ -58,7 +58,7 @@ public class ProyectoServiceImpl implements ProyectoService {
     TareaProyectoDAO tareaProyectoDAO;
 
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
-    private final SimpleDateFormat fechaYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat fechaYYYYMMDD = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public Proyecto guardaProyecto(Proyecto proyecto) {
@@ -362,6 +362,8 @@ public class ProyectoServiceImpl implements ProyectoService {
                         } else if (accion.equals("m")) {
                             if (descripcion != null || fechaInicio != null || fechaFin != null) {
                                 actualiza = proyectoDAO.actualizaInfoTarea(idTarea, descripcion, fechaInicio, fechaFin, duracion);
+                            } else {
+                                actualiza = true;
                             }
                         } else if (accion.equals("e")) {
                             actualiza = tareaProyectoDAO.actualizaTareaProyecto(idTarea, "E");

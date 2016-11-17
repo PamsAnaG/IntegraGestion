@@ -216,7 +216,7 @@ function activaEdicion(idTarea, idColumna) {
             input.val(html);
             $("#" + idTD).html(input);
             if (esFecha) {
-                new Kalendae.Input(idTD + "TMP", {months: 1, direction: 'future', format: 'YYYY-MM-DD'});
+                new Kalendae.Input(idTD + "TMP", {months: 1, direction: 'future', format: 'DD/MM/YYYY'});
             }
             document.getElementById(idTD + "TMP").focus();
         } else {
@@ -258,9 +258,17 @@ function terminaEdicion() {
                     break;
                 case 2:
                     tmpTareaE.fechaInicio = tmpValorTD;
+                    var tmpFF = document.getElementById("dpff" + tmpIdTarea).textContent;
+                    if (tmpFF !== null && tmpFF.length > 0) {
+                        tmpTareaE.fechaFin = tmpFF;
+                    }
                     break;
                 case 3:
                     tmpTareaE.fechaFin = tmpValorTD;
+                    var tmpFI = document.getElementById("dpfi" + tmpIdTarea).textContent;
+                    if (tmpFI !== null && tmpFI.length > 0) {
+                        tmpTareaE.fechaInicio = tmpFI;
+                    }
                     break;
                 case 4:
                     tmpTareaE.recursos = mapRecursos;
@@ -275,9 +283,17 @@ function terminaEdicion() {
                     break;
                 case 2:
                     tFechaIni = tmpValorTD;
+                    var tmpFF = document.getElementById("dpff" + tmpIdTarea).textContent;
+                    if (tmpFF !== null && tmpFF.length > 0) {
+                        tFechaFin = tmpFF;
+                    }
                     break;
                 case 3:
                     tFechaFin = tmpValorTD;
+                    var tmpFI = document.getElementById("dpfi" + tmpIdTarea).textContent;
+                    if (tmpFI !== null && tmpFI.length > 0) {
+                        tFechaIni = tmpFI;
+                    }
                     break;
                 case 4:
                     tRecursos = mapRecursos;
@@ -437,7 +453,7 @@ function convertDate(inputFormat) {
         return (s < 10) ? '0' + s : s;
     }
     var d = new Date(inputFormat);
-    return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join('-');
+    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
 }
 
 $(function() {
