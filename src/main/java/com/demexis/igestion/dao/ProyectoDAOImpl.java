@@ -22,7 +22,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -315,5 +317,24 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
             return obj;
         }
     };
+
+    @Override
+    public Map obtieneDisponibilidadRecursos() {
+        
+        Map recursos = getJdbcTemplate().queryForMap(getQueries().getProperty("getDispRecursos"));
+
+        if (!recursos.isEmpty()) {
+            logger.info("Informacion Resumen: ");
+            logger.info("Ocupados = " + recursos.get("OCUPADOS"));
+            logger.info("Disponibles = " + recursos.get("DISPONIBLES"));
+            logger.info("Encolados = " + recursos.get("ENCOLADOS"));
+            logger.info("Iniciados = " + recursos.get("ALERTA_INICIADOS"));
+            logger.info("Cerrados = " + recursos.get("ALERTA_CERRADOS"));
+            logger.info("Tareas Finalizadas = " + recursos.get("ALERTA_TAREAS"));
+            return recursos;
+        }
+
+        return null;
+    }
 
 }

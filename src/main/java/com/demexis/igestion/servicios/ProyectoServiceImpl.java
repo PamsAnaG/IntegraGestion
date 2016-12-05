@@ -10,6 +10,7 @@ import com.demexis.igestion.dao.TareaProyectoDAO;
 import com.demexis.igestion.domain.Cliente;
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
+import com.demexis.igestion.domain.ResumenDashboard;
 import com.demexis.igestion.domain.Tarea;
 import com.demexis.igestion.domain.TipoProyecto;
 import java.text.SimpleDateFormat;
@@ -403,6 +404,21 @@ public class ProyectoServiceImpl implements ProyectoService {
     @Override
     public List<Recurso> obtieneRecursosProyecto(Proyecto proyecto) {
         return proyectoDAO.obtieneRecursosProyecto(proyecto);
+    }
+    
+    @Override
+    public ResumenDashboard obtieneResumen() {
+        ResumenDashboard resumen = new ResumenDashboard();
+        
+        Map infoResumen = proyectoDAO.obtieneDisponibilidadRecursos();
+        resumen.setRecursosOcupados(Integer.parseInt(String.valueOf(infoResumen.get("OCUPADOS"))));
+        resumen.setRecursosDisponibles(Integer.parseInt(String.valueOf(infoResumen.get("DISPONIBLES"))));
+        resumen.setColaProyectos(Integer.parseInt(String.valueOf(infoResumen.get("ENCOLADOS"))));
+        resumen.setInicioProyecto(Integer.parseInt(String.valueOf(infoResumen.get("ALERTA_INICIADOS"))));
+        resumen.setCierreProyecto(Integer.parseInt(String.valueOf(infoResumen.get("ALERTA_CERRADOS"))));
+        resumen.setTareaFinalizada(Integer.parseInt(String.valueOf(infoResumen.get("ALERTA_TAREAS"))));
+        
+        return resumen;
     }
 
 }

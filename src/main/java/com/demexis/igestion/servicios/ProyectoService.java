@@ -7,6 +7,7 @@ package com.demexis.igestion.servicios;
 
 import com.demexis.igestion.domain.Proyecto;
 import com.demexis.igestion.domain.Recurso;
+import com.demexis.igestion.domain.ResumenDashboard;
 import com.demexis.igestion.domain.Tarea;
 import java.util.List;
 import java.util.Map;
@@ -34,5 +35,7 @@ public interface ProyectoService {
     public List<Recurso> obtieneRecursos();
     
     public List<Recurso> obtieneRecursosProyecto(Proyecto proyecto);
+    
+    public ResumenDashboard obtieneResumen();
 
 }

@@ -34,17 +34,8 @@ public class DashBoardController {
     @RequestMapping(value = "/dashboard", method = { RequestMethod.POST, RequestMethod.GET } )
     public ModelAndView inicio() {
         
-        ResumenDashboard resumen = new ResumenDashboard();
-        List<Proyecto> proyectos = proyectoService.obtieneProyectosDashboard();        
-        
-        resumen.setRecursosOcupados(5);
-        resumen.setRecursosDisponibles(3);
-        resumen.setColaProyectos(2);
-        resumen.setRegistrosRadar(19);
-        resumen.setValidacionRadar(45);
-        resumen.setTareaFinalizada(4);
-        resumen.setInicioProyecto(1);
-        resumen.setCierreProyecto(7);        
+        ResumenDashboard resumen = proyectoService.obtieneResumen();
+        List<Proyecto> proyectos = proyectoService.obtieneProyectosDashboard();
 
         ModelAndView model = new ModelAndView();
         model.addObject("Proyecto", new Proyecto());

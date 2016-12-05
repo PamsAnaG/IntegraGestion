@@ -74,6 +74,19 @@
                             GROUP BY ID_USUARIO, ID_RECURSO
                      ]]>
                 </prop>
+                <prop key="getDispRecursos">
+                     <![CDATA[
+                         SELECT * FROM 
+                            (
+                                (SELECT COUNT(ID_RECURSO) OCUPADOS FROM RECURSO WHERE ID_RECURSO IN (SELECT DISTINCT ID_RECURSO FROM REL_RECURSO_TAREA WHERE ESTATUS = 'A') AND ESTATUS = 'A') OCUPADOS, 
+                                (SELECT COUNT(ID_RECURSO) DISPONIBLES FROM RECURSO WHERE ID_RECURSO NOT IN (SELECT DISTINCT ID_RECURSO FROM REL_RECURSO_TAREA WHERE ESTATUS = 'A') AND ESTATUS = 'A') DISPONIBLES, 
+                                (SELECT COUNT(*) ENCOLADOS FROM PROYECTO WHERE FECHA_INICIO > DATE(NOW())) ENCOLADOS, 
+                                (SELECT COUNT(*) ALERTA_INICIADOS FROM PROYECTO WHERE ID_PROYECTO NOT IN (SELECT DISTINCT ID_PROYECTO FROM TAREA_PROYECTO WHERE PORCENTAJE_COMPLETADO > 0) AND FECHA_INICIO <= DATE(NOW())) ALERTA_INICIADOS, 
+                                (SELECT COUNT(*) ALERTA_CERRADOS FROM PROYECTO WHERE ESTATUS != 'CE' AND FECHA_FIN < DATE(NOW())) ALERTA_CERRADOS, 
+                                (SELECT COUNT(*) ALERTA_TAREAS FROM TAREA_PROYECTO WHERE FECHA_FIN < DATE(NOW()) AND PORCENTAJE_COMPLETADO < 100) ALERTA_TAREAS
+                            );
+                     ]]>
+                </prop>
             </props>
         </property>
     </bean>
