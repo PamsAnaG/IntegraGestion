@@ -331,6 +331,8 @@ public class ProyectoDAOImpl extends IgestionJdbcDaoSupport implements ProyectoD
             logger.info("Iniciados = " + recursos.get("ALERTA_INICIADOS"));
             logger.info("Cerrados = " + recursos.get("ALERTA_CERRADOS"));
             logger.info("Tareas Finalizadas = " + recursos.get("ALERTA_TAREAS"));
+            logger.info("Registros Radar = " + recursos.get("REG_RADAR"));
+            logger.info("Valida Radar = " + recursos.get("VALIDA_RADAR"));
             return recursos;
         }
 

@@ -417,6 +417,8 @@ public class ProyectoServiceImpl implements ProyectoService {
         resumen.setInicioProyecto(Integer.parseInt(String.valueOf(infoResumen.get("ALERTA_INICIADOS"))));
         resumen.setCierreProyecto(Integer.parseInt(String.valueOf(infoResumen.get("ALERTA_CERRADOS"))));
         resumen.setTareaFinalizada(Integer.parseInt(String.valueOf(infoResumen.get("ALERTA_TAREAS"))));
+        resumen.setRegistrosRadar(Integer.parseInt(String.valueOf(infoResumen.get("REG_RADAR"))));
+        resumen.setValidacionRadar(Integer.parseInt(String.valueOf(infoResumen.get("VALIDA_RADAR"))));
         
         return resumen;
     }
